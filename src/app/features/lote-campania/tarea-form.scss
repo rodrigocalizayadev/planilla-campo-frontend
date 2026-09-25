@@ -1,0 +1,6 @@
+@use '../../shared/styles/formularios';
+@use '../../shared/styles/botones';
+@use '../../shared/styles/tokens';
+
+// `.selector-modo` y `.total-en-vivo` viven en shared/styles/_formularios.scss:
+// los usan también aplicacion-form y venta-form.

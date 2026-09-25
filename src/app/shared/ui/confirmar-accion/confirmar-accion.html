@@ -1,0 +1,12 @@
+<div class="confirmar-overlay" tabindex="-1" (keydown.escape)="cancelado.emit()">
+  <div class="confirmar-caja" role="alertdialog" aria-modal="true" [attr.aria-label]="titulo()">
+    <div class="confirmar-caja__titulo">{{ titulo() }}</div>
+    @if (mensaje()) {
+      <p class="confirmar-caja__mensaje">{{ mensaje() }}</p>
+    }
+    <div class="confirmar-caja__acciones">
+      <button type="button" class="boton-secundario" (click)="cancelado.emit()">Cancelar</button>
+      <button type="button" class="boton-baja" (click)="confirmado.emit()">{{ textoConfirmar() }}</button>
+    </div>
+  </div>
+</div>

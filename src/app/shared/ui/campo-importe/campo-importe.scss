@@ -1,0 +1,8 @@
+@use '../../styles/formularios';
+
+// `display: contents`: el `<input>` real queda como hijo directo de `.campo-precio`
+// (fila con el selector de moneda) o de `.campo` (cuando se usa sin selector, p. ej.
+// comisión/flete de la liquidación), según en cuál se lo use.
+:host {
+  display: contents;
+}

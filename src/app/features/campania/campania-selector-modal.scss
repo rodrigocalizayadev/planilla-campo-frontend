@@ -1,0 +1,101 @@
+@use '../../shared/styles/tokens';
+@use '../../shared/styles/formularios';
+@use '../../shared/styles/botones';
+
+.selector-modal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-8);
+  padding: var(--espacio-10);
+
+  &__lista {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-superficie);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-lg);
+    overflow: hidden;
+  }
+
+  &__vacio {
+    padding: var(--espacio-10) var(--espacio-9);
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--color-texto-secundario);
+  }
+
+  &__nueva {
+    width: 100%;
+  }
+}
+
+.fila-campania {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-6);
+  width: 100%;
+  padding: var(--espacio-7) var(--espacio-9);
+  border: none;
+  border-bottom: 1px solid var(--color-borde-fila);
+  background: transparent;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background: var(--color-superficie-secundaria);
+  }
+
+  &--activa {
+    background: var(--color-verde-50);
+  }
+
+  &__principal {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__nombre {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-verde-900);
+  }
+
+  &__periodo {
+    font-size: 12px;
+    color: var(--color-texto-terciario);
+  }
+
+  &__estado {
+    flex: none;
+    padding: 2px 8px;
+    border-radius: var(--radio-pill);
+    border: 1px solid var(--color-borde-input);
+    background: var(--color-superficie);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-texto-secundario);
+
+    &--en-curso {
+      border-color: var(--color-verde-300);
+      background: var(--color-verde-100);
+      color: var(--color-verde-900);
+    }
+
+    &--cerrada {
+      border-color: var(--color-baja-borde);
+      background: var(--color-baja-fondo);
+      color: var(--color-baja-texto);
+    }
+  }
+}

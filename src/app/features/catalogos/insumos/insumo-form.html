@@ -1,0 +1,88 @@
+<app-modal
+  [titulo]="esEdicion() ? 'Editar insumo' : 'Nuevo insumo'"
+  subtitulo="Catálogo de insumos"
+  (cerrar)="cancelado.emit()"
+>
+  <form class="form-catalogo" novalidate (submit)="guardar($event)">
+    <label class="campo">
+      <span class="campo__etiqueta">Nombre</span>
+      <input
+        class="campo__input"
+        type="text"
+        placeholder="Fertilizante foliar importado"
+        [formField]="insumoForm.nombre"
+      />
+      @if (insumoForm.nombre().touched() && insumoForm.nombre().invalid()) {
+        <span class="campo__error">{{ insumoForm.nombre().errors()[0]?.message }}</span>
+      }
+    </label>
+
+    <div class="campo-fila">
+      <label class="campo">
+        <span class="campo__etiqueta">Tipo</span>
+        <select class="campo__input" [formField]="insumoForm.tipo">
+          <option value="" disabled>Elegí un tipo</option>
+          @for (opcion of enums.opciones('tipoInsumo'); track opcion.valor) {
+            <option [value]="opcion.valor">{{ opcion.etiqueta }}</option>
+          }
+        </select>
+        @if (insumoForm.tipo().touched() && insumoForm.tipo().invalid()) {
+          <span class="campo__error">{{ insumoForm.tipo().errors()[0]?.message }}</span>
+        }
+      </label>
+
+      <label class="campo">
+        <span class="campo__etiqueta">Unidad de medida</span>
+        <select class="campo__input" [formField]="insumoForm.unidadMedida">
+          <option value="" disabled>Elegí una unidad</option>
+          @for (opcion of enums.opciones('unidadMedida'); track opcion.valor) {
+            <option [value]="opcion.valor">{{ opcion.etiqueta }}</option>
+          }
+        </select>
+        @if (insumoForm.unidadMedida().touched() && insumoForm.unidadMedida().invalid()) {
+          <span class="campo__error">{{ insumoForm.unidadMedida().errors()[0]?.message }}</span>
+        }
+      </label>
+    </div>
+
+    <div class="campo-fila">
+      <div class="campo">
+        <span class="campo__etiqueta">Precio de referencia</span>
+        <div class="campo-precio">
+          <select class="campo-precio__moneda" [formField]="insumoForm.precioMoneda">
+            <option value="ARS">$</option>
+            <option value="USD">US$</option>
+          </select>
+          <app-campo-importe [formField]="insumoForm.precioImporte" />
+        </div>
+        @if (insumoForm.precioImporte().touched() && insumoForm.precioImporte().invalid()) {
+          <span class="campo__error">{{ insumoForm.precioImporte().errors()[0]?.message }}</span>
+        }
+      </div>
+
+      <label class="campo" for="precioTipoCambio">
+        <span class="campo__etiqueta">Tipo de cambio</span>
+        <app-campo-importe
+          id="precioTipoCambio"
+          variante="numerico"
+          tipo="tipoCambio"
+          [formField]="insumoForm.precioTipoCambio"
+        />
+        @if (insumoForm.precioTipoCambio().touched() && insumoForm.precioTipoCambio().invalid()) {
+          <span class="campo__error">{{ insumoForm.precioTipoCambio().errors()[0]?.message }}</span>
+        }
+      </label>
+    </div>
+    <span class="campo__ayuda">
+      Solo para autocompletar: al cargar una aplicación este precio se copia y queda editable, sin
+      afectar aplicaciones ya cargadas. El tipo de cambio se precarga con el último que cargaste.
+    </span>
+
+    <div class="form-catalogo__pie">
+      <button type="button" class="boton-secundario" (click)="cancelado.emit()">Cancelar</button>
+      <button type="submit" class="boton-primario" [disabled]="enviando()">
+        {{ esEdicion() ? 'Guardar cambios' : 'Crear insumo' }}
+      </button>
+    </div>
+  </form>
+</app-modal>

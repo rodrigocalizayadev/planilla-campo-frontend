@@ -1,0 +1,52 @@
+@use '../../styles/tokens';
+@use '../../styles/botones';
+
+.confirmar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 24, 27, 0.38);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--espacio-8);
+  z-index: 10;
+
+  @include tokens.movil {
+    align-items: flex-end;
+  }
+}
+
+.confirmar-caja {
+  width: 100%;
+  max-width: 360px;
+  padding: var(--espacio-9);
+  border-radius: var(--radio-xl);
+  background: var(--color-superficie);
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-6);
+  box-sizing: border-box;
+
+  &__titulo {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-texto);
+  }
+
+  &__mensaje {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--color-texto-secundario);
+  }
+
+  &__acciones {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--espacio-5);
+
+    button {
+      padding: 0 var(--espacio-7);
+    }
+  }
+}

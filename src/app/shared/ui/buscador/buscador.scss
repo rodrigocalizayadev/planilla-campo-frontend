@@ -1,0 +1,21 @@
+:host {
+  display: contents;
+}
+
+// Fondo `--color-sidebar-fondo` (gris) a propósito: es un control de filtro, tiene que
+// distinguirse de un vistazo tanto de la tarjeta blanca de abajo como del fondo de
+// página (`--color-fondo` es casi blanco, no alcanza de contraste).
+.buscador__input {
+  min-height: 38px;
+  min-width: 180px;
+  padding: 0 var(--espacio-5);
+  border-radius: var(--radio-sm);
+  border: 1px solid var(--color-borde-input);
+  background: var(--color-sidebar-fondo);
+  font-size: 13px;
+  color: var(--color-texto);
+
+  &::placeholder {
+    color: var(--color-texto-terciario);
+  }
+}

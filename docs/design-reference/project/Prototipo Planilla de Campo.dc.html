@@ -1,0 +1,2476 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#F7F8F9; -webkit-font-smoothing:antialiased; }
+  a { color:#35583F; text-decoration:none; }
+  a:hover { color:#1F3527; }
+  input, select, button, textarea { font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; }
+  input:focus, select:focus { outline:2px solid #3F6B4E; outline-offset:1px; }
+</style>
+</helmet>
+
+<sc-if value="{{ listo }}" hint-placeholder-val="{{ true }}">
+<div style="min-height:100vh;background:#F7F8F9;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">
+
+  <sc-if value="{{ noLogueado }}" hint-placeholder-val="{{ false }}">
+    <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;box-sizing:border-box">
+      <div style="width:100%;max-width:420px;background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;padding:36px 30px;display:flex;flex-direction:column;gap:22px">
+        <div style="display:flex;align-items:center;gap:10px"><div style="width:28px;height:28px;border-radius:6px;background:#3F6B4E"></div><div style="font-size:16px;font-weight:600;color:#1F3527">Planilla de Campo</div></div>
+        <div style="display:flex;flex-direction:column;gap:6px"><div style="font-size:24px;font-weight:600;line-height:1.2">Entrar</div><div style="font-size:14px;line-height:1.4;color:#5F6A73">Usá el usuario que te dieron. No hay registro público.</div></div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#5F6A73">Usuario</label><div style="min-height:52px;display:flex;align-items:center;padding:0 14px;border:1px solid #D3D9DE;border-radius:8px;font-size:16px;font-weight:500">marcelo</div></div>
+          <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#5F6A73">Contraseña</label><div style="min-height:52px;display:flex;align-items:center;padding:0 14px;border:1px solid #D3D9DE;border-radius:8px;font-family:'IBM Plex Mono',monospace;font-size:16px">••••••••</div></div>
+          <div onClick="{{ entrar }}" style="min-height:52px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:#3F6B4E;color:#FFFFFF;font-size:16px;font-weight:600;cursor:pointer" style-hover="background:#35583F">Entrar</div>
+        </div>
+        <div style="font-size:13px;line-height:1.45;color:#5F6A73">Los dos usuarios ven toda la información de todas las campañas.</div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ logueado }}" hint-placeholder-val="{{ true }}">
+  <div style="{{ st.shell }}">
+
+    <div style="{{ st.sidebar }}">
+      <div style="display:flex;align-items:center;gap:10px;padding:0 6px"><div style="width:26px;height:26px;border-radius:5px;background:#3F6B4E"></div><div style="font-size:15px;font-weight:600;color:#1F3527">Planilla de Campo</div></div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#5F6A73;padding:0 6px">Campaña activa</div>
+        <div onClick="{{ abrirCampania }}" style="min-height:44px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 12px;border-radius:6px;background:#FFFFFF;border:1px solid #9FB8A6;cursor:pointer">
+          <div><div style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;color:#1F3527">{{ camp.nombre }}</div><div style="font-size:11px;color:#5F6A73">{{ camp.sub }}</div></div>
+          <div style="font-size:11px;color:#5F6A73">▼</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <sc-for list="{{ nav }}" as="n" hint-placeholder-count="3">
+          <div onClick="{{ n.ir }}" style="{{ n.estilo }}">{{ n.label }}</div>
+        </sc-for>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:2px;padding-top:8px;border-top:1px solid #E4E8EB">
+        <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#5F6A73;padding:8px 6px">Catálogos</div>
+        <sc-for list="{{ navCat }}" as="n" hint-placeholder-count="2">
+          <div onClick="{{ n.ir }}" style="{{ n.estilo }}">{{ n.label }}</div>
+        </sc-for>
+      </div>
+      <div style="margin-top:auto;display:flex;flex-direction:column;gap:8px;padding-top:12px;border-top:1px solid #E4E8EB">
+        <div onClick="{{ alternarSenal }}" style="{{ st.chipSenal }}">{{ senalTxt }}</div>
+        <div onClick="{{ reiniciar }}" style="min-height:36px;display:flex;align-items:center;gap:8px;padding:0 10px;border-radius:6px;border:1px solid #D3D9DE;background:#FFFFFF;font-size:12px;font-weight:600;color:#46515A;cursor:pointer">Reiniciar datos de prueba</div>
+      </div>
+    </div>
+
+    <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+
+      <div style="{{ st.cabEscritorio }}">
+        <div style="display:flex;align-items:center;gap:10px;min-width:0">
+          <sc-if value="{{ hayHistorial }}" hint-placeholder-val="{{ false }}">
+            <div onClick="{{ volver }}" style="width:32px;height:32px;flex:none;border-radius:6px;border:1px solid #D3D9DE;display:flex;align-items:center;justify-content:center;font-size:15px;color:#46515A;cursor:pointer">‹</div>
+          </sc-if>
+          <div style="font-size:13px;color:#5F6A73;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ tituloVista }}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;flex:none">
+          <div style="text-align:right"><div style="font-size:13px;font-weight:600;color:#22303A">Marcelo Ré</div><div style="font-size:11px;color:#5F6A73">Administrador</div></div>
+          <div style="width:32px;height:32px;border-radius:999px;background:#DFE9E1;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#1F3527">MR</div>
+          <div onClick="{{ salir }}" style="min-height:34px;display:inline-flex;align-items:center;padding:0 12px;border-radius:6px;border:1px solid #D3D9DE;background:#FFFFFF;font-size:13px;font-weight:600;color:#46515A;cursor:pointer">Salir</div>
+        </div>
+      </div>
+
+      <div style="{{ st.cabMovil }}">
+        <div style="display:flex;align-items:center;gap:10px;min-width:0">
+          <sc-if value="{{ hayHistorial }}" hint-placeholder-val="{{ false }}">
+            <div onClick="{{ volver }}" style="width:36px;height:36px;flex:none;border-radius:8px;border:1px solid #D3D9DE;display:flex;align-items:center;justify-content:center;font-size:16px;color:#46515A;cursor:pointer">‹</div>
+          </sc-if>
+          <div style="font-size:16px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ tituloVista }}</div>
+        </div>
+        <div onClick="{{ abrirCampania }}" style="flex:none;min-height:34px;display:flex;align-items:center;gap:6px;padding:0 10px;border-radius:999px;border:1px solid #9FB8A6;background:#FBFDFB;cursor:pointer"><span style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;color:#1F3527">{{ camp.nombre }}</span><span style="font-size:11px;color:#5F6A73">▼</span></div>
+      </div>
+
+      <sc-if value="{{ sinSenal }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 20px;background:#FDF3E7;border-bottom:1px solid #F1DFC4">
+          <div style="width:10px;height:10px;border-radius:999px;background:#C98A1E"></div>
+          <div style="font-size:13px;line-height:1.35;font-weight:600;color:#8A5A12">Sin conexión · lo que cargues queda guardado en el teléfono y se sube cuando vuelva la señal</div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ camp.cerrada }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 20px;background:#F1F3F5;border-bottom:1px solid #E4E8EB">
+          <div style="padding:3px 8px;border-radius:999px;background:#FFFFFF;border:1px solid #D3D9DE;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#46515A">Cerrada</div>
+          <div style="font-size:13px;line-height:1.35;color:#46515A">{{ camp.avisoCerrada }}</div>
+        </div>
+      </sc-if>
+
+      <div style="{{ st.contenido }}">
+
+        <sc-if value="{{ r.tablero }}" hint-placeholder-val="{{ true }}">
+          <sc-if value="{{ tot.hayLotes }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;flex-direction:column;gap:20px">
+            <div style="{{ st.filaTitulo }}">
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <div style="{{ st.h1 }}">Campaña {{ camp.nombre }}</div>
+                <div style="font-size:14px;line-height:1.3;color:#46515A">{{ tot.sub }}</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px">
+                <div style="display:flex;border:1px solid #D3D9DE;border-radius:6px;overflow:hidden;background:#FFFFFF">
+                  <div onClick="{{ verPesos }}" style="{{ st.tabPesos }}">$ ARS</div>
+                  <div onClick="{{ verDolares }}" style="{{ st.tabDolares }}">US$</div>
+                </div>
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#5F6A73">TC {{ tcTxt }}</div>
+              </div>
+            </div>
+
+            <div style="{{ st.col4 }}">
+              <div style="background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px">
+                <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#5F6A73">Costo total de campaña</div>
+                <div style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:25px;font-weight:600">{{ tot.costoTxt }}</div>
+                <div style="font-size:12px;line-height:1.3;color:#5F6A73">incluye {{ tot.indirectosTxt }} de indirectos prorrateados</div>
+              </div>
+              <div style="background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px">
+                <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#5F6A73">Superficie sembrada</div>
+                <div style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:25px;font-weight:600">{{ tot.haTxt }} ha</div>
+                <div style="font-size:12px;line-height:1.3;color:#5F6A73">costo por ha {{ tot.costoHaTxt }}</div>
+              </div>
+              <div style="background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px">
+                <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#5F6A73">Margen realizado</div>
+                <div style="{{ tot.realEstilo }}">{{ tot.realTxt }}</div>
+                <div style="font-size:12px;line-height:1.3;color:#5F6A73">solo lo ya liquidado</div>
+              </div>
+              <div style="background:repeating-linear-gradient(135deg,#F5F8FB 0 8px,#EDF2F7 8px 16px);border:1px dashed #A9BACB;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px">
+                <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#3E5C7A">Margen estimado</div>
+                <div style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:25px;font-weight:600;color:#3E5C7A">{{ tot.estTxt }}</div>
+                <div style="font-size:12px;line-height:1.3;color:#3E5C7A">con consignaciones y galpón valorizados</div>
+              </div>
+            </div>
+
+            <div style="padding:12px 14px;border-radius:8px;background:#F1F5F1;border:1px solid #DFE9E1;font-size:13px;line-height:1.45;color:#1F3527"><span style="font-weight:600">{{ tot.notaTitulo }}</span> {{ tot.notaTxt }}</div>
+
+            <div style="background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;overflow:hidden">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 20px;border-bottom:1px solid #E4E8EB">
+                <div style="font-size:16px;font-weight:600">Lote-campaña</div>
+                <div onClick="{{ abrirSembrar }}" style="{{ st.btnChico }}">+ Sembrar un lote</div>
+              </div>
+              <div style="{{ st.cabLotes }}">
+                <div style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#5F6A73">Lote y cultivo</div>
+                <div style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#5F6A73;text-align:right">ha</div>
+                <div style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#5F6A73;text-align:right">Costo total</div>
+                <div style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#5F6A73;text-align:right">Costo / ha</div>
+                <div style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#5F6A73;text-align:right">Costo / unidad</div>
+                <div style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#5F6A73;text-align:right">M. realizado</div>
+                <div style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#5F6A73;text-align:right">M. estimado</div>
+              </div>
+              <sc-for list="{{ filas }}" as="l" hint-placeholder-count="4">
+                <div onClick="{{ l.ver }}" style="{{ st.filaLote }}">
+                  <div style="{{ st.celdaNombre }}">
+                    <div style="font-size:14px;font-weight:600;color:#1F3527">{{ l.titulo }}</div>
+                    <div style="font-size:12px;line-height:1.3;color:#5F6A73">{{ l.sub }}</div>
+                  </div>
+                  <div style="{{ st.celda }}"><div style="{{ st.etiq }}">Superficie</div><div style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:13px;color:#22303A">{{ l.haTxt }} ha</div></div>
+                  <div style="{{ st.celda }}"><div style="{{ st.etiq }}">Costo total</div><div style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:14px;font-weight:500">{{ l.costoTxt }}</div></div>
+                  <div style="{{ st.celda }}"><div style="{{ st.etiq }}">Costo / ha</div><div style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:13px;color:#46515A">{{ l.costoHaTxt }}</div></div>
+                  <div style="{{ st.celda }}"><div style="{{ st.etiq }}">Costo / unidad</div><div style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:14px;font-weight:600;color:#14181B">{{ l.costoUnidadTxt }}</div><div style="font-size:11px;color:#5F6A73">{{ l.unidadTxt }}</div></div>
+                  <div style="{{ st.celda }}"><div style="{{ st.etiq }}">M. realizado</div><div style="{{ l.realEstilo }}">{{ l.realTxt }}</div></div>
+                  <div style="{{ st.celda }}"><div style="{{ st.etiq }}">M. estimado</div><div style="{{ l.estEstilo }}">{{ l.estTxt }}</div></div>
+                </div>
+              </sc-for>
+              <div style="{{ st.filaTotal }}">
+                <div style="{{ st.celdaNombre }}"><div style="font-size:14px;font-weight:600">Total campaña</div></div>
+                <div style="{{ st.celda }}"><div style="{{ st.etiq }}">Superficie</div><div style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:13px;font-weight:600">{{ tot.haTxt }} ha</div></div>
+                <div style="{{ st.celda }}"><div style="{{ st.etiq }}">Costo total</div><div style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:15px;font-weight:600">{{ tot.costoPesosTxt }}</div></div>
+                <div style="{{ st.celda }}"><div style="{{ st.etiq }}">Costo / ha</div><div style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:13px;color:#46515A">{{ tot.costoHaPesosTxt }}</div></div>
+                <div style="{{ st.celda }}"><div style="font-size:12px;color:#5F6A73">unidades distintas</div></div>
+                <div style="{{ st.celda }}"><div style="{{ st.etiq }}">M. realizado</div><div style="{{ tot.realEstiloChico }}">{{ tot.realPesosTxt }}</div></div>
+                <div style="{{ st.celda }}"><div style="{{ st.etiq }}">M. estimado</div><div style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:15px;font-weight:600;color:#3E5C7A">{{ tot.estPesosTxt }}</div></div>
+              </div>
+              <div style="padding:12px 20px;font-size:12px;line-height:1.45;color:#5F6A73;border-top:1px solid #F1F3F5">{{ tot.notaTotal }}</div>
+            </div>
+          </div>
+          </sc-if>
+
+          <sc-if value="{{ tot.sinLotes }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;padding:40px 28px;display:flex;flex-direction:column;gap:14px;align-items:flex-start;max-width:620px">
+              <div style="width:44px;height:44px;border-radius:8px;border:1px dashed #9FB8A6;background:#F1F5F1"></div>
+              <div style="font-size:20px;font-weight:600;line-height:1.25">La campaña {{ camp.nombre }} está creada y todavía vacía</div>
+              <div style="font-size:14px;line-height:1.5;color:#46515A">{{ tot.textoVacio }}</div>
+              <div onClick="{{ abrirSembrar }}" style="{{ st.btnPrimario }}">Sembrar el primer lote</div>
+            </div>
+          </sc-if>
+        </sc-if>
+
+        <sc-if value="{{ r.detalle }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:18px">
+            <div style="{{ st.filaTitulo }}">
+              <div style="display:flex;flex-direction:column;gap:8px;min-width:0">
+                <div onClick="{{ volverTablero }}" style="font-size:13px;font-weight:600;color:#35583F;cursor:pointer">‹ Volver al tablero</div>
+                <div style="{{ st.h1 }}">{{ det.titulo }}</div>
+                <div style="font-size:14px;line-height:1.4;color:#46515A">{{ det.sub }}</div>
+              </div>
+              <div style="{{ st.filaBotones }}">
+                <div onClick="{{ abrirTarea }}" style="{{ st.btnPrimario }}">+ Cargar tarea</div>
+                <div onClick="{{ abrirAplicacion }}" style="{{ st.btnSec }}">Aplicación</div>
+                <div onClick="{{ abrirCosecha }}" style="{{ st.btnSec }}">Cosecha</div>
+                <div onClick="{{ abrirVenta }}" style="{{ st.btnSec }}">Venta</div>
+              </div>
+            </div>
+
+            <div style="{{ st.heroFila }}">
+              <sc-if value="{{ det.hayCosecha }}" hint-placeholder-val="{{ true }}">
+                <div style="border:1px solid #9FB8A6;border-radius:10px;padding:22px;background:#FBFDFB;display:flex;flex-direction:column;gap:12px">
+                  <div style="font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#3F6B4E">Costo por {{ det.unidad }}</div>
+                  <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap">
+                    <div style="font-family:'IBM Plex Mono',monospace;font-size:24px;color:#5F6A73">{{ det.simbolo }}</div>
+                    <div style="{{ st.numeroHero }}">{{ det.costoUnidadTxt }}</div>
+                    <div style="font-size:15px;color:#5F6A73">por {{ det.unidad }}</div>
+                  </div>
+                  <div style="font-size:13px;line-height:1.5;color:#46515A">{{ det.costoUnidadDetalle }}</div>
+                  <div style="padding:10px 12px;border-radius:6px;background:#DFE9E1;font-size:13px;line-height:1.4;font-weight:600;color:#1F3527">Por debajo de este precio, vender da pérdida.</div>
+                  <div style="display:flex;flex-direction:column;gap:8px;padding-top:4px;border-top:1px solid #DFE9E1">
+                    <label style="font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#5F6A73">Me ofrecen por {{ det.unidad }}</label>
+                    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+                      <div style="display:flex;align-items:center;min-height:48px;border:1px solid #D3D9DE;border-radius:8px;overflow:hidden;background:#FFFFFF;width:170px">
+                        <div style="padding:0 10px;align-self:stretch;display:flex;align-items:center;border-right:1px solid #E4E8EB;font-family:'IBM Plex Mono',monospace;font-size:13px;color:#5F6A73">{{ det.simbolo }}</div>
+                        <input type="text" inputMode="numeric" placeholder="{{ det.placeholderPrecio }}" value="{{ det.precioConsulta }}" onChange="{{ det.setPrecio }}" style="flex:1;min-width:0;padding:0 12px;border:0;background:transparent;font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:17px;font-weight:500;color:#14181B;text-align:right">
+                      </div>
+                      <sc-if value="{{ det.hayConsulta }}" hint-placeholder-val="{{ false }}">
+                        <div style="{{ det.consultaEstilo }}">
+                          <div style="font-weight:600">{{ det.consultaTitulo }}</div>
+                          <div style="font-weight:400;margin-top:2px">{{ det.consultaSub }}</div>
+                        </div>
+                      </sc-if>
+                    </div>
+                  </div>
+                </div>
+              </sc-if>
+              <sc-if value="{{ det.sinCosecha }}" hint-placeholder-val="{{ false }}">
+                <div style="border:1px dashed #C7CFD6;border-radius:10px;padding:22px;background:#FBFCFC;display:flex;flex-direction:column;gap:10px">
+                  <div style="font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#5F6A73">Costo por unidad</div>
+                  <div style="font-size:22px;font-weight:600;line-height:1.25;color:#46515A">Todavía no se puede calcular</div>
+                  <div style="font-size:13px;line-height:1.5;color:#46515A">{{ det.textoSinCosecha }}</div>
+                  <div onClick="{{ abrirCosecha }}" style="{{ st.btnSecVerde }}">Cargar cosecha</div>
+                </div>
+              </sc-if>
+
+              <div style="{{ st.col2Kpi }}">
+                <div style="background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:6px">
+                  <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#5F6A73">Costo total</div>
+                  <div style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:22px;font-weight:600">{{ det.costoTxt }}</div>
+                  <div style="font-size:12px;color:#5F6A73">{{ det.movimientosTxt }}</div>
+                </div>
+                <div style="background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:6px">
+                  <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#5F6A73">Costo por hectárea</div>
+                  <div style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:22px;font-weight:600">{{ det.costoHaTxt }}</div>
+                  <div style="font-size:12px;color:#5F6A73">sobre {{ det.haTxt }} ha sembradas</div>
+                </div>
+                <div style="background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:6px">
+                  <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#5F6A73">Margen realizado</div>
+                  <div style="{{ det.realEstilo }}">{{ det.realTxt }}</div>
+                  <div style="font-size:12px;color:#5F6A73">{{ det.realSub }}</div>
+                </div>
+                <div style="background:repeating-linear-gradient(135deg,#F5F8FB 0 8px,#EDF2F7 8px 16px);border:1px dashed #A9BACB;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:6px">
+                  <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#3E5C7A">Margen estimado</div>
+                  <div style="{{ det.estEstilo }}">{{ det.estTxt }}</div>
+                  <div style="font-size:12px;color:#3E5C7A">{{ det.estSub }}</div>
+                </div>
+              </div>
+            </div>
+
+            <div style="{{ st.col2 }}">
+              <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+              <div style="background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;overflow:hidden">
+                <div style="padding:16px 18px;border-bottom:1px solid #E4E8EB;display:flex;align-items:baseline;justify-content:space-between;gap:10px"><div style="font-size:16px;font-weight:600">Costos por rubro</div><div style="font-size:12px;color:#5F6A73">{{ det.notaRubros }}</div></div>
+                <sc-for list="{{ det.rubros }}" as="ru" hint-placeholder-count="4">
+                  <div style="display:grid;grid-template-columns:minmax(0,1fr) 74px 124px;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid #F1F3F5">
+                    <div style="display:flex;flex-direction:column;gap:6px">
+                      <div style="font-size:14px;font-weight:500;color:#22303A">{{ ru.nombre }}</div>
+                      <div style="height:5px;border-radius:3px;background:#F1F3F5"><div style="{{ ru.barra }}"></div></div>
+                    </div>
+                    <div style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:13px;color:#5F6A73;text-align:right">{{ ru.pctTxt }}</div>
+                    <div style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:15px;font-weight:500;text-align:right">{{ ru.importeTxt }}</div>
+                  </div>
+                </sc-for>
+                <div style="display:grid;grid-template-columns:minmax(0,1fr) 74px 124px;align-items:center;gap:12px;padding:14px 18px;background:#FBFCFC">
+                  <div style="font-size:14px;font-weight:600">Costo total</div>
+                  <div style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#5F6A73;text-align:right">100 %</div>
+                  <div style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:17px;font-weight:600;text-align:right">{{ det.costoPesosTxt }}</div>
+                </div>
+              </div>
+              <sc-if value="{{ det.hayCosecha }}" hint-placeholder-val="{{ true }}">
+                <div style="{{ st.col2Kpi }}">
+                  <div style="background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:6px">
+                    <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#5F6A73">Rendimiento por hectárea</div>
+                    <div style="display:flex;align-items:baseline;gap:5px"><div style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:22px;font-weight:600">{{ det.rendimientoTxt }}</div><div style="font-size:12px;color:#5F6A73">kg / ha</div></div>
+                    <div style="font-size:12px;line-height:1.4;color:#5F6A73">kilos cosechados con descarte incluido: mide productividad</div>
+                  </div>
+                  <div style="background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:6px">
+                    <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#5F6A73">Tasa de descarte</div>
+                    <div style="{{ det.descarteEstilo }}">{{ det.tasaDescarteTxt }}</div>
+                    <div style="font-size:12px;line-height:1.4;color:#5F6A73">{{ det.descarteDetalle }}</div>
+                  </div>
+                </div>
+              </sc-if>
+              </div>
+
+              <div style="background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;overflow:hidden">
+                <div style="padding:16px 18px;border-bottom:1px solid #E4E8EB;display:flex;align-items:baseline;justify-content:space-between;gap:10px">
+                  <div style="font-size:16px;font-weight:600">De dónde sale cada margen</div>
+                  <div style="font-size:12px;color:#5F6A73">{{ det.vendiblesTxt }}</div>
+                </div>
+                <sc-for list="{{ det.desglose }}" as="d" hint-placeholder-count="3">
+                  <div style="{{ d.fila }}">
+                    <div style="display:flex;flex-direction:column;gap:3px;min-width:0">
+                      <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+                        <div style="font-size:14px;font-weight:500;color:#22303A">{{ d.concepto }}</div>
+                        <sc-if value="{{ d.estimado }}" hint-placeholder-val="{{ false }}">
+                          <div style="padding:2px 6px;border:1px dashed #A9BACB;border-radius:4px;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#3E5C7A">Estimado</div>
+                        </sc-if>
+                      </div>
+                      <div style="font-size:12px;line-height:1.3;color:#5F6A73">{{ d.sub }}</div>
+                    </div>
+                    <div style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:13px;color:#5F6A73;text-align:right">{{ d.cantTxt }}</div>
+                    <div style="{{ d.importeEstilo }}">{{ d.importeTxt }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+
+            <div style="{{ st.col2 }}">
+              <div style="background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;overflow:hidden">
+                <div style="padding:16px 18px;border-bottom:1px solid #E4E8EB;display:flex;align-items:center;justify-content:space-between;gap:10px">
+                  <div style="font-size:16px;font-weight:600">Cosecha</div>
+                  <div onClick="{{ abrirCosecha }}" style="font-size:13px;font-weight:600;color:#35583F;cursor:pointer">+ Cargar corte</div>
+                </div>
+                <sc-for list="{{ det.cosechas }}" as="c" hint-placeholder-count="2">
+                  <div style="display:grid;grid-template-columns:minmax(0,1fr) 92px 92px 104px;gap:10px;align-items:center;padding:12px 18px;border-bottom:1px solid #F1F3F5">
+                    <div><div style="font-size:14px;font-weight:500;color:#22303A">{{ c.corteTxt }}</div><div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#5F6A73">{{ c.fechaTxt }}</div></div>
+                    <div style="text-align:right"><div style="font-size:11px;color:#5F6A73">Primera</div><div style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:15px;font-weight:500">{{ c.primeraTxt }}</div></div>
+                    <div style="text-align:right"><div style="font-size:11px;color:#5F6A73">Segunda</div><div style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:15px;font-weight:500">{{ c.segundaTxt }}</div></div>
+                    <div style="text-align:right"><div style="font-size:11px;color:#5F6A73">Descarte</div><div style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:14px;color:#46515A">{{ c.descarteTxt }}</div></div>
+                  </div>
+                </sc-for>
+                <sc-if value="{{ det.sinCosecha }}" hint-placeholder-val="{{ false }}">
+                  <div style="padding:20px 18px;font-size:13px;line-height:1.5;color:#46515A">Sin cortes cargados. El maíz se sembró el {{ det.fechaSiembraTxt }}: todavía no hay nada para cosechar.</div>
+                </sc-if>
+                <div style="padding:12px 18px;background:#FBFCFC;display:flex;align-items:center;justify-content:space-between;gap:10px">
+                  <div style="font-size:13px;color:#46515A">{{ det.stockTxt }}</div>
+                  <div style="font-size:12px;color:#5F6A73">{{ det.descarteTotalTxt }}</div>
+                </div>
+              </div>
+
+              <div style="background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;overflow:hidden">
+                <div style="padding:16px 18px;border-bottom:1px solid #E4E8EB;display:flex;align-items:center;justify-content:space-between;gap:10px">
+                  <div style="font-size:16px;font-weight:600">Ventas del lote</div>
+                  <div onClick="{{ abrirVenta }}" style="font-size:13px;font-weight:600;color:#35583F;cursor:pointer">+ Nueva venta</div>
+                </div>
+                <sc-for list="{{ det.ventas }}" as="v" hint-placeholder-count="2">
+                  <div style="{{ v.fila }}">
+                    <div style="min-width:0">
+                      <div style="font-size:14px;font-weight:500;color:#22303A;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ v.comprador }}</div>
+                      <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#5F6A73">{{ v.fechaTxt }} · {{ v.cantTxt }}</div>
+                    </div>
+                    <div style="text-align:right"><div style="{{ v.netoEstilo }}">{{ v.netoTxt }}</div><div style="font-size:11px;color:#5F6A73">{{ v.precioTxt }}</div></div>
+                    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+                      <div style="{{ v.chip }}">{{ v.estadoTxt }}</div>
+                      <sc-if value="{{ v.pendiente }}" hint-placeholder-val="{{ false }}">
+                        <div onClick="{{ v.liquidar }}" style="font-size:12px;font-weight:600;color:#35583F;cursor:pointer">Liquidar</div>
+                      </sc-if>
+                    </div>
+                  </div>
+                </sc-for>
+                <sc-if value="{{ det.sinVentas }}" hint-placeholder-val="{{ false }}">
+                  <div style="padding:20px 18px;display:flex;flex-direction:column;gap:8px">
+                    <div style="font-size:14px;font-weight:600;color:#1F3527">Todavía no vendiste nada de este lote</div>
+                    <div style="font-size:13px;line-height:1.5;color:#46515A">Por eso el margen realizado da negativo por todo lo invertido: ya gastaste y no cobraste. Es normal en esta etapa.</div>
+                  </div>
+                </sc-if>
+              </div>
+            </div>
+
+            <div style="background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;overflow:hidden">
+              <div style="padding:16px 18px;border-bottom:1px solid #E4E8EB;display:flex;align-items:baseline;justify-content:space-between;gap:10px">
+                <div style="font-size:16px;font-weight:600">Movimientos cargados</div>
+                <div style="font-size:12px;color:#5F6A73">insumos y tareas, del más nuevo al más viejo</div>
+              </div>
+              <sc-for list="{{ det.movimientos }}" as="mv" hint-placeholder-count="5">
+                <div style="{{ st.filaMov }}">
+                  <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#5F6A73">{{ mv.fechaTxt }}</div>
+                  <div style="min-width:0">
+                    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+                      <div style="font-size:14px;font-weight:500;color:#22303A">{{ mv.titulo }}</div>
+                      <div style="{{ mv.chipRubro }}">{{ mv.rubro }}</div>
+                      <sc-if value="{{ mv.pendiente }}" hint-placeholder-val="{{ false }}">
+                        <div style="padding:2px 7px;border-radius:999px;background:#FDF3E7;border:1px solid #F1DFC4;font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#8A5A12">Pendiente de subir</div>
+                      </sc-if>
+                    </div>
+                    <div style="font-size:12px;line-height:1.35;color:#5F6A73">{{ mv.detalle }}</div>
+                    <sc-if value="{{ mv.hayTc }}" hint-placeholder-val="{{ false }}">
+                      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5F6A73">{{ mv.tcTxt }}</div>
+                    </sc-if>
+                  </div>
+                  <div style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:14px;font-weight:500;text-align:right">{{ mv.importeTxt }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ r.ventas }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:18px">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div style="{{ st.h1 }}">Ventas de la campaña</div>
+              <div style="font-size:14px;line-height:1.3;color:#46515A">{{ vp.sub }}</div>
+            </div>
+            <sc-if value="{{ vp.hayPendientes }}" hint-placeholder-val="{{ true }}">
+              <div style="background:#FFFFFF;border:1px solid #F1DFC4;border-radius:10px;overflow:hidden">
+                <div style="padding:14px 18px;background:#FDF3E7;border-bottom:1px solid #F1DFC4;font-size:14px;font-weight:600;color:#8A5A12">{{ vp.tituloPendientes }}</div>
+                <sc-for list="{{ vp.pendientes }}" as="v" hint-placeholder-count="2">
+                  <div style="{{ st.filaVenta }}">
+                    <div style="min-width:0"><div style="font-size:14px;font-weight:600;color:#1F3527">{{ v.lote }}</div><div style="font-size:12px;line-height:1.35;color:#5F6A73">{{ v.comprador }} · {{ v.fechaTxt }}</div></div>
+                    <div style="text-align:right"><div style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:14px;color:#22303A">{{ v.cantTxt }}</div><div style="font-size:11px;color:#5F6A73">sin precio</div></div>
+                    <div style="text-align:right"><div style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:15px;font-weight:500;color:#3E5C7A">{{ v.estimadoTxt }}</div><div style="font-size:11px;color:#3E5C7A">valorizado</div></div>
+                    <div onClick="{{ v.liquidar }}" style="{{ st.btnChico }}">Completar liquidación</div>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+            <div style="background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;overflow:hidden">
+              <div style="padding:16px 18px;border-bottom:1px solid #E4E8EB;font-size:16px;font-weight:600">Todas las ventas</div>
+              <sc-for list="{{ vp.todas }}" as="v" hint-placeholder-count="4">
+                <div style="{{ st.filaVenta }}">
+                  <div style="min-width:0"><div style="font-size:14px;font-weight:600;color:#1F3527">{{ v.lote }}</div><div style="font-size:12px;line-height:1.35;color:#5F6A73">{{ v.comprador }} · {{ v.fechaTxt }}</div></div>
+                  <div style="text-align:right"><div style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:14px;color:#22303A">{{ v.cantTxt }}</div><div style="font-size:11px;color:#5F6A73">{{ v.precioTxt }}</div></div>
+                  <div style="text-align:right"><div style="{{ v.netoEstilo }}">{{ v.netoTxt }}</div><div style="font-size:11px;color:#5F6A73">{{ v.netoSub }}</div></div>
+                  <div style="display:flex;justify-content:flex-end"><div style="{{ v.chip }}">{{ v.estadoTxt }}</div></div>
+                </div>
+              </sc-for>
+              <sc-if value="{{ vp.sinVentas }}" hint-placeholder-val="{{ false }}">
+                <div style="padding:22px 18px;font-size:13px;line-height:1.5;color:#46515A">{{ vp.textoSinVentas }}</div>
+              </sc-if>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ r.indirectos }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:18px">
+            <div style="{{ st.filaTitulo }}">
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <div style="{{ st.h1 }}">Costos indirectos</div>
+                <div style="font-size:14px;line-height:1.3;color:#46515A">{{ ind.sub }}</div>
+              </div>
+              <div onClick="{{ abrirIndirecto }}" style="{{ st.btnPrimario }}">+ Nuevo costo indirecto</div>
+            </div>
+            <div style="{{ st.col2 }}">
+              <div style="background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;overflow:hidden">
+                <div style="padding:16px 18px;border-bottom:1px solid #E4E8EB;font-size:16px;font-weight:600">Cargados en la campaña</div>
+                <sc-for list="{{ ind.items }}" as="i" hint-placeholder-count="2">
+                  <div style="display:grid;grid-template-columns:minmax(0,1fr) 140px;gap:12px;align-items:center;padding:13px 18px;border-bottom:1px solid #F1F3F5">
+                    <div><div style="font-size:14px;font-weight:500;color:#22303A">{{ i.concepto }}</div><div style="font-size:12px;color:#5F6A73">{{ i.criterioTxt }}</div></div>
+                    <div style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:15px;font-weight:500;text-align:right">{{ i.importeTxt }}</div>
+                  </div>
+                </sc-for>
+                <div style="display:grid;grid-template-columns:minmax(0,1fr) 140px;gap:12px;padding:14px 18px;background:#FBFCFC"><div style="font-size:14px;font-weight:600">Total indirectos</div><div style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:16px;font-weight:600;text-align:right">{{ ind.totalTxt }}</div></div>
+              </div>
+              <div style="background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;overflow:hidden">
+                <div style="padding:16px 18px;border-bottom:1px solid #E4E8EB;font-size:16px;font-weight:600">Cómo queda repartido</div>
+                <sc-for list="{{ ind.reparto }}" as="p" hint-placeholder-count="4">
+                  <div style="display:grid;grid-template-columns:minmax(0,1fr) 64px 128px;gap:10px;align-items:center;padding:12px 18px;border-bottom:1px solid #F1F3F5">
+                    <div style="font-size:14px;font-weight:500;color:#22303A">{{ p.lote }}</div>
+                    <div style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:13px;color:#5F6A73;text-align:right">{{ p.haTxt }}</div>
+                    <div style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:15px;font-weight:500;text-align:right">{{ p.importeTxt }}</div>
+                  </div>
+                </sc-for>
+                <div style="display:grid;grid-template-columns:minmax(0,1fr) 64px 128px;gap:10px;padding:14px 18px;background:#FBFCFC"><div style="font-size:14px;font-weight:600">Reparto total</div><div style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;text-align:right">{{ tot.haTxt }}</div><div style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:16px;font-weight:600;text-align:right">{{ ind.totalRepartoTxt }}</div></div>
+                <div style="padding:12px 18px;font-size:12px;line-height:1.45;color:#0E7A46;border-top:1px solid #F1F3F5">Cierra exacto: la suma de los lotes es igual al total cargado.</div>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ r.catLotes }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:18px">
+            <div style="{{ st.filaTitulo }}">
+              <div style="display:flex;flex-direction:column;gap:6px"><div style="{{ st.h1 }}">Lotes</div><div style="font-size:14px;color:#46515A">{{ cat.subLotes }}</div></div>
+              <div style="display:flex;align-items:center;gap:8px">
+                <div onClick="{{ cat.alternarBajaLotes }}" style="{{ cat.chipBajaLotes }}">{{ cat.textoBajaLotes }}</div>
+                <div onClick="{{ abrirLote }}" style="{{ st.btnPrimario }}">+ Nuevo lote</div>
+              </div>
+            </div>
+            <div style="background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;overflow:hidden">
+              <sc-for list="{{ cat.lotes }}" as="l" hint-placeholder-count="6">
+                <div onClick="{{ l.editar }}" style="{{ st.filaCat }}">
+                  <div style="min-width:0">
+                    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><div style="font-size:14px;font-weight:600;color:#1F3527">{{ l.nombre }}</div><sc-if value="{{ l.baja }}" hint-placeholder-val="{{ false }}"><div style="{{ st.chipBaja }}">Dado de baja</div></sc-if></div>
+                    <div style="font-size:12px;line-height:1.35;color:#5F6A73">{{ l.sub }}</div>
+                  </div>
+                  <div style="text-align:right"><div style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:14px">{{ l.haTxt }} ha</div></div>
+                  <div style="font-size:13px;color:#22303A">{{ l.enCampania }}</div>
+                </div>
+              </sc-for>
+              <sc-if value="{{ cat.sinLotesFiltrados }}" hint-placeholder-val="{{ false }}">
+                <div style="padding:20px 18px;font-size:13px;line-height:1.5;color:#46515A">Sin lotes dados de baja.</div>
+              </sc-if>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ r.catCultivos }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:18px">
+            <div style="{{ st.filaTitulo }}">
+              <div style="display:flex;flex-direction:column;gap:6px"><div style="{{ st.h1 }}">Cultivos</div><div style="font-size:14px;color:#46515A">{{ cat.subCultivos }}</div></div>
+              <div style="display:flex;align-items:center;gap:8px">
+                <div onClick="{{ cat.alternarBajaCultivos }}" style="{{ cat.chipBajaCultivos }}">{{ cat.textoBajaCultivos }}</div>
+                <div onClick="{{ abrirCultivo }}" style="{{ st.btnPrimario }}">+ Nuevo cultivo</div>
+              </div>
+            </div>
+            <div style="background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;overflow:hidden">
+              <sc-for list="{{ cat.cultivos }}" as="cu" hint-placeholder-count="4">
+                <div onClick="{{ cu.editar }}" style="{{ st.filaCat }}">
+                  <div style="min-width:0">
+                    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><div style="font-size:14px;font-weight:600;color:#1F3527">{{ cu.nombre }}</div><sc-if value="{{ cu.baja }}" hint-placeholder-val="{{ false }}"><div style="{{ st.chipBaja }}">Dado de baja</div></sc-if></div>
+                    <div style="font-size:12px;line-height:1.35;color:#5F6A73">Se mide en {{ cu.unidadPlural }} de {{ cu.kgTxt }} kg</div>
+                  </div>
+                  <div style="text-align:right"><div style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:14px;font-weight:500">{{ cu.precioPrimeraTxt }}</div><div style="font-size:11px;color:#5F6A73">1ª · {{ cu.actualizadoTxt }}</div></div>
+                  <div style="text-align:right"><div style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:13px;color:#46515A">{{ cu.precioSegundaTxt }}</div><div style="font-size:11px;color:#5F6A73">2ª de referencia</div></div>
+                </div>
+              </sc-for>
+              <sc-if value="{{ cat.sinCultivosFiltrados }}" hint-placeholder-val="{{ false }}">
+                <div style="padding:20px 18px;font-size:13px;line-height:1.5;color:#46515A">Sin cultivos dados de baja.</div>
+              </sc-if>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ r.catCompradores }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:18px">
+            <div style="{{ st.filaTitulo }}">
+              <div style="display:flex;flex-direction:column;gap:6px"><div style="{{ st.h1 }}">Compradores</div><div style="font-size:14px;color:#46515A">{{ cat.subCompradores }}</div></div>
+              <div style="display:flex;align-items:center;gap:8px">
+                <div onClick="{{ cat.alternarBajaCompradores }}" style="{{ cat.chipBajaCompradores }}">{{ cat.textoBajaCompradores }}</div>
+                <div onClick="{{ abrirComprador }}" style="{{ st.btnPrimario }}">+ Nuevo comprador</div>
+              </div>
+            </div>
+            <div style="background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;overflow:hidden">
+              <sc-for list="{{ cat.compradores }}" as="c" hint-placeholder-count="3">
+                <div onClick="{{ c.editar }}" style="{{ st.filaCat }}">
+                  <div style="min-width:0">
+                    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><div style="font-size:14px;font-weight:600;color:#1F3527">{{ c.nombre }}</div><sc-if value="{{ c.baja }}" hint-placeholder-val="{{ false }}"><div style="{{ st.chipBaja }}">Dado de baja</div></sc-if></div>
+                    <div style="font-size:12px;line-height:1.35;color:#5F6A73">CUIT {{ c.cuit }} · {{ c.contacto }} · {{ c.tel }} · {{ c.plaza }}</div>
+                  </div>
+                  <div style="text-align:right"><div style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:14px;font-weight:500">{{ c.ventasTxt }}</div><div style="font-size:11px;color:#5F6A73">{{ c.ventasSub }}</div></div>
+                  <div><div style="{{ c.chip }}">{{ c.modalidad }}</div></div>
+                </div>
+              </sc-for>
+              <sc-if value="{{ cat.sinCompradoresFiltrados }}" hint-placeholder-val="{{ false }}">
+                <div style="padding:20px 18px;font-size:13px;line-height:1.5;color:#46515A">Sin compradores dados de baja.</div>
+              </sc-if>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ r.catInsumos }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:18px">
+            <div style="{{ st.filaTitulo }}">
+              <div style="display:flex;flex-direction:column;gap:6px"><div style="{{ st.h1 }}">Insumos</div><div style="font-size:14px;color:#46515A">Precio de referencia: se copia al cargar una aplicación y queda editable.</div></div>
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+                <select value="{{ cat.tipoFiltro }}" onChange="{{ cat.setTipoFiltro }}" style="min-height:38px;padding:0 10px;border:1px solid #D3D9DE;border-radius:6px;font-size:13px;font-weight:600;color:#46515A;background:#FFFFFF">
+                  <sc-for list="{{ cat.tiposFiltro }}" as="t" hint-placeholder-count="5"><option value="{{ t }}">{{ t }}</option></sc-for>
+                </select>
+                <div onClick="{{ cat.alternarBajaInsumos }}" style="{{ cat.chipBajaInsumos }}">{{ cat.textoBajaInsumos }}</div>
+                <div onClick="{{ abrirInsumo }}" style="{{ st.btnPrimario }}">+ Nuevo insumo</div>
+              </div>
+            </div>
+            <div style="background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;overflow:hidden">
+              <sc-for list="{{ cat.insumos }}" as="i" hint-placeholder-count="8">
+                <div onClick="{{ i.editar }}" style="{{ st.filaCat }}">
+                  <div style="min-width:0">
+                    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><div style="font-size:14px;font-weight:600;color:#1F3527">{{ i.nombre }}</div><sc-if value="{{ i.baja }}" hint-placeholder-val="{{ false }}"><div style="{{ st.chipBaja }}">Dado de baja</div></sc-if></div>
+                    <div style="font-size:12px;color:#5F6A73">{{ i.tipo }} · por {{ i.unidad }}</div>
+                  </div>
+                  <div style="text-align:right"><div style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:14px;font-weight:500">{{ i.precioTxt }}</div></div>
+                  <div style="font-size:12px;color:#5F6A73">{{ i.monedaTxt }}</div>
+                </div>
+              </sc-for>
+              <sc-if value="{{ cat.sinInsumosFiltrados }}" hint-placeholder-val="{{ false }}">
+                <div style="padding:20px 18px;font-size:13px;line-height:1.5;color:#46515A">{{ cat.textoSinInsumos }}</div>
+              </sc-if>
+            </div>
+          </div>
+        </sc-if>
+
+      </div>
+
+      <div style="{{ st.navInf }}">
+        <sc-for list="{{ navMovil }}" as="n" hint-placeholder-count="4">
+          <div onClick="{{ n.ir }}" style="{{ n.estilo }}"><div style="{{ n.punto }}"></div><div style="font-size:11px;font-weight:600">{{ n.label }}</div></div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ hayAviso }}" hint-placeholder-val="{{ false }}">
+    <div style="{{ st.toast }}">{{ aviso }}</div>
+  </sc-if>
+
+  <sc-if value="{{ modalAbierto }}" hint-placeholder-val="{{ false }}">
+    <div style="{{ st.overlay }}" onClick="{{ cerrar }}">
+      <div style="{{ st.caja }}" onClick="{{ nada }}">
+        <div style="padding:16px 20px;border-bottom:1px solid #E4E8EB;display:flex;align-items:center;justify-content:space-between;gap:12px;background:#FFFFFF;flex:none">
+          <div style="display:flex;flex-direction:column;gap:2px;min-width:0"><div style="font-size:17px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ f.titulo }}</div><div style="font-size:12px;color:#5F6A73">{{ f.sub }}</div></div>
+          <div onClick="{{ cerrar }}" style="width:36px;height:36px;flex:none;border-radius:8px;border:1px solid #D3D9DE;display:flex;align-items:center;justify-content:center;font-size:15px;color:#46515A;cursor:pointer">✕</div>
+        </div>
+
+        <div style="{{ st.cuerpo }}">
+
+        <sc-if value="{{ f.esTarea }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:20px;display:flex;flex-direction:column;gap:14px">
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <label style="{{ st.label }}">Cómo se paga</label>
+              <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
+                <div onClick="{{ f.modoJornal }}" style="{{ f.estJornal }}">Jornal</div>
+                <div onClick="{{ f.modoDestajo }}" style="{{ f.estDestajo }}">Destajo</div>
+                <div onClick="{{ f.modoHa }}" style="{{ f.estHa }}">Por hectárea</div>
+                <div onClick="{{ f.modoTotal }}" style="{{ f.estTotal }}">Monto total</div>
+              </div>
+            </div>
+            <sc-if value="{{ f.pideCantidad }}" hint-placeholder-val="{{ true }}">
+              <div style="{{ st.formCol2 }}">
+                <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">{{ f.labelCantidad }}</label><input type="text" inputMode="numeric" value="{{ f.cantidad }}" onChange="{{ f.setCantidad }}" style="{{ st.inputNum }}"></div>
+                <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">{{ f.labelValor }}</label><input type="text" inputMode="numeric" value="{{ f.valor }}" onChange="{{ f.setValor }}" style="{{ st.inputNum }}"></div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ f.soloValor }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">{{ f.labelValor }}</label><input type="text" inputMode="numeric" value="{{ f.valor }}" onChange="{{ f.setValor }}" style="{{ st.inputNum }}"></div>
+            </sc-if>
+            <sc-if value="{{ f.esPorHa }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:10px 12px;border-radius:8px;background:#F7F8F9;border:1px solid #E4E8EB;font-size:13px;line-height:1.45;color:#46515A">{{ f.notaHa }}</div>
+            </sc-if>
+            <div style="{{ st.formCol2 }}">
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <label style="{{ st.label }}">Tarea</label>
+                <select value="{{ f.nombre }}" onChange="{{ f.setNombre }}" style="{{ st.input }}">
+                  <sc-for list="{{ f.tareasTipo }}" as="t" hint-placeholder-count="4"><option value="{{ t }}">{{ t }}</option></sc-for>
+                </select>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Fecha</label><input type="date" value="{{ f.fecha }}" onChange="{{ f.setFecha }}" style="{{ st.input }}"></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="{{ st.label }}">Quién la hizo</label>
+              <select value="{{ f.ejecutor }}" onChange="{{ f.setEjecutor }}" style="{{ st.input }}">
+                <sc-for list="{{ f.ejecutores }}" as="e" hint-placeholder-count="4"><option value="{{ e }}">{{ e }}</option></sc-for>
+              </select>
+              <div style="font-size:12px;line-height:1.4;color:#5F6A73">{{ f.notaEjecutor }}</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Nota (opcional)</label><input type="text" value="{{ f.nota }}" onChange="{{ f.setNota }}" placeholder="Se carpió el sector alto" style="{{ st.input }}"></div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ f.esAplicacion }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:20px;display:flex;flex-direction:column;gap:14px">
+          <sc-if value="{{ f.subNinguno }}" hint-placeholder-val="{{ true }}">
+            <div style="{{ st.formCol2 }}">
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <label style="{{ st.label }}">Insumo</label>
+                <select value="{{ f.insumoId }}" onChange="{{ f.setInsumo }}" style="{{ st.input }}">
+                  <sc-for list="{{ f.insumos }}" as="i" hint-placeholder-count="6"><option value="{{ i.id }}">{{ i.nombre }}</option></sc-for>
+                  <option value="__nuevo__">+ Nuevo insumo…</option>
+                </select>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Fecha</label><input type="date" value="{{ f.fecha }}" onChange="{{ f.setFecha }}" style="{{ st.input }}"></div>
+            </div>
+            <div style="{{ st.formCol2 }}">
+              <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Cantidad en {{ f.unidadInsumo }}</label><input type="text" inputMode="decimal" value="{{ f.cantidad }}" onChange="{{ f.setCantidad }}" style="{{ st.inputNum }}"></div>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <label style="{{ st.label }}">Precio unitario</label>
+                <div style="display:flex;align-items:stretch;min-height:48px;border:1px solid #D3D9DE;border-radius:8px;overflow:hidden;background:#FFFFFF">
+                  <select value="{{ f.moneda }}" onChange="{{ f.setMoneda }}" style="border:0;background:#F1F5F1;padding:0 8px;font-size:13px;font-weight:600;color:#1F3527"><option value="ARS">$</option><option value="USD">US$</option></select>
+                  <input type="text" inputMode="decimal" value="{{ f.precio }}" onChange="{{ f.setPrecio }}" style="flex:1;min-width:0;border:0;padding:0 12px;background:transparent;font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:17px;font-weight:500;text-align:right;color:#14181B">
+                </div>
+              </div>
+            </div>
+            <sc-if value="{{ f.esDolar }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Tipo de cambio</label><input type="text" inputMode="numeric" value="{{ f.tc }}" onChange="{{ f.setTc }}" style="{{ st.inputNum }}"></div>
+            </sc-if>
+            <div style="padding:10px 12px;border-radius:8px;background:#F1F5F1;border:1px solid #DFE9E1;font-size:13px;line-height:1.45;color:#1F3527">{{ f.notaPrecio }}</div>
+          </sc-if>
+          <sc-if value="{{ f.subInsumo }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:10px 12px;border-radius:8px;background:#F1F5F1;border:1px solid #DFE9E1;font-size:13px;line-height:1.45;color:#1F3527">Se agrega al catálogo de insumos y queda seleccionado en esta aplicación.</div>
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Nombre</label><input type="text" value="{{ fs.nombre }}" onChange="{{ fs.setNombre }}" placeholder="Fertilizante foliar importado" style="{{ st.input }}"></div>
+            <div style="{{ st.formCol2 }}">
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <label style="{{ st.label }}">Tipo</label>
+                <select value="{{ fs.tipo }}" onChange="{{ fs.setTipo }}" style="{{ st.input }}"><sc-for list="{{ fs.tipos }}" as="t" hint-placeholder-count="5"><option value="{{ t }}">{{ t }}</option></sc-for></select>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <label style="{{ st.label }}">Unidad de medida</label>
+                <select value="{{ fs.unidad }}" onChange="{{ fs.setUnidad }}" style="{{ st.input }}"><sc-for list="{{ fs.unidades }}" as="u" hint-placeholder-count="4"><option value="{{ u }}">{{ u }}</option></sc-for></select>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="{{ st.label }}">Precio de referencia</label>
+              <div style="display:flex;align-items:stretch;min-height:48px;border:1px solid #D3D9DE;border-radius:8px;overflow:hidden;background:#FFFFFF">
+                <select value="{{ fs.moneda }}" onChange="{{ fs.setMoneda }}" style="border:0;background:#F1F5F1;padding:0 8px;font-size:13px;font-weight:600;color:#1F3527"><option value="ARS">$</option><option value="USD">US$</option></select>
+                <input type="text" inputMode="decimal" value="{{ fs.precio }}" onChange="{{ fs.setPrecio }}" style="flex:1;min-width:0;border:0;padding:0 12px;background:transparent;font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:17px;font-weight:500;text-align:right;color:#14181B">
+              </div>
+              <div style="font-size:12px;line-height:1.4;color:#5F6A73">Solo para autocompletar: el precio real de cada aplicación se carga y edita aparte.</div>
+            </div>
+          </sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ f.esCosecha }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:20px;display:flex;flex-direction:column;gap:14px">
+            <div style="display:flex;flex-direction:column;gap:10px;padding:14px;border:1px solid #E4E8EB;border-radius:8px">
+              <label style="{{ st.label }}">Embolsado vendible · en {{ f.unidadPlural }}</label>
+              <div style="display:flex;align-items:center;gap:10px"><div style="width:104px;flex:none;font-size:15px;font-weight:500;color:#22303A">Primera</div><input type="text" inputMode="numeric" value="{{ f.primera }}" onChange="{{ f.setPrimera }}" style="{{ st.inputNum }}"><div style="width:56px;flex:none;font-size:13px;color:#5F6A73">{{ f.unidadPlural }}</div></div>
+              <div style="display:flex;align-items:center;gap:10px"><div style="width:104px;flex:none;font-size:15px;font-weight:500;color:#22303A">Segunda</div><input type="text" inputMode="numeric" value="{{ f.segunda }}" onChange="{{ f.setSegunda }}" style="{{ st.inputNum }}"><div style="width:56px;flex:none;font-size:13px;color:#5F6A73">{{ f.unidadPlural }}</div></div>
+              <div style="font-size:12px;line-height:1.45;color:#5F6A73">Las dos calidades del mismo corte se cargan juntas: son las que entran al costo por {{ f.unidad }}.</div>
+            </div>
+            <div style="{{ st.formCol2 }}">
+              <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Fecha</label><input type="date" value="{{ f.fecha }}" onChange="{{ f.setFecha }}" style="{{ st.input }}"></div>
+              <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Número de corte</label><input type="text" inputMode="numeric" value="{{ f.corte }}" onChange="{{ f.setCorte }}" style="{{ st.inputNum }}"></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:10px;padding:14px;border:1px dashed #D3D9DE;border-radius:8px;background:#FBFCFC">
+              <label style="{{ st.label }}">Descarte · se pesa, no se embolsa</label>
+              <div style="display:flex;align-items:center;gap:10px"><div style="width:104px;flex:none;font-size:15px;font-weight:500;color:#22303A">Descarte</div><input type="text" inputMode="numeric" value="{{ f.descarteKg }}" onChange="{{ f.setDescarte }}" style="{{ st.inputNum }}"><div style="width:56px;flex:none;font-size:13px;color:#5F6A73">kg</div></div>
+              <div style="font-size:12px;line-height:1.45;color:#5F6A73">Se registra en kilos para la tasa de descarte y el rendimiento por hectárea, pero no entra en el costo por {{ f.unidad }}.</div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ f.esVenta }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:20px;display:flex;flex-direction:column;gap:14px">
+          <sc-if value="{{ f.subNinguno }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <label style="{{ st.label }}">Cómo se vende</label>
+              <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
+                <div onClick="{{ f.modoCerrada }}" style="{{ f.estCerrada }}">Precio cerrado</div>
+                <div onClick="{{ f.modoConsignacion }}" style="{{ f.estConsignacion }}">Consignación</div>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Cantidad en {{ f.unidadPlural }}</label><input type="text" inputMode="numeric" value="{{ f.cantidad }}" onChange="{{ f.setCantidad }}" style="{{ st.inputNum }}"></div>
+            <sc-if value="{{ f.ventaCerrada }}" hint-placeholder-val="{{ true }}">
+              <div style="{{ st.formCol2 }}">
+                <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Precio por {{ f.unidad }}</label><input type="text" inputMode="numeric" value="{{ f.precio }}" onChange="{{ f.setPrecio }}" style="{{ st.inputNum }}"></div>
+                <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Flete y gastos</label><input type="text" inputMode="numeric" value="{{ f.gastos }}" onChange="{{ f.setGastos }}" style="{{ st.inputNum }}"></div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ f.avisaStock }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:10px 12px;border-radius:8px;background:#FCEDEC;border:1px solid #F3D4D1;font-size:13px;line-height:1.45;color:#8E2018">{{ f.stockTxt }}</div>
+            </sc-if>
+            <sc-if value="{{ f.ventaConsignacion }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:10px 12px;border-radius:8px;background:repeating-linear-gradient(135deg,#F5F8FB 0 8px,#EDF2F7 8px 16px);border:1px dashed #A9BACB;font-size:13px;line-height:1.45;color:#3E5C7A">{{ f.notaConsignacion }}</div>
+            </sc-if>
+            <div style="{{ st.formCol2 }}">
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <label style="{{ st.label }}">Comprador</label>
+                <select value="{{ f.compradorId }}" onChange="{{ f.setComprador }}" style="{{ st.input }}">
+                  <sc-for list="{{ f.compradores }}" as="c" hint-placeholder-count="3"><option value="{{ c.id }}">{{ c.nombre }}</option></sc-for>
+                  <option value="__nuevo__">+ Nuevo comprador…</option>
+                </select>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <label style="{{ st.label }}">Calidad</label>
+                <select value="{{ f.calidad }}" onChange="{{ f.setCalidad }}" style="{{ st.input }}">
+                  <sc-for list="{{ f.calidades }}" as="q" hint-placeholder-count="2"><option value="{{ q.valor }}">{{ q.label }}</option></sc-for>
+                </select>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Fecha de entrega</label><input type="date" value="{{ f.fecha }}" onChange="{{ f.setFecha }}" style="{{ st.input }}"></div>
+          </sc-if>
+          <sc-if value="{{ f.subComprador }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:10px 12px;border-radius:8px;background:#F1F5F1;border:1px solid #DFE9E1;font-size:13px;line-height:1.45;color:#1F3527">Se agrega al catálogo de compradores y queda seleccionado en esta venta.</div>
+            <div style="{{ st.formCol2 }}">
+              <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Nombre</label><input type="text" value="{{ fs.nombre }}" onChange="{{ fs.setNombre }}" style="{{ st.input }}"></div>
+              <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">CUIT</label><input type="text" value="{{ fs.cuit }}" onChange="{{ fs.setCuit }}" placeholder="30-12345678-9" style="{{ st.input }}"></div>
+            </div>
+            <div style="{{ st.formCol2 }}">
+              <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Persona de contacto</label><input type="text" value="{{ fs.contacto }}" onChange="{{ fs.setContacto }}" style="{{ st.input }}"></div>
+              <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Teléfono</label><input type="text" value="{{ fs.tel }}" onChange="{{ fs.setTel }}" style="{{ st.input }}"></div>
+            </div>
+            <div style="{{ st.formCol2 }}">
+              <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Localidad</label><input type="text" value="{{ fs.plaza }}" onChange="{{ fs.setPlaza }}" style="{{ st.input }}"></div>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <label style="{{ st.label }}">Modalidad habitual</label>
+                <select value="{{ fs.consignacionTxt }}" onChange="{{ fs.setModalidad }}" style="{{ st.input }}">
+                  <option value="cerrado">Precio cerrado</option>
+                  <option value="consignacion">Consignación</option>
+                </select>
+              </div>
+            </div>
+          </sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ f.esLiquidacion }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:20px;display:flex;flex-direction:column;gap:14px">
+            <div style="padding:10px 12px;border-radius:8px;background:#FDF3E7;border:1px solid #F1DFC4;font-size:13px;line-height:1.45;color:#8A5A12">{{ f.esperaTxt }}</div>
+            <div style="{{ st.formCol2 }}">
+              <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Fecha de liquidación</label><input type="date" value="{{ f.fecha }}" onChange="{{ f.setFecha }}" style="{{ st.input }}"></div>
+              <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Precio por {{ f.unidad }}</label><input type="text" inputMode="numeric" value="{{ f.precio }}" onChange="{{ f.setPrecio }}" style="{{ st.inputNum }}"></div>
+            </div>
+            <div style="{{ st.formCol2 }}">
+              <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Comisión %</label><input type="text" inputMode="decimal" value="{{ f.comision }}" onChange="{{ f.setComision }}" style="{{ st.inputNum }}"></div>
+              <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Flete y gastos</label><input type="text" inputMode="numeric" value="{{ f.gastos }}" onChange="{{ f.setGastos }}" style="{{ st.inputNum }}"></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;padding:14px;border:1px solid #E4E8EB;border-radius:8px">
+              <sc-for list="{{ f.lineas }}" as="li" hint-placeholder-count="3">
+                <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px"><div style="font-size:13px;color:#46515A">{{ li.concepto }}</div><div style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:15px;font-weight:500;color:#46515A">{{ li.importeTxt }}</div></div>
+              </sc-for>
+              <div style="height:1px;background:#E4E8EB"></div>
+              <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px"><div style="font-size:14px;font-weight:600">Neto a cobrar</div><div style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:19px;font-weight:600">{{ f.netoTxt }}</div></div>
+            </div>
+            <div style="padding:10px 12px;border-radius:8px;background:#F1F5F1;border:1px solid #DFE9E1;font-size:13px;line-height:1.45;color:#1F3527">{{ f.notaLiquidacion }}</div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ f.esIndirecto }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:20px;display:flex;flex-direction:column;gap:14px">
+            <div style="{{ st.formCol2 }}">
+              <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Concepto</label><input type="text" value="{{ f.concepto }}" onChange="{{ f.setConcepto }}" placeholder="Limpieza de canales" style="{{ st.input }}"></div>
+              <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Importe</label><input type="text" inputMode="numeric" value="{{ f.importe }}" onChange="{{ f.setImporte }}" style="{{ st.inputNum }}"></div>
+            </div>
+            <div style="padding:10px 12px;border-radius:8px;background:#F7F8F9;border:1px solid #E4E8EB;font-size:13px;line-height:1.45;color:#46515A">Se reparte por hectárea sembrada entre los {{ ind.cantidadLotes }} lote-campaña de la campaña.</div>
+            <div style="display:flex;flex-direction:column;background:#FFFFFF;border:1px solid #E4E8EB;border-radius:8px;overflow:hidden">
+              <sc-for list="{{ f.preview }}" as="p" hint-placeholder-count="4">
+                <div style="display:grid;grid-template-columns:minmax(0,1fr) 64px 124px;gap:10px;padding:10px 14px;border-bottom:1px solid #F1F3F5"><div style="font-size:14px;color:#22303A">{{ p.lote }}</div><div style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#5F6A73;text-align:right">{{ p.haTxt }}</div><div style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:14px;font-weight:500;text-align:right">{{ p.importeTxt }}</div></div>
+              </sc-for>
+              <div style="display:grid;grid-template-columns:minmax(0,1fr) 64px 124px;gap:10px;padding:12px 14px;background:#FBFCFC"><div style="font-size:14px;font-weight:600">Suma del reparto</div><div></div><div style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:15px;font-weight:600;text-align:right">{{ f.previewTotalTxt }}</div></div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ f.esSembrar }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:20px;display:flex;flex-direction:column;gap:14px">
+            <sc-if value="{{ f.sinLotesDisponibles }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:14px;border-radius:8px;background:#FCEDEC;border:1px solid #F3D4D1;display:flex;flex-direction:column;gap:10px">
+                <div style="font-size:14px;line-height:1.45;color:#8E2018">{{ f.textoSinLotes }}</div>
+                <div onClick="{{ f.irACatalogo }}" style="{{ st.btnSecVerde }}">Ir al catálogo de lotes</div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ f.hayLotesDisponibles }}" hint-placeholder-val="{{ true }}">
+              <sc-if value="{{ f.subNinguno }}" hint-placeholder-val="{{ true }}">
+              <div style="{{ st.formCol2 }}">
+                <div style="display:flex;flex-direction:column;gap:6px">
+                  <label style="{{ st.label }}">Lote</label>
+                  <select value="{{ f.loteId }}" onChange="{{ f.setLoteId }}" style="{{ st.input }}">
+                    <sc-for list="{{ f.lotesDisponibles }}" as="l" hint-placeholder-count="4"><option value="{{ l.id }}">{{ l.label }}</option></sc-for>
+                  </select>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:6px">
+                  <label style="{{ st.label }}">Cultivo</label>
+                  <select value="{{ f.cultivoId }}" onChange="{{ f.setCultivoId }}" style="{{ st.input }}">
+                    <sc-for list="{{ f.cultivosDisponibles }}" as="cu" hint-placeholder-count="4"><option value="{{ cu.id }}">{{ cu.nombre }}</option></sc-for>
+                    <option value="__nuevo__">+ Nuevo cultivo…</option>
+                  </select>
+                </div>
+              </div>
+              <sc-if value="{{ f.hayCiclo }}" hint-placeholder-val="{{ false }}">
+                <div style="padding:10px 12px;border-radius:8px;background:#FDF3E7;border:1px solid #F1DFC4;font-size:13px;line-height:1.45;color:#8A5A12">{{ f.cicloTxt }}</div>
+              </sc-if>
+              <sc-if value="{{ f.hayNotaCultivo }}" hint-placeholder-val="{{ false }}">
+                <div style="padding:10px 12px;border-radius:8px;background:#F1F5F1;border:1px solid #DFE9E1;font-size:13px;line-height:1.45;color:#1F3527">{{ f.notaCultivo }}</div>
+              </sc-if>
+              <div style="{{ st.formCol2 }}">
+                <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Variedad</label><input type="text" value="{{ f.variedad }}" onChange="{{ f.setVariedad }}" placeholder="Valcatorce INTA" style="{{ st.input }}"></div>
+                <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Hectáreas sembradas</label><input type="text" inputMode="decimal" value="{{ f.haSembradas }}" onChange="{{ f.setHaSembradas }}" style="{{ st.inputNum }}"></div>
+              </div>
+              <div style="font-size:12px;line-height:1.4;color:#5F6A73">{{ f.notaHaLote }}</div>
+              <div style="{{ st.formCol2 }}">
+                <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Fecha de siembra</label><input type="date" value="{{ f.fechaSiembra }}" onChange="{{ f.setFechaSiembra }}" style="{{ st.input }}"></div>
+                <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Fecha de trasplante (opcional)</label><input type="date" value="{{ f.fechaTrasplante }}" onChange="{{ f.setFechaTrasplante }}" style="{{ st.input }}"></div>
+              </div>
+              </sc-if>
+              <sc-if value="{{ f.subCultivo }}" hint-placeholder-val="{{ false }}">
+                <div style="padding:10px 12px;border-radius:8px;background:#F1F5F1;border:1px solid #DFE9E1;font-size:13px;line-height:1.45;color:#1F3527">Se agrega al catálogo de cultivos y queda seleccionado en esta siembra.</div>
+                <div style="{{ st.formCol2 }}">
+                  <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Nombre</label><input type="text" value="{{ fs.nombre }}" onChange="{{ fs.setNombre }}" placeholder="Cebolla" style="{{ st.input }}"></div>
+                  <div style="display:flex;flex-direction:column;gap:6px">
+                    <label style="{{ st.label }}">Unidad de producción</label>
+                    <select value="{{ fs.presetId }}" onChange="{{ fs.setPreset }}" style="{{ st.input }}"><sc-for list="{{ fs.presets }}" as="p" hint-placeholder-count="6"><option value="{{ p.id }}">{{ p.label }}</option></sc-for></select>
+                  </div>
+                </div>
+                <div style="{{ st.formCol2 }}">
+                  <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Precio de referencia primera</label><input type="text" inputMode="numeric" value="{{ fs.precioPrimera }}" onChange="{{ fs.setPrecioPrimera }}" style="{{ st.inputNum }}"></div>
+                  <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Precio de referencia segunda</label><input type="text" inputMode="numeric" value="{{ fs.precioSegunda }}" onChange="{{ fs.setPrecioSegunda }}" style="{{ st.inputNum }}"></div>
+                </div>
+              </sc-if>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ f.esLoteForm }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:20px;display:flex;flex-direction:column;gap:14px">
+            <div style="{{ st.formCol2 }}">
+              <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Nombre</label><input type="text" value="{{ f.nombre }}" onChange="{{ f.setNombre }}" placeholder="Lote 7" style="{{ st.input }}"></div>
+              <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Superficie en hectáreas</label><input type="text" inputMode="decimal" value="{{ f.ha }}" onChange="{{ f.setHa }}" style="{{ st.inputNum }}"></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="{{ st.label }}">Tipo de suelo</label>
+              <select value="{{ f.tipoSuelo }}" onChange="{{ f.setTipoSuelo }}" style="{{ st.input }}"><sc-for list="{{ f.suelos }}" as="t" hint-placeholder-count="5"><option value="{{ t }}">{{ t }}</option></sc-for></select>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Comentarios (opcional)</label><input type="text" value="{{ f.comentarios }}" onChange="{{ f.setComentarios }}" placeholder="Frente al canal, sector norte" style="{{ st.input }}"></div>
+            <sc-if value="{{ f.esEdicion }}" hint-placeholder-val="{{ false }}">
+              <div onClick="{{ f.alternarBaja }}" style="{{ f.estiloBaja }}">{{ f.textoBaja }}</div>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ f.esCultivoForm }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:20px;display:flex;flex-direction:column;gap:14px">
+            <div style="{{ st.formCol2 }}">
+              <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Nombre</label><input type="text" value="{{ f.nombre }}" onChange="{{ f.setNombre }}" placeholder="Cebolla" style="{{ st.input }}"></div>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <label style="{{ st.label }}">Unidad de producción</label>
+                <select value="{{ f.presetId }}" onChange="{{ f.setPreset }}" style="{{ st.input }}"><sc-for list="{{ f.presets }}" as="p" hint-placeholder-count="6"><option value="{{ p.id }}">{{ p.label }}</option></sc-for></select>
+              </div>
+            </div>
+            <div style="{{ st.formCol2 }}">
+              <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Nombre singular</label><input type="text" value="{{ f.unidad }}" onChange="{{ f.setUnidad }}" placeholder="bolsa" style="{{ st.input }}"></div>
+              <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Nombre plural</label><input type="text" value="{{ f.unidadPlural }}" onChange="{{ f.setUnidadPlural }}" placeholder="bolsas" style="{{ st.input }}"></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Kilos por unidad</label><input type="text" inputMode="decimal" value="{{ f.kgPorUnidad }}" onChange="{{ f.setKgPorUnidad }}" style="{{ st.inputNum }}"></div>
+            <div style="{{ st.formCol2 }}">
+              <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Precio de referencia primera</label><input type="text" inputMode="numeric" value="{{ f.precioPrimera }}" onChange="{{ f.setPrecioPrimera }}" style="{{ st.inputNum }}"></div>
+              <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Precio de referencia segunda</label><input type="text" inputMode="numeric" value="{{ f.precioSegunda }}" onChange="{{ f.setPrecioSegunda }}" style="{{ st.inputNum }}"></div>
+            </div>
+            <sc-if value="{{ f.hayActualizado }}" hint-placeholder-val="{{ false }}">
+              <div style="font-size:12px;line-height:1.4;color:#5F6A73">{{ f.actualizadoTxt }}</div>
+            </sc-if>
+            <sc-if value="{{ f.esEdicion }}" hint-placeholder-val="{{ false }}">
+              <div onClick="{{ f.alternarBaja }}" style="{{ f.estiloBaja }}">{{ f.textoBaja }}</div>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ f.esInsumoForm }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:20px;display:flex;flex-direction:column;gap:14px">
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Nombre</label><input type="text" value="{{ f.nombre }}" onChange="{{ f.setNombre }}" placeholder="Fertilizante foliar importado" style="{{ st.input }}"></div>
+            <div style="{{ st.formCol2 }}">
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <label style="{{ st.label }}">Tipo</label>
+                <select value="{{ f.tipo }}" onChange="{{ f.setTipo }}" style="{{ st.input }}"><sc-for list="{{ f.tipos }}" as="t" hint-placeholder-count="5"><option value="{{ t }}">{{ t }}</option></sc-for></select>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <label style="{{ st.label }}">Unidad de medida</label>
+                <select value="{{ f.unidad }}" onChange="{{ f.setUnidad }}" style="{{ st.input }}"><sc-for list="{{ f.unidades }}" as="u" hint-placeholder-count="4"><option value="{{ u }}">{{ u }}</option></sc-for></select>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="{{ st.label }}">Precio de referencia</label>
+              <div style="display:flex;align-items:stretch;min-height:48px;border:1px solid #D3D9DE;border-radius:8px;overflow:hidden;background:#FFFFFF">
+                <select value="{{ f.moneda }}" onChange="{{ f.setMoneda }}" style="border:0;background:#F1F5F1;padding:0 8px;font-size:13px;font-weight:600;color:#1F3527"><option value="ARS">$</option><option value="USD">US$</option></select>
+                <input type="text" inputMode="decimal" value="{{ f.precio }}" onChange="{{ f.setPrecio }}" style="flex:1;min-width:0;border:0;padding:0 12px;background:transparent;font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:17px;font-weight:500;text-align:right;color:#14181B">
+              </div>
+              <div style="font-size:12px;line-height:1.4;color:#5F6A73">Solo para autocompletar: al cargar una aplicación este precio se copia y queda editable, sin afectar aplicaciones ya cargadas.</div>
+            </div>
+            <sc-if value="{{ f.esEdicion }}" hint-placeholder-val="{{ false }}">
+              <div onClick="{{ f.alternarBaja }}" style="{{ f.estiloBaja }}">{{ f.textoBaja }}</div>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ f.esCompradorForm }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:20px;display:flex;flex-direction:column;gap:14px">
+            <div style="{{ st.formCol2 }}">
+              <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Nombre</label><input type="text" value="{{ f.nombre }}" onChange="{{ f.setNombre }}" placeholder="Distribuidora San Jorge" style="{{ st.input }}"></div>
+              <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">CUIT</label><input type="text" value="{{ f.cuit }}" onChange="{{ f.setCuit }}" placeholder="30-12345678-9" style="{{ st.input }}"></div>
+            </div>
+            <div style="{{ st.formCol2 }}">
+              <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Persona de contacto</label><input type="text" value="{{ f.contacto }}" onChange="{{ f.setContacto }}" style="{{ st.input }}"></div>
+              <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Teléfono</label><input type="text" value="{{ f.tel }}" onChange="{{ f.setTel }}" style="{{ st.input }}"></div>
+            </div>
+            <div style="{{ st.formCol2 }}">
+              <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Localidad</label><input type="text" value="{{ f.plaza }}" onChange="{{ f.setPlaza }}" style="{{ st.input }}"></div>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <label style="{{ st.label }}">Modalidad habitual</label>
+                <select value="{{ f.consignacionTxt }}" onChange="{{ f.setModalidad }}" style="{{ st.input }}">
+                  <option value="cerrado">Precio cerrado</option>
+                  <option value="consignacion">Consignación</option>
+                </select>
+              </div>
+            </div>
+            <sc-if value="{{ f.esEdicion }}" hint-placeholder-val="{{ false }}">
+              <div onClick="{{ f.alternarBaja }}" style="{{ f.estiloBaja }}">{{ f.textoBaja }}</div>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ f.esCampania }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:14px;display:flex;flex-direction:column;gap:8px">
+            <sc-for list="{{ f.campanias }}" as="c" hint-placeholder-count="2">
+              <div onClick="{{ c.elegir }}" style="{{ c.estilo }}">
+                <div><div style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;color:#1F3527">{{ c.nombre }}</div><div style="font-size:12px;color:#5F6A73">{{ c.sub }}</div></div>
+                <div style="font-size:13px;font-weight:600;color:#3F6B4E">{{ c.marca }}</div>
+              </div>
+            </sc-for>
+            <div onClick="{{ f.nueva }}" style="min-height:52px;display:flex;align-items:center;justify-content:center;border-radius:10px;border:1px dashed #9FB8A6;background:#FBFDFB;font-size:15px;font-weight:600;color:#1F3527;cursor:pointer">+ Nueva campaña</div>
+            <sc-if value="{{ f.puedeCerrar }}" hint-placeholder-val="{{ true }}">
+              <div onClick="{{ f.cerrarCampania }}" style="min-height:48px;display:flex;align-items:center;justify-content:center;border-radius:10px;border:1px solid #D3D9DE;background:#FFFFFF;font-size:14px;font-weight:600;color:#46515A;cursor:pointer">{{ f.textoCerrar }}</div>
+            </sc-if>
+            <div style="font-size:12px;line-height:1.45;color:#5F6A73;padding:4px 6px">{{ f.notaCampania }}</div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ f.esNuevaCampania }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:20px;display:flex;flex-direction:column;gap:14px">
+            <div style="{{ st.formCol2 }}">
+              <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Nombre</label><input type="text" value="{{ f.nombre }}" onChange="{{ f.setNombre }}" placeholder="2026/27" style="{{ st.input }}"></div>
+              <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Gastos de comercialización</label><div style="display:flex;align-items:stretch;min-height:48px;border:1px solid #D3D9DE;border-radius:8px;overflow:hidden;background:#FFFFFF"><input type="text" inputMode="decimal" value="{{ f.gastosPct }}" onChange="{{ f.setGastosPct }}" style="flex:1;min-width:0;border:0;padding:0 12px;background:transparent;font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:17px;font-weight:500;text-align:right;color:#14181B"><div style="display:flex;align-items:center;padding:0 12px;border-left:1px solid #E4E8EB;background:#F7F8F9;font-size:14px;color:#5F6A73">%</div></div></div>
+            </div>
+            <div style="{{ st.formCol2 }}">
+              <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Fecha de inicio</label><input type="date" value="{{ f.inicio }}" onChange="{{ f.setInicio }}" style="{{ st.input }}"></div>
+              <div style="display:flex;flex-direction:column;gap:6px"><label style="{{ st.label }}">Fecha de fin</label><input type="date" value="{{ f.fin }}" onChange="{{ f.setFin }}" style="{{ st.input }}"></div>
+            </div>
+            <div style="padding:10px 12px;border-radius:8px;background:#F1F5F1;border:1px solid #DFE9E1;font-size:13px;line-height:1.45;color:#1F3527">{{ f.notaNueva }}</div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ f.esCargar }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:14px;display:flex;flex-direction:column;gap:8px">
+            <div style="font-size:12px;color:#5F6A73;padding:0 6px">Se carga en {{ f.loteActual }}</div>
+            <sc-for list="{{ f.opciones }}" as="o" hint-placeholder-count="4">
+              <div onClick="{{ o.ir }}" style="min-height:56px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 14px;border:1px solid #D3D9DE;border-radius:10px;font-size:16px;font-weight:600;color:#22303A;cursor:pointer">{{ o.label }}<span style="font-size:13px;font-weight:400;color:#5F6A73">{{ o.sub }}</span></div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ f.esMas }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:14px;display:flex;flex-direction:column;gap:8px">
+            <sc-for list="{{ f.masOpciones }}" as="o" hint-placeholder-count="4">
+              <div onClick="{{ o.ir }}" style="min-height:52px;display:flex;align-items:center;padding:0 14px;border:1px solid #D3D9DE;border-radius:10px;font-size:15px;font-weight:600;color:#22303A;cursor:pointer">{{ o.label }}</div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        </div>
+
+        <sc-if value="{{ f.hayError }}" hint-placeholder-val="{{ false }}">
+          <div style="margin:0 20px 4px;padding:10px 12px;border-radius:8px;background:#FCEDEC;border:1px solid #F3D4D1;font-size:13px;line-height:1.45;color:#8E2018">{{ f.error }}</div>
+        </sc-if>
+
+        <sc-if value="{{ f.tieneGuardar }}" hint-placeholder-val="{{ false }}">
+          <div style="{{ st.pieModal }}">
+            <sc-if value="{{ f.hayTotal }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px">
+                <div style="min-width:0"><div style="font-size:12px;font-weight:600;color:#5F6A73;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><span style="text-transform:uppercase;letter-spacing:.04em">{{ f.totalLabel }}</span> · <span style="font-weight:400">{{ f.totalDetalle }}</span></div></div>
+                <div style="display:flex;align-items:baseline;gap:5px">
+                  <sc-if value="{{ f.totalEsPlata }}" hint-placeholder-val="{{ true }}">
+                    <span style="font-family:'IBM Plex Mono',monospace;font-size:16px;color:#5F6A73">$</span>
+                  </sc-if>
+                  <span style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:28px;font-weight:600">{{ f.totalTxt }}</span>
+                  <sc-if value="{{ f.totalEsCantidad }}" hint-placeholder-val="{{ false }}">
+                    <span style="font-size:14px;color:#5F6A73">{{ f.totalUnidad }}</span>
+                  </sc-if>
+                </div>
+              </div>
+            </sc-if>
+            <div style="display:flex;gap:8px">
+              <div onClick="{{ f.cancelar }}" style="{{ st.btnSecAncho }}">Cancelar</div>
+              <div onClick="{{ f.guardar }}" style="{{ f.estiloGuardar }}">{{ f.textoGuardar }}</div>
+            </div>
+            <sc-if value="{{ f.hayPista }}" hint-placeholder-val="{{ false }}">
+              <div style="font-size:12px;line-height:1.4;color:#5F6A73;text-align:center">{{ f.pista }}</div>
+            </sc-if>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+</sc-if>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:900}}">
+class Component extends DCLogic {
+  state = {
+    D: null, logueado: false, ruta: 'tablero', loteId: 'LC3', historial: [],
+    modal: null, ventaRef: null, form: {}, error: null, aviso: null,
+    sinSenal: false, moneda: 'ARS', precio: '', ancho: 1280,
+    sub: null, formSub: {}, catTipoInsumo: 'todos', catBajaLotes: false, catBajaInsumos: false, catBajaCompradores: false, catBajaCultivos: false
+  };
+
+  componentDidMount() {
+    this._m = () => this.setState({ ancho: window.innerWidth });
+    window.addEventListener('resize', this._m);
+    this._m();
+    import('./datos.js').then((M) => { this.M = M; this.setState({ D: M.estadoInicial() }); });
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this._m);
+    if (this._t) clearTimeout(this._t);
+  }
+
+  toast(t) {
+    this.setState({ aviso: t });
+    if (this._t) clearTimeout(this._t);
+    this._t = setTimeout(() => this.setState({ aviso: null }), 3200);
+  }
+  num(v) {
+    const n = Number(String(v == null ? '' : v).replace(/\./g, '').replace(',', '.').replace(/[^0-9.]/g, ''));
+    return isNaN(n) ? 0 : n;
+  }
+  clon() { return JSON.parse(JSON.stringify(this.state.D)); }
+  lote(D) {
+    const d = D || this.state.D;
+    const lista = d.loteCampanias.filter((l) => l.campaniaId === d.campaniaActiva);
+    return lista.find((l) => l.id === this.state.loteId) || lista[0] || null;
+  }
+  soloLectura() {
+    const c = this.state.D.campanias.find((x) => x.id === this.state.D.campaniaActiva);
+    return !!c && c.estado === 'cerrada';
+  }
+
+  ir(ruta, loteId) {
+    this.setState((s) => ({
+      historial: s.historial.concat([{ ruta: s.ruta, loteId: s.loteId }]),
+      ruta, loteId: loteId || s.loteId, modal: null, error: null, precio: ''
+    }));
+  }
+  volver() {
+    this.setState((s) => {
+      const h = s.historial.slice();
+      const p = h.pop();
+      return p ? { historial: h, ruta: p.ruta, loteId: p.loteId, modal: null } : { modal: null };
+    });
+  }
+
+  abrir(tipo, extra) {
+    const M = this.M;
+    if (!M) return;
+    const catalogo = tipo === 'loteForm' || tipo === 'insumoForm' || tipo === 'compradorForm' || tipo === 'cultivoForm';
+    if (this.soloLectura() && tipo !== 'nuevaCampania' && !catalogo) {
+      this.toast('La campaña está cerrada: es solo lectura. Cambiá de campaña o reabrila para cargar.');
+      return;
+    }
+    const lc = this.lote();
+    if (!lc && tipo !== 'nuevaCampania' && tipo !== 'indirecto' && tipo !== 'sembrar' && !catalogo) {
+      this.toast('Esta campaña todavía no tiene lotes sembrados.');
+      return;
+    }
+    let form = {};
+    if (tipo === 'tarea') form = { nombre: 'Carpida', ejecutor: 'Cuadrilla', fecha: M.hoyISO(), modalidad: 'jornal', valor: '35000', cantidad: '', nota: '' };
+    if (tipo === 'aplicacion') {
+      const activos2 = this.state.D.insumos.filter((x) => x.activo);
+      const i = activos2.find((x) => x.id === 'I05') || activos2[0];
+      form = i
+        ? { insumoId: i.id, fecha: M.hoyISO(), cantidad: '', precio: String(i.precio), moneda: i.moneda, tc: String(M.TC_ULTIMO) }
+        : { insumoId: '', fecha: M.hoyISO(), cantidad: '', precio: '', moneda: 'ARS', tc: String(M.TC_ULTIMO) };
+    }
+    if (tipo === 'cosecha') {
+      const ult = lc.cosechas.reduce((a, b) => Math.max(a, b.corte), 0);
+      form = { fecha: M.hoyISO(), corte: String(ult + 1), primera: '', segunda: '', descarteKg: '' };
+    }
+    if (tipo === 'venta') {
+      const c = M.calcularLote(this.state.D, lc);
+      const calidad = c.stock.primera > 0 ? 'primera' : (c.stock.segunda > 0 ? 'segunda' : 'primera');
+      const compActivos = this.state.D.compradores.filter((x) => x.activo);
+      form = { compradorId: compActivos[0] ? compActivos[0].id : '', calidad, fecha: M.hoyISO(), cantidad: '', tipo: 'cerrada', precio: String(M.precioRefDe(this.state.D, lc)[calidad]), gastos: '' };
+    }
+    if (tipo === 'liquidacion') {
+      const lcv = this.state.D.loteCampanias.find((l) => l.id === extra.lcId);
+      form = { fecha: M.hoyISO(), precio: String(M.precioRefDe(this.state.D, lcv)[extra.calidad]), comision: '8', gastos: '' };
+    }
+    if (tipo === 'indirecto') form = { concepto: '', importe: '' };
+    if (tipo === 'nuevaCampania') form = { nombre: '', inicio: '2026-03-01', fin: '2027-06-30', gastosPct: '12' };
+    if (tipo === 'sembrar') {
+      const lotesAct = this.state.D.lotes.filter((x) => x.activo);
+      const cultAct = this.state.D.cultivos.filter((x) => x.activo);
+      form = {
+        loteId: lotesAct[0] ? lotesAct[0].id : '', cultivoId: cultAct[0] ? cultAct[0].id : '',
+        variedad: '', fechaSiembra: M.hoyISO(), fechaTrasplante: '', haSembradas: ''
+      };
+    }
+    if (tipo === 'loteForm') {
+      if (extra && extra.editId) {
+        const l = this.state.D.lotes.find((x) => x.id === extra.editId);
+        form = { editId: l.id, nombre: l.nombre, ha: String(l.ha), tipoSuelo: l.tipoSuelo, comentarios: l.comentarios || '', activo: l.activo };
+      } else {
+        form = { editId: null, nombre: '', ha: '', tipoSuelo: M.SUELO_TIPOS[0], comentarios: '' };
+      }
+    }
+    if (tipo === 'insumoForm') {
+      if (extra && extra.editId) {
+        const i = this.state.D.insumos.find((x) => x.id === extra.editId);
+        form = { editId: i.id, nombre: i.nombre, tipo: i.tipo, unidad: i.unidad, precio: String(i.precio), moneda: i.moneda, activo: i.activo };
+      } else {
+        form = { editId: null, nombre: '', tipo: M.INSUMO_TIPOS[0], unidad: M.UNIDADES_INSUMO[0], precio: '', moneda: 'ARS' };
+      }
+    }
+    if (tipo === 'compradorForm') {
+      if (extra && extra.editId) {
+        const c = this.state.D.compradores.find((x) => x.id === extra.editId);
+        form = { editId: c.id, nombre: c.nombre, contacto: c.contacto, cuit: c.cuit, tel: c.tel, plaza: c.plaza, consignacionTxt: c.consignacion ? 'consignacion' : 'cerrado', activo: c.activo };
+      } else {
+        form = { editId: null, nombre: '', contacto: '', cuit: '', tel: '', plaza: '', consignacionTxt: 'cerrado' };
+      }
+    }
+    if (tipo === 'cultivoForm') {
+      if (extra && extra.editId) {
+        const cu = this.state.D.cultivos.find((x) => x.id === extra.editId);
+        const pr = M.UNIDADES_PRESET.find((p) => p.unidad === cu.unidad) || M.UNIDADES_PRESET[M.UNIDADES_PRESET.length - 1];
+        form = { editId: cu.id, nombre: cu.nombre, presetId: pr.id, unidad: cu.unidad, unidadPlural: cu.unidadPlural, kgPorUnidad: String(cu.kgPorUnidad), precioPrimera: String(cu.precioPrimera), precioSegunda: String(cu.precioSegunda), fechaPrecio: cu.fechaPrecio, activo: cu.activo };
+      } else {
+        const preset = M.UNIDADES_PRESET[0];
+        form = { editId: null, nombre: '', presetId: preset.id, unidad: preset.unidad, unidadPlural: preset.unidadPlural, kgPorUnidad: String(preset.kgPorUnidad), precioPrimera: '', precioSegunda: '' };
+      }
+    }
+    this.setState({ modal: tipo, form, error: null, sub: null, formSub: {}, ventaRef: tipo === 'liquidacion' ? extra : null });
+  }
+  cerrar() { this.setState({ modal: null, error: null, sub: null }); }
+  campo(k) {
+    return (e) => {
+      const v = e && e.target ? e.target.value : e;
+      this.setState((s) => ({ form: Object.assign({}, s.form, { [k]: v }), error: null }));
+    };
+  }
+  campoSub(k) {
+    return (e) => {
+      const v = e && e.target ? e.target.value : e;
+      this.setState((s) => ({ formSub: Object.assign({}, s.formSub, { [k]: v }), error: null }));
+    };
+  }
+
+  guardarTarea() {
+    const M = this.M, f = this.state.form, D = this.clon();
+    const lc = D.loteCampanias.find((l) => l.id === this.lote(D).id);
+    if (this.num(f.valor) <= 0) { this.setState({ error: 'Falta el importe. Poné un valor mayor que cero para poder calcular el total.' }); return; }
+    D.secuencia += 1;
+    lc.tareas.push({
+      id: 't' + D.secuencia, fecha: f.fecha, nombre: f.nombre, ejecutor: f.ejecutor, modalidad: f.modalidad,
+      valor: this.num(f.valor),
+      cantidad: (f.modalidad === 'jornal' || f.modalidad === 'destajo') ? this.num(f.cantidad) : null,
+      nota: f.nota || '', pendiente: this.state.sinSenal
+    });
+    const total = M.totalTarea(lc.tareas[lc.tareas.length - 1], lc.haSembradas);
+    this.setState({ D, modal: null });
+    this.toast(f.nombre + ' cargada por $ ' + M.miles(total) + (this.state.sinSenal ? ' · pendiente de subir' : ''));
+  }
+
+  guardarAplicacion() {
+    const M = this.M, f = this.state.form, D = this.clon();
+    const lc = D.loteCampanias.find((l) => l.id === this.lote(D).id);
+    if (this.num(f.cantidad) <= 0) { this.setState({ error: 'Falta la cantidad aplicada. Sin cantidad no se puede calcular el total.' }); return; }
+    D.secuencia += 1;
+    const ap = {
+      id: 'a' + D.secuencia, fecha: f.fecha, insumoId: f.insumoId,
+      cantidad: this.num(f.cantidad), precio: this.num(f.precio),
+      moneda: f.moneda, tc: f.moneda === 'USD' ? this.num(f.tc) : null,
+      pendiente: this.state.sinSenal
+    };
+    lc.aplicaciones.push(ap);
+    this.setState({ D, modal: null });
+    this.toast('Aplicación cargada por $ ' + M.miles(M.totalAplicacion(ap)));
+  }
+
+  guardarCosecha() {
+    const M = this.M, f = this.state.form, D = this.clon();
+    const lc = D.loteCampanias.find((l) => l.id === this.lote(D).id);
+    const p = this.num(f.primera), sg = this.num(f.segunda);
+    if (p + sg <= 0) { this.setState({ error: 'Cargá al menos una calidad con cantidad: sin cantidades vendibles no hay costo por unidad.' }); return; }
+    D.secuencia += 1;
+    lc.cosechas.push({ id: 'c' + D.secuencia, fecha: f.fecha, corte: this.num(f.corte) || 1, primera: p, segunda: sg, descarteKg: this.num(f.descarteKg) });
+    this.setState({ D, modal: null });
+    this.toast('Corte ' + (this.num(f.corte) || 1) + ' cargado: ' + M.miles(p + sg) + ' ' + lc.unidadPlural + ' vendibles');
+  }
+
+  guardarVenta() {
+    const M = this.M, f = this.state.form, D = this.clon();
+    const lc = D.loteCampanias.find((l) => l.id === this.lote(D).id);
+    const c = M.calcularLote(this.state.D, this.lote());
+    const cant = this.num(f.cantidad);
+    const disp = c.stock[f.calidad];
+    if (cant <= 0) { this.setState({ error: 'Falta la cantidad vendida.' }); return; }
+    if (cant > disp) {
+      this.setState({ error: 'Quedan ' + M.miles(disp) + ' ' + lc.unidadPlural + ' de ' + f.calidad + ' en galpón. Estás vendiendo ' + M.miles(cant) + ' y no alcanzan: cargá primero el corte que falta, o bajá la cantidad a ' + M.miles(disp) + '.' });
+      return;
+    }
+    if (f.tipo === 'cerrada' && this.num(f.precio) <= 0) { this.setState({ error: 'Una venta con precio cerrado necesita el precio por ' + lc.unidad + '.' }); return; }
+    D.secuencia += 1;
+    lc.ventas.push({
+      id: 'v' + D.secuencia, fecha: f.fecha || M.hoyISO(), compradorId: f.compradorId, calidad: f.calidad,
+      cantidad: cant, precio: f.tipo === 'cerrada' ? this.num(f.precio) : null,
+      gastos: f.tipo === 'cerrada' ? this.num(f.gastos) : 0,
+      estado: f.tipo === 'cerrada' ? 'liquidada' : 'pendiente',
+      fechaLiquidacion: f.tipo === 'cerrada' ? (f.fecha || M.hoyISO()) : null
+    });
+    this.setState({ D, modal: null });
+    this.toast(f.tipo === 'cerrada' ? 'Venta liquidada cargada' : 'Entrega en consignación cargada: queda pendiente de liquidación');
+  }
+
+  guardarLiquidacion() {
+    const M = this.M, f = this.state.form, ref = this.state.ventaRef, D = this.clon();
+    const lc = D.loteCampanias.find((l) => l.id === ref.lcId);
+    const v = lc.ventas.find((x) => x.id === ref.vId);
+    const precio = this.num(f.precio);
+    if (precio <= 0) { this.setState({ error: 'Falta el precio que liquidó el comprador.' }); return; }
+    const bruto = v.cantidad * precio;
+    const comision = Math.round(bruto * this.num(f.comision) / 100);
+    v.precio = precio;
+    v.gastos = comision + this.num(f.gastos);
+    v.estado = 'liquidada';
+    v.fechaLiquidacion = f.fecha || M.hoyISO();
+    this.setState({ D, modal: null, ventaRef: null });
+    this.toast('Liquidación confirmada: ' + M.miles(v.cantidad) + ' ' + lc.unidadPlural + ' pasaron de estimado a realizado');
+  }
+
+  guardarIndirecto() {
+    const M = this.M, f = this.state.form, D = this.clon();
+    if (!f.concepto || this.num(f.importe) <= 0) { this.setState({ error: 'Poné un concepto y un importe mayor que cero.' }); return; }
+    D.secuencia += 1;
+    D.indirectos.push({ id: 'x' + D.secuencia, concepto: f.concepto, importe: this.num(f.importe), criterio: 'ha' });
+    this.setState({ D, modal: null });
+    this.toast('Costo indirecto repartido entre los lotes por hectárea sembrada');
+  }
+
+  guardarSembrar() {
+    const M = this.M, f = this.state.form, D = this.clon();
+    if (!f.loteId) { this.setState({ error: 'Elegí qué lote vas a sembrar.' }); return; }
+    if (!f.cultivo || !f.cultivo.trim()) { this.setState({ error: 'Falta el cultivo.' }); return; }
+    const ha = this.num(f.haSembradas);
+    const loteCat = D.lotes.find((l) => l.id === f.loteId);
+    if (ha <= 0) { this.setState({ error: 'Las hectáreas sembradas tienen que ser mayores que cero.' }); return; }
+    if (loteCat && ha > loteCat.ha) { this.setState({ error: 'El ' + loteCat.nombre + ' tiene ' + M.coma(loteCat.ha) + ' ha: no se pueden sembrar más de las que tiene.' }); return; }
+    if (!f.unidad || !f.unidadPlural) { this.setState({ error: 'Falta el nombre de la unidad de venta.' }); return; }
+    D.secuencia += 1;
+    const nuevoId = 'LC' + D.secuencia;
+    D.loteCampanias.push({
+      id: nuevoId, campaniaId: D.campaniaActiva, loteId: f.loteId,
+      cultivo: f.cultivo.trim(), variedad: (f.variedad || '').trim(), haSembradas: ha,
+      fechaSiembra: f.fechaSiembra || M.hoyISO(), unidad: f.unidad, unidadPlural: f.unidadPlural,
+      kgPorUnidad: this.num(f.kgPorUnidad) || 1,
+      preciosRef: { primera: this.num(f.precioPrimera), segunda: this.num(f.precioSegunda) },
+      aplicaciones: [], tareas: [], cosechas: [], ventas: []
+    });
+    this.setState({ D });
+    this.toast((loteCat ? loteCat.nombre : 'Lote') + ' sembrado con ' + f.cultivo);
+    this.ir('detalle', nuevoId);
+  }
+
+  guardarSembrar() {
+    const M = this.M, f = this.state.form, D = this.clon();
+    if (!f.loteId) { this.setState({ error: 'Elegí qué lote vas a sembrar.' }); return; }
+    if (!f.cultivoId) { this.setState({ error: 'Elegí el cultivo.' }); return; }
+    const ha = this.num(f.haSembradas);
+    const loteCat = D.lotes.find((l) => l.id === f.loteId);
+    const cult = D.cultivos.find((c) => c.id === f.cultivoId);
+    if (ha <= 0) { this.setState({ error: 'Las hectáreas sembradas tienen que ser mayores que cero.' }); return; }
+    if (loteCat && ha > loteCat.ha) { this.setState({ error: 'El ' + loteCat.nombre + ' tiene ' + M.coma(loteCat.ha) + ' ha: no se pueden sembrar más de las que tiene.' }); return; }
+    const yaSembrado = D.loteCampanias.filter((l) => l.campaniaId === D.campaniaActiva && l.loteId === f.loteId).length;
+    const ciclo = yaSembrado + 1;
+    D.secuencia += 1;
+    const nuevoId = 'LC' + D.secuencia;
+    D.loteCampanias.push({
+      id: nuevoId, campaniaId: D.campaniaActiva, loteId: f.loteId, cultivoId: cult.id,
+      cultivo: cult.nombre, variedad: (f.variedad || '').trim(), haSembradas: ha, ciclo,
+      fechaSiembra: f.fechaSiembra || M.hoyISO(), fechaTrasplante: f.fechaTrasplante || null,
+      unidad: cult.unidad, unidadPlural: cult.unidadPlural, kgPorUnidad: cult.kgPorUnidad,
+      preciosRef: { primera: cult.precioPrimera, segunda: cult.precioSegunda },
+      aplicaciones: [], tareas: [], cosechas: [], ventas: []
+    });
+    this.setState({ D });
+    this.toast((loteCat ? loteCat.nombre : 'Lote') + (ciclo > 1 ? ' sembrado (ciclo ' + ciclo + ') con ' + cult.nombre : ' sembrado con ' + cult.nombre));
+    this.ir('detalle', nuevoId);
+  }
+
+  guardarCultivo() {
+    const M = this.M, f = this.state.form, D = this.clon();
+    if (!f.nombre || !f.nombre.trim()) { this.setState({ error: 'Falta el nombre del cultivo.' }); return; }
+    if (!f.unidad || !f.unidadPlural) { this.setState({ error: 'Falta el nombre de la unidad de venta.' }); return; }
+    const pp = this.num(f.precioPrimera), ps = this.num(f.precioSegunda);
+    if (f.editId) {
+      const cu = D.cultivos.find((x) => x.id === f.editId);
+      const cambioPrecio = pp !== cu.precioPrimera || ps !== cu.precioSegunda;
+      Object.assign(cu, {
+        nombre: f.nombre.trim(), unidad: f.unidad, unidadPlural: f.unidadPlural, kgPorUnidad: this.num(f.kgPorUnidad) || 1,
+        precioPrimera: pp, precioSegunda: ps, fechaPrecio: cambioPrecio ? M.hoyISO() : cu.fechaPrecio
+      });
+      this.toast('Cultivo actualizado' + (cambioPrecio ? ': precio de referencia al día' : ''));
+      this.setState({ D, modal: null });
+    } else {
+      D.secuencia += 1;
+      const nuevo = { id: 'CU' + D.secuencia, nombre: f.nombre.trim(), unidad: f.unidad, unidadPlural: f.unidadPlural, kgPorUnidad: this.num(f.kgPorUnidad) || 1, precioPrimera: pp, precioSegunda: ps, fechaPrecio: M.hoyISO(), activo: true };
+      D.cultivos.push(nuevo);
+      this.setState((s) => ({ D, modal: s.sub === 'cultivo' ? s.modal : null, sub: s.sub === 'cultivo' ? null : s.sub, form: s.sub === 'cultivo' ? Object.assign({}, s.form, { cultivoId: nuevo.id }) : s.form }));
+      this.toast('Cultivo creado');
+    }
+  }
+
+  alternarBajaCultivo() {
+    const D = this.clon(), f = this.state.form;
+    const cu = D.cultivos.find((x) => x.id === f.editId);
+    if (!cu) return;
+    cu.activo = !cu.activo;
+    this.setState({ D, modal: null });
+    this.toast(cu.activo ? 'Cultivo reactivado' : 'Cultivo dado de baja: sale de los desplegables, el histórico queda igual');
+  }
+
+  guardarLote() {
+    const f = this.state.form, D = this.clon();
+    if (!f.nombre || !f.nombre.trim()) { this.setState({ error: 'Falta el nombre del lote.' }); return; }
+    const ha = this.num(f.ha);
+    if (ha <= 0) { this.setState({ error: 'La superficie tiene que ser mayor que cero.' }); return; }
+    if (f.editId) {
+      const l = D.lotes.find((x) => x.id === f.editId);
+      Object.assign(l, { nombre: f.nombre.trim(), ha, tipoSuelo: f.tipoSuelo, comentarios: f.comentarios || '' });
+      this.toast('Lote actualizado');
+    } else {
+      D.secuencia += 1;
+      D.lotes.push({ id: 'L' + D.secuencia, nombre: f.nombre.trim(), ha, tipoSuelo: f.tipoSuelo, comentarios: f.comentarios || '', activo: true });
+      this.toast('Lote creado: ya se puede sembrar');
+    }
+    this.setState({ D, modal: null });
+  }
+
+  guardarInsumo() {
+    const f = this.state.form, D = this.clon();
+    if (!f.nombre || !f.nombre.trim()) { this.setState({ error: 'Falta el nombre del insumo.' }); return; }
+    if (this.num(f.precio) <= 0) { this.setState({ error: 'El precio de referencia tiene que ser mayor que cero.' }); return; }
+    if (f.editId) {
+      const i = D.insumos.find((x) => x.id === f.editId);
+      Object.assign(i, { nombre: f.nombre.trim(), tipo: f.tipo, unidad: f.unidad, precio: this.num(f.precio), moneda: f.moneda });
+      this.toast('Insumo actualizado');
+    } else {
+      D.secuencia += 1;
+      D.insumos.push({ id: 'I' + D.secuencia, nombre: f.nombre.trim(), tipo: f.tipo, unidad: f.unidad, precio: this.num(f.precio), moneda: f.moneda, activo: true });
+      this.toast('Insumo creado');
+    }
+    this.setState({ D, modal: null });
+  }
+
+  guardarComprador() {
+    const f = this.state.form, D = this.clon();
+    if (!f.nombre || !f.nombre.trim()) { this.setState({ error: 'Falta el nombre del comprador.' }); return; }
+    const consig = f.consignacionTxt === 'consignacion';
+    if (f.editId) {
+      const c = D.compradores.find((x) => x.id === f.editId);
+      Object.assign(c, { nombre: f.nombre.trim(), contacto: f.contacto || '', cuit: f.cuit || '', tel: f.tel || '', plaza: f.plaza || '', consignacion: consig });
+      this.toast('Comprador actualizado');
+    } else {
+      D.secuencia += 1;
+      D.compradores.push({ id: 'CP' + D.secuencia, nombre: f.nombre.trim(), contacto: f.contacto || '', cuit: f.cuit || '', tel: f.tel || '', plaza: f.plaza || '', consignacion: consig, activo: true });
+      this.toast('Comprador creado');
+    }
+    this.setState({ D, modal: null });
+  }
+
+  alternarBajaLote() {
+    const D = this.clon(), f = this.state.form;
+    const l = D.lotes.find((x) => x.id === f.editId);
+    if (!l) return;
+    l.activo = !l.activo;
+    this.setState({ D, modal: null });
+    this.toast(l.activo ? 'Lote reactivado' : 'Lote dado de baja: sale de los desplegables, el histórico queda igual');
+  }
+  alternarBajaInsumo() {
+    const D = this.clon(), f = this.state.form;
+    const i = D.insumos.find((x) => x.id === f.editId);
+    if (!i) return;
+    i.activo = !i.activo;
+    this.setState({ D, modal: null });
+    this.toast(i.activo ? 'Insumo reactivado' : 'Insumo dado de baja: sale de los desplegables, el histórico queda igual');
+  }
+  alternarBajaComprador() {
+    const D = this.clon(), f = this.state.form;
+    const c = D.compradores.find((x) => x.id === f.editId);
+    if (!c) return;
+    c.activo = !c.activo;
+    this.setState({ D, modal: null });
+    this.toast(c.activo ? 'Comprador reactivado' : 'Comprador dado de baja: sale de los desplegables, el histórico queda igual');
+  }
+
+  guardarInsumoRapido() {
+    const fs = this.state.formSub, D = this.clon();
+    if (!fs.nombre || !fs.nombre.trim()) { this.setState({ error: 'Falta el nombre del insumo.' }); return; }
+    if (this.num(fs.precio) <= 0) { this.setState({ error: 'El precio de referencia tiene que ser mayor que cero.' }); return; }
+    D.secuencia += 1;
+    const nuevo = { id: 'I' + D.secuencia, nombre: fs.nombre.trim(), tipo: fs.tipo, unidad: fs.unidad || 'kg', precio: this.num(fs.precio), moneda: fs.moneda, activo: true };
+    D.insumos.push(nuevo);
+    this.setState((s) => ({
+      D, sub: null, error: null,
+      form: Object.assign({}, s.form, { insumoId: nuevo.id, precio: String(nuevo.precio), moneda: nuevo.moneda })
+    }));
+    this.toast('Insumo ' + nuevo.nombre + ' creado y seleccionado');
+  }
+
+  guardarCompradorRapido() {
+    const fs = this.state.formSub, D = this.clon();
+    if (!fs.nombre || !fs.nombre.trim()) { this.setState({ error: 'Falta el nombre del comprador.' }); return; }
+    D.secuencia += 1;
+    const consig = fs.consignacionTxt === 'consignacion';
+    const nuevo = { id: 'CP' + D.secuencia, nombre: fs.nombre.trim(), contacto: fs.contacto || '', cuit: fs.cuit || '', tel: fs.tel || '', plaza: fs.plaza || '', consignacion: consig, activo: true };
+    D.compradores.push(nuevo);
+    this.setState((s) => ({
+      D, sub: null, error: null,
+      form: Object.assign({}, s.form, { compradorId: nuevo.id })
+    }));
+    this.toast('Comprador ' + nuevo.nombre + ' creado y seleccionado');
+  }
+
+  guardarNuevaCampania() {
+    const f = this.state.form, D = this.clon();
+    const nombre = (f.nombre || '').trim();
+    if (!/^\d{4}\/\d{2}$/.test(nombre)) { this.setState({ error: 'El nombre va en formato 2026/27.' }); return; }
+    if (D.campanias.some((c) => c.nombre === nombre)) { this.setState({ error: 'Ya existe una campaña ' + nombre + '.' }); return; }
+    const pct = this.num(f.gastosPct);
+    if (pct < 0 || pct > 60) { this.setState({ error: 'El porcentaje de gastos de comercialización tiene que estar entre 0 y 60.' }); return; }
+    D.secuencia += 1;
+    const id = 'C' + D.secuencia;
+    D.campanias.push({ id, nombre, estado: 'abierta', inicio: f.inicio, fin: f.fin, gastosPct: pct });
+    D.campaniaActiva = id;
+    this.setState({ D, modal: null, ruta: 'tablero', historial: [], precio: '' });
+    this.toast('Campaña ' + nombre + ' creada y activa. Todavía no tiene lotes sembrados.');
+  }
+
+  cerrarCampania() {
+    const D = this.clon();
+    const c = D.campanias.find((x) => x.id === D.campaniaActiva);
+    if (!c || c.estado === 'cerrada') return;
+    c.estado = 'cerrada';
+    c.cierre = this.M.hoyISO();
+    this.setState({ D, modal: null });
+    this.toast('Campaña ' + c.nombre + ' cerrada: los números quedan fijos y pasa a solo lectura.');
+  }
+
+  reabrirCampania() {
+    const D = this.clon();
+    const c = D.campanias.find((x) => x.id === D.campaniaActiva);
+    if (!c) return;
+    c.estado = 'abierta';
+    delete c.cierre;
+    this.setState({ D, modal: null });
+    this.toast('Campaña ' + c.nombre + ' reabierta: se puede volver a cargar.');
+  }
+
+  estilos(m, a) {
+    const btn = (bg, col, bd) => ({
+      minHeight: '44px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+      padding: '0 16px', borderRadius: '6px', background: bg, color: col, border: bd,
+      fontSize: '14px', fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap'
+    });
+    const cols = a ? 'minmax(0,1fr) minmax(0,1fr)' : 'minmax(170px,2.1fr) 56px 112px 100px 112px 112px 132px';
+    const inputBase = {
+      minHeight: '48px', padding: '0 12px', border: '1px solid #D3D9DE', borderRadius: '8px',
+      fontSize: '16px', fontWeight: 500, color: '#14181B', background: '#FFFFFF', width: '100%', boxSizing: 'border-box'
+    };
+    return {
+      shell: { display: 'flex', flexDirection: m ? 'column' : 'row', minHeight: '100vh', background: '#F7F8F9' },
+      sidebar: {
+        display: m ? 'none' : 'flex', width: '236px', flex: 'none', flexDirection: 'column', gap: '18px',
+        padding: '20px 14px', background: '#FBFCFC', borderRight: '1px solid #E4E8EB', minHeight: '100vh',
+        position: 'sticky', top: 0, boxSizing: 'border-box'
+      },
+      cabEscritorio: {
+        display: m ? 'none' : 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px',
+        padding: '10px 28px', background: '#FFFFFF', borderBottom: '1px solid #E4E8EB',
+        position: 'sticky', top: 0, zIndex: 3
+      },
+      cabMovil: {
+        display: m ? 'flex' : 'none', alignItems: 'center', justifyContent: 'space-between', gap: '12px',
+        padding: '12px 16px', background: '#FFFFFF', borderBottom: '1px solid #E4E8EB', position: 'sticky', top: 0, zIndex: 3
+      },
+      contenido: { flex: 1, minWidth: 0, padding: m ? '16px 16px 84px' : '24px 28px 40px', boxSizing: 'border-box' },
+      navInf: {
+        display: m ? 'grid' : 'none', gridTemplateColumns: 'repeat(4,minmax(0,1fr))',
+        position: 'fixed', left: 0, right: 0, bottom: 0, background: '#FFFFFF', borderTop: '1px solid #E4E8EB', zIndex: 4
+      },
+      h1: { fontSize: m ? '24px' : '30px', fontWeight: 600, letterSpacing: '-0.02em', lineHeight: 1.15 },
+      filaTitulo: { display: 'flex', flexDirection: m ? 'column' : 'row', alignItems: m ? 'stretch' : 'flex-end', justifyContent: 'space-between', gap: '14px' },
+      filaBotones: { display: 'flex', flexWrap: 'wrap', gap: '8px', justifyContent: m ? 'stretch' : 'flex-end' },
+      col4: { display: 'grid', gridTemplateColumns: a ? 'repeat(2,minmax(0,1fr))' : 'repeat(4,minmax(0,1fr))', gap: '12px' },
+      col2: { display: 'grid', gridTemplateColumns: a ? 'minmax(0,1fr)' : 'repeat(2,minmax(0,1fr))', gap: '16px' },
+      col2Kpi: { display: 'grid', gridTemplateColumns: 'repeat(2,minmax(0,1fr))', gap: '12px' },
+      heroFila: { display: 'grid', gridTemplateColumns: a ? 'minmax(0,1fr)' : 'minmax(0,1.05fr) minmax(0,1fr)', gap: '16px' },
+      numeroHero: { fontFamily: "'IBM Plex Mono',monospace", fontVariantNumeric: 'tabular-nums', fontSize: m ? '46px' : '58px', fontWeight: 600, letterSpacing: '-0.02em', lineHeight: 1 },
+      cabLotes: { display: a ? 'none' : 'grid', gridTemplateColumns: cols, gap: '12px', padding: '10px 20px', background: '#FBFCFC', borderBottom: '1px solid #E4E8EB' },
+      filaLote: { display: 'grid', gridTemplateColumns: cols, gap: a ? '10px' : '12px', alignItems: a ? 'start' : 'center', padding: a ? '14px 16px' : '13px 20px', borderBottom: '1px solid #F1F3F5', cursor: 'pointer' },
+      filaTotal: { display: 'grid', gridTemplateColumns: cols, gap: a ? '10px' : '12px', alignItems: a ? 'start' : 'center', padding: a ? '14px 16px' : '15px 20px', background: '#FBFCFC' },
+      celda: { display: 'flex', flexDirection: 'column', gap: '2px', alignItems: a ? 'flex-start' : 'flex-end', textAlign: a ? 'left' : 'right' },
+      celdaNombre: { gridColumn: a ? 'span 2' : 'auto', display: 'flex', flexDirection: 'column', gap: '3px', minWidth: 0 },
+      etiq: { display: a ? 'block' : 'none', fontSize: '11px', color: '#5F6A73' },
+      filaMov: { display: 'grid', gridTemplateColumns: m ? '66px minmax(0,1fr) 96px' : '80px minmax(0,1fr) 130px', gap: '12px', alignItems: 'center', padding: '12px 18px', borderBottom: '1px solid #F1F3F5' },
+      filaVenta: { display: 'grid', gridTemplateColumns: a ? 'minmax(0,1fr) minmax(0,1fr)' : 'minmax(0,1.4fr) 130px 150px 190px', gap: '12px', alignItems: 'center', padding: '13px 18px', borderBottom: '1px solid #F1F3F5' },
+      filaCat: { display: 'grid', gridTemplateColumns: a ? 'minmax(0,1fr) 90px' : 'minmax(0,1.6fr) 120px 220px', gap: '12px', alignItems: 'center', padding: '13px 18px', borderBottom: '1px solid #F1F3F5', cursor: 'pointer' },
+      chipBaja: { padding: '2px 7px', borderRadius: '999px', background: '#FCEDEC', border: '1px solid #F3D4D1', fontSize: '10px', fontWeight: 600, letterSpacing: '.04em', textTransform: 'uppercase', color: '#8E2018' },
+      btnPrimario: btn('#3F6B4E', '#FFFFFF', '0'),
+      btnSec: btn('#FFFFFF', '#22303A', '1px solid #D3D9DE'),
+      btnSecVerde: Object.assign(btn('#FFFFFF', '#1F3527', '1px solid #3F6B4E'), { alignSelf: 'flex-start' }),
+      btnChico: { minHeight: '38px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '0 12px', borderRadius: '6px', background: '#FFFFFF', border: '1px solid #D3D9DE', fontSize: '13px', fontWeight: 600, color: '#22303A', cursor: 'pointer' },
+      btnPrimarioAncho: { flex: 2, minHeight: '52px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '8px', background: '#3F6B4E', color: '#FFFFFF', fontSize: '16px', fontWeight: 600, cursor: 'pointer' },
+      btnSecAncho: { flex: 1, minHeight: '52px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '8px', border: '1px solid #D3D9DE', background: '#FFFFFF', fontSize: '15px', fontWeight: 600, color: '#22303A', cursor: 'pointer' },
+      overlay: { position: 'fixed', inset: 0, background: 'rgba(20,24,27,0.38)', display: 'flex', alignItems: m ? 'flex-end' : 'center', justifyContent: 'center', padding: m ? '0' : '24px', zIndex: 10 },
+      caja: { width: m ? '100%' : '580px', maxHeight: m ? '100vh' : '88vh', height: m ? '100vh' : 'auto', overflow: 'hidden', background: '#FFFFFF', borderRadius: m ? '0' : '12px', border: m ? '0' : '1px solid #E4E8EB', display: 'flex', flexDirection: 'column' },
+      // El cuerpo scrollea solo; cabecera y pie quedan siempre a la vista, y la
+      // sombra hacia arriba del pie avisa que hay más campos abajo.
+      cuerpo: { flex: 1, minHeight: 0, overflowY: 'auto' },
+      pieModal: { flex: 'none', background: '#FFFFFF', borderTop: '1px solid #E4E8EB', padding: '12px 20px 14px', display: 'flex', flexDirection: 'column', gap: '8px', boxShadow: '0 -10px 14px -10px rgba(20,24,27,0.18)' },
+      formCol2: { display: 'grid', gridTemplateColumns: m ? 'minmax(0,1fr)' : 'repeat(2,minmax(0,1fr))', gap: '12px' },
+      label: { fontSize: '12px', fontWeight: 600, letterSpacing: '.04em', textTransform: 'uppercase', color: '#5F6A73' },
+      input: inputBase,
+      inputNum: Object.assign({}, inputBase, { fontFamily: "'IBM Plex Mono',monospace", fontVariantNumeric: 'tabular-nums', fontSize: '17px', textAlign: 'right', flex: 1 }),
+      toast: { position: 'fixed', left: '50%', transform: 'translateX(-50%)', bottom: m ? '76px' : '24px', maxWidth: '90vw', padding: '12px 16px', borderRadius: '8px', background: '#1F3527', color: '#FFFFFF', fontSize: '13px', fontWeight: 500, lineHeight: 1.35, zIndex: 20 },
+      chipSenal: {
+        minHeight: '36px', display: 'flex', alignItems: 'center', gap: '8px', padding: '0 10px', borderRadius: '6px',
+        border: this.state.sinSenal ? '1px solid #F1DFC4' : '1px solid #D3D9DE',
+        background: this.state.sinSenal ? '#FDF3E7' : '#FFFFFF',
+        color: this.state.sinSenal ? '#8A5A12' : '#46515A', fontSize: '12px', fontWeight: 600, cursor: 'pointer'
+      },
+      tabPesos: this.tabMoneda('ARS'),
+      tabDolares: this.tabMoneda('USD')
+    };
+  }
+
+  tabMoneda(cual) {
+    const on = this.state.moneda === cual;
+    return {
+      minHeight: '36px', display: 'flex', alignItems: 'center', padding: '0 12px', cursor: 'pointer',
+      fontSize: '13px', fontWeight: 600,
+      background: on ? '#F1F5F1' : '#FFFFFF', color: on ? '#1F3527' : '#5F6A73'
+    };
+  }
+
+  mono(size, weight, color) {
+    return { fontFamily: "'IBM Plex Mono',monospace", fontVariantNumeric: 'tabular-nums', fontSize: size + 'px', fontWeight: weight, color: color };
+  }
+
+  renderVals() {
+    const M = this.M, s = this.state, m = s.ancho < 900;
+    const angosto = s.ancho < 1120; // el escritorio angosto usa las grillas apiladas, sin perder la barra lateral
+    const st = this.estilos(m, angosto);
+    const base = {
+      listo: !!(s.D && M), logueado: s.logueado, noLogueado: !s.logueado, esMovil: m, st,
+      sinSenal: s.sinSenal, senalTxt: s.sinSenal ? 'Sin señal (simulada)' : 'Con señal',
+      aviso: s.aviso, hayAviso: !!s.aviso, nada: (e) => { if (e && e.stopPropagation) e.stopPropagation(); },
+      entrar: () => this.setState({ logueado: true }), salir: () => this.setState({ logueado: false, historial: [], ruta: 'tablero' }),
+      alternarSenal: () => this.setState((x) => ({ sinSenal: !x.sinSenal })),
+      volver: () => this.volver(), hayHistorial: s.historial.length > 0,
+      cerrar: () => this.cerrar(), modalAbierto: !!s.modal
+    };
+    if (!s.D || !M) return base;
+
+    const D = s.D;
+    const camp = M.campaniaDe(D);
+    const cerrada = camp.estado === 'cerrada';
+    const activos = M.lotesDe(D);
+    const usd = s.moneda === 'USD';
+    const sim = usd ? 'US$ ' : '$ ';
+    // cv se aplica a cada movimiento dentro del cálculo: los totales son sumas de
+    // valores ya redondeados, así la columna cierra en pesos y en dólares.
+    const cv = usd ? (n) => Math.round(n / M.TC_ULTIMO) : (n) => Math.round(n);
+    const C = M.calcularCampania(D, cv);
+    const dinero = (n) => sim + M.miles(n);
+    // Los precios por unidad no son átomos agregables: se convierten con decimales,
+    // porque un valor unitario redondeado a dólares enteros da cuentas absurdas.
+    const precioUni = (n) => sim + (usd ? M.dec2(n / M.TC_ULTIMO) : M.miles(n));
+    const monto = (n) => M.miles(n);
+    const montoDec = (n) => M.dec2(n);
+    const firmado = (n) => (n >= 0 ? '+' : '−') + M.miles(Math.abs(n));
+    const firmadoPesos = firmado;
+
+    const lcAct = this.lote();
+    const cAct = lcAct ? M.calcularLote(D, lcAct, cv) : null;
+    const nombreLote = (lc) => (D.lotes.find((x) => x.id === lc.loteId) || {}).nombre + ' · ' + lc.cultivo;
+
+    // navegación
+    const item = (label, ruta) => ({
+      label, ir: () => this.ir(ruta),
+      estilo: {
+        minHeight: '40px', display: 'flex', alignItems: 'center', padding: '0 12px', borderRadius: '6px',
+        fontSize: '14px', fontWeight: 600, cursor: 'pointer',
+        background: s.ruta === ruta ? '#DFE9E1' : 'transparent',
+        color: s.ruta === ruta ? '#1F3527' : '#46515A'
+      }
+    });
+    const nav = [item('Tablero', 'tablero'), item('Ventas', 'ventas'), item('Costos indirectos', 'indirectos')];
+    const navCat = [item('Lotes', 'catLotes'), item('Cultivos', 'catCultivos'), item('Insumos', 'catInsumos'), item('Compradores', 'catCompradores')];
+    const movil = (label, accion, activo) => ({
+      label, ir: accion,
+      estilo: { minHeight: '58px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '4px', background: activo ? '#F1F5F1' : '#FFFFFF', cursor: 'pointer' },
+      punto: { width: '16px', height: '16px', borderRadius: label === 'Cargar' ? '999px' : '4px', background: activo ? '#3F6B4E' : 'transparent', border: activo ? '0' : '1.5px solid #9AA4AC' }
+    });
+    const navMovil = [
+      movil('Tablero', () => this.ir('tablero'), s.ruta === 'tablero'),
+      movil('Ventas', () => this.ir('ventas'), s.ruta === 'ventas'),
+      movil('Cargar', () => this.setState({ modal: 'cargar', error: null }), s.modal === 'cargar'),
+      movil('Más', () => this.setState({ modal: 'mas', error: null }), s.modal === 'mas')
+    ];
+
+    // tablero
+    const filas = activos.map((lc) => {
+      const c = M.calcularLote(D, lc, cv);
+      return {
+        id: lc.id, titulo: nombreLote(lc),
+        sub: lc.variedad + ' · ' + (c.hayCosecha ? M.miles(c.vendibles) + ' ' + lc.unidadPlural + ' vendibles' : 'sin cosecha todavía'),
+        haTxt: M.coma(lc.haSembradas),
+        costoTxt: monto(c.costoTotal), costoHaTxt: monto(c.costoPorHa),
+        costoUnidadTxt: c.hayCosecha ? montoDec(c.costoPorUnidad) : '—',
+        unidadTxt: c.hayCosecha ? 'por ' + lc.unidad : 'sin cosecha',
+        realTxt: c.hayMargen ? firmadoPesos(c.margenRealizado) : '—',
+        realEstilo: this.mono(14, 500, c.hayMargen ? (c.margenRealizado >= 0 ? '#0E7A46' : '#B42318') : '#5F6A73'),
+        estTxt: c.hayMargen ? '≈' + firmadoPesos(c.margenEstimado) : '—',
+        estEstilo: this.mono(14, 500, c.hayMargen ? '#3E5C7A' : '#5F6A73'),
+        ver: () => this.ir('detalle', lc.id)
+      };
+    });
+
+    const pendTotal = activos.reduce((acc, lc) => acc + M.calcularLote(D, lc, cv).cantPendiente, 0);
+    const sinVender = activos.filter((lc) => M.calcularLote(D, lc, cv).netoLiquidado === 0).length;
+    const tot = {
+      hayLotes: activos.length > 0, sinLotes: activos.length === 0,
+      sub: activos.length + ' lote-campaña sembrados · ' + M.coma(C.ha) + ' ha · ' + M.fecha(camp.inicio) + ' a ' + M.fecha(camp.fin),
+      costoTxt: dinero(C.costoTotal), costoPesosTxt: monto(C.costoTotal),
+      haTxt: M.coma(C.ha), costoHaTxt: dinero(C.costoPorHa), costoHaPesosTxt: monto(C.costoPorHa),
+      indirectosTxt: dinero(C.indirectos),
+      realTxt: firmado(C.margenRealizado), realPesosTxt: firmadoPesos(C.margenRealizado),
+      realEstilo: this.mono(25, 600, C.margenRealizado >= 0 ? '#0E7A46' : '#B42318'),
+      realEstiloChico: this.mono(15, 600, C.margenRealizado >= 0 ? '#0E7A46' : '#B42318'),
+      estTxt: '≈' + firmado(C.margenEstimado), estPesosTxt: '≈' + firmadoPesos(C.margenEstimado),
+      notaTitulo: C.margenRealizado < C.margenEstimado ? 'Los dos márgenes dicen cosas distintas y los dos son verdad.' : 'Margen de la campaña',
+      notaTxt: 'Hay ' + M.miles(pendTotal) + ' unidades entregadas sin liquidar y ' + sinVender + ' lote-campaña que todavía no vendieron nada. El realizado solo cuenta lo cobrado; el estimado valoriza lo entregado y el galpón a precio de referencia, menos ' + M.coma(camp.gastosPct) + ' % de gastos de comercialización.',
+      notaTotal: 'El total es la suma exacta de los ' + activos.length + ' lotes, incluidos los que todavía no tienen cosecha ni ventas.'
+        + (usd ? ' Convertido a dólares al TC ' + M.miles(M.TC_ULTIMO) + ', el mismo para todas las cifras de la pantalla.' : ''),
+      textoVacio: cerrada
+        ? 'Esta campaña está cerrada y no tiene lote-campaña cargados.'
+        : 'El primer paso es sembrar un lote: elegís el lote, el cultivo, la variedad y cuántas hectáreas sembraste. Después vas a poder cargar tareas, insumos y cosecha.'
+    };
+
+    // detalle
+    let det = {};
+    if (cAct) {
+      const lc = lcAct, c = cAct;
+      const rubro = (nombre, importe) => ({
+        nombre, importeTxt: monto(importe),
+        pctTxt: (c.costoTotal ? (importe * 100 / c.costoTotal) : 0).toLocaleString('es-AR', { maximumFractionDigits: 1 }) + ' %',
+        barra: { width: (c.costoTotal ? importe * 100 / c.costoTotal : 0) + '%', height: '5px', borderRadius: '3px', background: '#3F6B4E' }
+      });
+      const desglose = [];
+      desglose.push({
+        concepto: 'Liquidado', sub: M.miles(c.liquidadas) + ' ' + lc.unidadPlural + ' con precio confirmado', estimado: false,
+        cantTxt: M.miles(c.liquidadas), importeTxt: monto(c.netoLiquidado), importeEstilo: Object.assign(this.mono(15, 500, '#14181B'), { textAlign: 'right' }),
+        fila: { display: 'grid', gridTemplateColumns: 'minmax(0,1fr) 82px 128px', gap: '10px', alignItems: 'center', padding: '12px 18px', borderBottom: '1px solid #F1F3F5' }
+      });
+      const refAct0 = M.precioRefDe(D, lc);
+      if (c.cantPendiente > 0) desglose.push({
+        concepto: 'Entregado sin liquidar', sub: 'consignación · a ' + precioUni(refAct0.primera) + ' por ' + lc.unidad + ' de referencia, menos ' + M.coma(camp.gastosPct) + ' %', estimado: true,
+        cantTxt: M.miles(c.cantPendiente), importeTxt: '≈' + monto(c.valorPendiente), importeEstilo: Object.assign(this.mono(15, 500, '#3E5C7A'), { textAlign: 'right' }),
+        fila: { display: 'grid', gridTemplateColumns: 'minmax(0,1fr) 82px 128px', gap: '10px', alignItems: 'center', padding: '12px 18px', borderBottom: '1px solid #F1F3F5', background: 'repeating-linear-gradient(135deg,#F7FAFC 0 8px,#F1F5F9 8px 16px)' }
+      });
+      if (c.cantStock > 0) desglose.push({
+        concepto: 'Stock en galpón', sub: M.miles(c.stock.primera) + ' de primera y ' + M.miles(c.stock.segunda) + ' de segunda, sin vender', estimado: true,
+        cantTxt: M.miles(c.cantStock), importeTxt: '≈' + monto(c.valorStock), importeEstilo: Object.assign(this.mono(15, 500, '#3E5C7A'), { textAlign: 'right' }),
+        fila: { display: 'grid', gridTemplateColumns: 'minmax(0,1fr) 82px 128px', gap: '10px', alignItems: 'center', padding: '12px 18px', borderBottom: '1px solid #F1F3F5', background: 'repeating-linear-gradient(135deg,#F7FAFC 0 8px,#F1F5F9 8px 16px)' }
+      });
+      desglose.push({
+        concepto: 'Menos costo total', sub: 'insumos, mano de obra, labores e indirectos', estimado: false,
+        cantTxt: '', importeTxt: '−' + monto(c.costoTotal), importeEstilo: Object.assign(this.mono(15, 500, '#46515A'), { textAlign: 'right' }),
+        fila: { display: 'grid', gridTemplateColumns: 'minmax(0,1fr) 82px 128px', gap: '10px', alignItems: 'center', padding: '12px 18px', borderBottom: '1px solid #F1F3F5' }
+      });
+      if (c.hayMargen) {
+        desglose.push({
+          concepto: 'Margen realizado', sub: 'liquidado − costo total', estimado: false,
+          cantTxt: '', importeTxt: firmadoPesos(c.margenRealizado),
+          importeEstilo: Object.assign(this.mono(18, 600, c.margenRealizado >= 0 ? '#0E7A46' : '#B42318'), { textAlign: 'right' }),
+          fila: { display: 'grid', gridTemplateColumns: 'minmax(0,1fr) 82px 128px', gap: '10px', alignItems: 'center', padding: '14px 18px', borderBottom: '1px solid #F1F3F5', background: '#FBFCFC' }
+        });
+        desglose.push({
+          concepto: 'Margen estimado', sub: 'con lo entregado y el galpón valorizados', estimado: true,
+          cantTxt: '', importeTxt: '≈' + firmadoPesos(c.margenEstimado),
+          importeEstilo: Object.assign(this.mono(18, 600, '#3E5C7A'), { textAlign: 'right' }),
+          fila: { display: 'grid', gridTemplateColumns: 'minmax(0,1fr) 82px 128px', gap: '10px', alignItems: 'center', padding: '14px 18px', background: 'repeating-linear-gradient(135deg,#F5F8FB 0 8px,#EDF2F7 8px 16px)', borderTop: '1px dashed #A9BACB' }
+        });
+      }
+      const pc = this.num(s.precio);
+      const dif = c.costoPorUnidad ? pc - c.costoPorUnidad : 0;
+      const disponibles = c.cantStock;
+      det = {
+        titulo: nombreLote(lc),
+        sub: 'Variedad ' + lc.variedad + ' · ' + M.coma(lc.haSembradas) + ' ha sembradas de ' + M.coma((D.lotes.find((x) => x.id === lc.loteId) || {}).ha) + ' · siembra ' + M.fecha(lc.fechaSiembra),
+        haTxt: M.coma(lc.haSembradas), unidad: lc.unidad,
+        simbolo: usd ? 'US$' : '$',
+        placeholderPrecio: usd ? M.dec2(refAct0.primera / M.TC_ULTIMO) : M.miles(refAct0.primera),
+        hayCosecha: c.hayCosecha, sinCosecha: !c.hayCosecha,
+        costoUnidadTxt: montoDec(c.costoPorUnidad),
+        costoUnidadDetalle: monto(c.costoTotal) + ' ÷ ' + M.miles(c.vendibles) + ' ' + lc.unidadPlural + ' vendibles (no se cuenta el descarte).',
+        textoSinCosecha: 'Hace falta cargar al menos un corte de cosecha. El costo acumulado sí existe: son ' + dinero(c.costoTotal) + ', o ' + dinero(c.costoPorHa) + ' por hectárea.',
+        fechaSiembraTxt: M.fecha(lc.fechaSiembra),
+        costoTxt: dinero(c.costoTotal), costoPesosTxt: monto(c.costoTotal), costoHaTxt: dinero(c.costoPorHa),
+        movimientosTxt: c.movimientos.length + ' movimientos cargados',
+        rendimientoTxt: M.miles(c.rendimientoKgHa),
+        tasaDescarteTxt: M.pct(c.tasaDescarte),
+        descarteEstilo: this.mono(22, 600, (c.tasaDescarte || 0) > 0.15 ? '#B42318' : '#14181B'),
+        descarteDetalle: M.miles(c.descarteKg) + ' kg de descarte sobre ' + M.miles(c.kgTotales) + ' kg cosechados',
+        notaRubros: usd ? 'en US$ al TC ' + M.miles(M.TC_ULTIMO) : '',
+        vendiblesTxt: c.hayCosecha ? M.miles(c.vendibles) + ' ' + lc.unidadPlural + ' vendibles' : 'sin cosecha',
+        realTxt: c.hayMargen ? firmado(c.margenRealizado) : 'No existe todavía',
+        realEstilo: c.hayMargen ? this.mono(22, 600, c.margenRealizado >= 0 ? '#0E7A46' : '#B42318') : { fontSize: '17px', fontWeight: 600, color: '#46515A' },
+        realSub: c.hayMargen ? 'solo lo ya liquidado' : 'no hay ventas cargadas',
+        estTxt: c.hayMargen ? '≈' + firmado(c.margenEstimado) : 'No existe todavía',
+        estEstilo: c.hayMargen ? this.mono(22, 600, '#3E5C7A') : { fontSize: '17px', fontWeight: 600, color: '#3E5C7A' },
+        estSub: c.hayMargen ? 'incluye sin liquidar y galpón' : 'sin cosecha no se puede valorizar',
+        rubros: [
+          rubro('Mano de obra', c.costoManoObra),
+          rubro('Insumos', c.costoInsumos),
+          rubro('Labores y servicios', c.costoLabores),
+          rubro('Indirectos prorrateados', c.costoIndirectos)
+        ],
+        desglose,
+        cosechas: lc.cosechas.map((cs) => ({
+          corteTxt: 'Corte ' + cs.corte, fechaTxt: M.fecha(cs.fecha),
+          primeraTxt: M.miles(cs.primera), segundaTxt: M.miles(cs.segunda), descarteTxt: M.miles(cs.descarteKg) + ' kg'
+        })),
+        stockTxt: c.hayCosecha ? 'En galpón: ' + M.miles(c.cantStock) + ' ' + lc.unidadPlural : 'Sin cosecha cargada',
+        descarteTotalTxt: c.descarteKg > 0 ? 'Descarte total ' + M.miles(c.descarteKg) + ' kg, fuera del costo por ' + lc.unidad : '',
+        ventas: lc.ventas.map((v) => {
+          const cp = D.compradores.find((x) => x.id === v.compradorId) || { nombre: '' };
+          const pend = v.estado === 'pendiente';
+          const valor = pend ? Math.round(v.cantidad * M.precioRefDe(D, lc)[v.calidad] * M.factorGastos(D)) : Math.round(v.cantidad * v.precio - v.gastos);
+          return {
+            comprador: cp.nombre,
+            fechaTxt: 'entrega ' + M.fecha(v.fecha) + (pend ? ' · ' + M.diasEntre(v.fecha, M.hoyISO()) + ' días esperando' : ' · liquidada ' + M.fecha(v.fechaLiquidacion || v.fecha)),
+            cantTxt: M.miles(v.cantidad) + ' ' + lc.unidadPlural + ' de ' + v.calidad,
+            precioTxt: pend ? 'sin precio' : precioUni(v.precio) + ' por ' + lc.unidad,
+            netoTxt: (pend ? '≈' : '') + monto(valor),
+            netoEstilo: this.mono(15, 500, pend ? '#3E5C7A' : '#14181B'),
+            estadoTxt: pend ? 'Pendiente' : 'Liquidada', pendiente: pend,
+            chip: pend
+              ? { padding: '4px 9px', borderRadius: '999px', background: '#FDF3E7', border: '1px solid #F1DFC4', fontSize: '12px', fontWeight: 600, color: '#8A5A12', whiteSpace: 'nowrap' }
+              : { padding: '4px 9px', borderRadius: '999px', background: '#DFE9E1', fontSize: '12px', fontWeight: 600, color: '#1F3527', whiteSpace: 'nowrap' },
+            liquidar: () => this.abrir('liquidacion', { lcId: lc.id, vId: v.id, calidad: v.calidad }),
+            fila: { display: 'grid', gridTemplateColumns: 'minmax(0,1.3fr) 130px 120px', gap: '10px', alignItems: 'center', padding: '13px 18px', borderBottom: '1px solid #F1F3F5' }
+          };
+        }),
+        sinVentas: lc.ventas.length === 0,
+        movimientos: c.movimientos.map((mv) => {
+          let detalle;
+          if (mv.rubro === 'Insumo') {
+            detalle = mv.cantidadTxt + ' × ' + (mv.moneda === 'USD' ? 'US$ ' + M.coma(mv.precio) : precioUni(mv.precio));
+          } else if (mv.modalidad === 'hectarea') {
+            detalle = mv.ejecutor + ' · ' + precioUni(mv.valor) + ' × ' + M.coma(c.ha) + ' ha';
+          } else if (mv.modalidad === 'total') {
+            detalle = mv.ejecutor + ' · monto acordado';
+          } else if (mv.modalidad === 'jornal') {
+            detalle = mv.ejecutor + ' · ' + M.miles(mv.cantidad) + ' jornales × ' + precioUni(mv.valor);
+          } else {
+            detalle = mv.ejecutor + ' · destajo, ' + M.miles(mv.cantidad) + ' ' + lc.unidadPlural + ' × ' + precioUni(mv.valor);
+          }
+          const esInsumo = mv.rubro === 'Insumo';
+          const esMo = mv.rubro === 'Mano de obra';
+          return {
+            fechaTxt: M.fecha(mv.fecha), titulo: mv.titulo, detalle, importeTxt: monto(mv.total),
+            rubro: mv.rubro, pendiente: mv.pendiente,
+            hayTc: mv.moneda === 'USD',
+            tcTxt: mv.moneda === 'USD' ? 'pagado en dólares · TC ' + M.miles(mv.tc) + ' guardado con el movimiento' : '',
+            chipRubro: {
+              padding: '2px 7px', borderRadius: '999px', fontSize: '10px', fontWeight: 600, letterSpacing: '.04em', textTransform: 'uppercase',
+              background: esInsumo ? '#F1F3F5' : esMo ? '#DFE9E1' : '#EDF2F7',
+              color: esInsumo ? '#46515A' : esMo ? '#1F3527' : '#3E5C7A'
+            }
+          };
+        }),
+        precioConsulta: s.precio, setPrecio: (e) => this.setState({ precio: e.target.value }),
+        hayConsulta: pc > 0 && !!c.costoPorUnidad,
+        consultaTitulo: dif >= 0
+          ? 'Ganás ' + sim + M.dec2(dif) + ' por ' + lc.unidad + ' sobre un costo de ' + sim + M.dec2(c.costoPorUnidad)
+          : 'Perdés ' + sim + M.dec2(-dif) + ' por ' + lc.unidad + ' sobre un costo de ' + sim + M.dec2(c.costoPorUnidad),
+        consultaSub: disponibles > 0
+          ? 'Sobre las ' + M.miles(disponibles) + ' ' + lc.unidadPlural + ' que quedan en galpón: '
+            + (dif >= 0 ? '+' : '−') + sim + M.miles(Math.abs(dif * disponibles))
+          : 'No queda stock en galpón: la cuenta es contra el costo por ' + lc.unidad + ', para la próxima cosecha.',
+        consultaEstilo: {
+          padding: '10px 12px', borderRadius: '8px', fontSize: '13px', fontWeight: 600, lineHeight: 1.35,
+          background: dif >= 0 ? '#EAF5EE' : '#FCEDEC', border: dif >= 0 ? '1px solid #C6E0D0' : '1px solid #F3D4D1',
+          color: dif >= 0 ? '#0E7A46' : '#B42318'
+        }
+      };
+    }
+
+    // ventas de la campaña
+    const todasVentas = [];
+    activos.forEach((lc) => {
+      lc.ventas.forEach((v) => {
+        const cp = D.compradores.find((x) => x.id === v.compradorId) || { nombre: '' };
+        const pend = v.estado === 'pendiente';
+        const valor = pend ? cv(v.cantidad * M.precioRefDe(D, lc)[v.calidad] * M.factorGastos(D)) : cv(v.cantidad * v.precio - v.gastos);
+        todasVentas.push({
+          fecha: v.fecha, compradorId: cp.id, lote: nombreLote(lc), comprador: cp.nombre,
+          fechaTxt: 'entrega ' + M.fecha(v.fecha) + (pend ? ' · ' + M.diasEntre(v.fecha, M.hoyISO()) + ' días esperando la liquidación' : ' · liquidada ' + M.fecha(v.fechaLiquidacion || v.fecha)),
+          cantTxt: M.miles(v.cantidad) + ' ' + lc.unidadPlural,
+          precioTxt: pend ? 'sin precio' : precioUni(v.precio) + ' por ' + lc.unidad,
+          netoTxt: (pend ? '≈' : '') + monto(valor),
+          netoSub: pend ? 'valorizado' : 'neto cobrado',
+          netoEstilo: this.mono(15, 500, pend ? '#3E5C7A' : '#14181B'),
+          estimadoTxt: '≈' + monto(valor),
+          estadoTxt: pend ? 'Pendiente' : 'Liquidada', pendiente: pend,
+          chip: pend
+            ? { padding: '4px 9px', borderRadius: '999px', background: '#FDF3E7', border: '1px solid #F1DFC4', fontSize: '12px', fontWeight: 600, color: '#8A5A12', whiteSpace: 'nowrap' }
+            : { padding: '4px 9px', borderRadius: '999px', background: '#DFE9E1', fontSize: '12px', fontWeight: 600, color: '#1F3527', whiteSpace: 'nowrap' },
+          liquidar: () => this.abrir('liquidacion', { lcId: lc.id, vId: v.id, calidad: v.calidad })
+        });
+      });
+    });
+    todasVentas.sort((a, b) => (a.fecha < b.fecha ? 1 : -1));
+    const pendientes = todasVentas.filter((v) => v.pendiente);
+    const vp = {
+      sub: todasVentas.length + ' ventas cargadas · ' + pendientes.length + ' pendientes de liquidación',
+      hayPendientes: pendientes.length > 0, pendientes, todas: todasVentas,
+      sinVentas: todasVentas.length === 0,
+      textoSinVentas: 'Todavía no hay ventas cargadas en la campaña ' + camp.nombre + '. Se cargan desde el detalle de cada lote-campaña, con precio cerrado o en consignación.',
+      tituloPendientes: 'Te deben liquidar ' + M.miles(C.cantPendiente) + ' unidades entregadas en consignación'
+    };
+
+    // indirectos
+    const rep = M.prorrateo(D, cv);
+    const ind = {
+      sub: 'Se reparten entre los lote-campaña por hectárea sembrada, y el reparto suma exactamente el importe cargado.',
+      items: M.indirectosDe(D).map((i) => ({
+        concepto: i.concepto,
+        importeTxt: monto(C.indirectosPorConcepto[i.id] || 0),
+        criterioTxt: 'Por hectárea sembrada'
+      })),
+      totalTxt: monto(C.indirectos), totalRepartoTxt: monto(C.indirectos),
+      reparto: activos.map((lc) => ({ lote: nombreLote(lc), haTxt: M.coma(lc.haSembradas), importeTxt: monto(rep[lc.id] || 0) })),
+      cantidadLotes: activos.length
+    };
+
+    // catálogos
+    const catTipo = s.catTipoInsumo || 'todos';
+    const tiposPresentes = Array.from(new Set(D.insumos.map((i) => i.tipo)));
+    const chipToggle = (on) => ({
+      minHeight: '38px', display: 'flex', alignItems: 'center', padding: '0 12px', borderRadius: '6px',
+      border: on ? '1px solid #9FB8A6' : '1px solid #D3D9DE', background: on ? '#F1F5F1' : '#FFFFFF',
+      color: on ? '#1F3527' : '#46515A', fontSize: '13px', fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap'
+    });
+    const lotesFiltrados = D.lotes.filter((l) => l.activo || s.catBajaLotes);
+    const insumosFiltrados = D.insumos.filter((i) => (i.activo || s.catBajaInsumos) && (catTipo === 'todos' || i.tipo === catTipo));
+    const compradoresFiltrados = D.compradores.filter((c) => c.activo || s.catBajaCompradores);
+    const cat = {
+      subLotes: D.lotes.length + ' lotes · ' + M.coma(D.lotes.reduce((a2, b) => a2 + b.ha, 0)) + ' ha en total',
+      alternarBajaLotes: () => this.setState((x) => ({ catBajaLotes: !x.catBajaLotes })),
+      chipBajaLotes: chipToggle(s.catBajaLotes), textoBajaLotes: s.catBajaLotes ? 'Ocultar dados de baja' : 'Ver dados de baja',
+      sinLotesFiltrados: lotesFiltrados.length === 0,
+      lotes: lotesFiltrados.map((l) => {
+        const lcx = activos.find((x) => x.loteId === l.id);
+        return {
+          nombre: l.nombre, baja: !l.activo,
+          sub: l.tipoSuelo + (l.comentarios ? ' · ' + l.comentarios : ''),
+          haTxt: M.coma(l.ha), enCampania: lcx ? lcx.cultivo + ' · ' + M.coma(lcx.haSembradas) + ' ha' : 'Sin sembrar esta campaña',
+          editar: () => this.abrir('loteForm', { editId: l.id })
+        };
+      }),
+      insumos: insumosFiltrados.map((i) => ({
+        nombre: i.nombre, tipo: i.tipo, unidad: i.unidad, baja: !i.activo,
+        precioTxt: (i.moneda === 'USD' ? 'US$ ' : '$ ') + M.coma(i.precio),
+        monedaTxt: i.moneda === 'USD' ? 'US$ · TC ' + M.miles(M.TC_ULTIMO) : '',
+        editar: () => this.abrir('insumoForm', { editId: i.id })
+      })),
+      tipoFiltro: catTipo, tiposFiltro: ['todos'].concat(tiposPresentes),
+      setTipoFiltro: (e) => this.setState({ catTipoInsumo: e.target.value }),
+      alternarBajaInsumos: () => this.setState((x) => ({ catBajaInsumos: !x.catBajaInsumos })),
+      chipBajaInsumos: chipToggle(s.catBajaInsumos), textoBajaInsumos: s.catBajaInsumos ? 'Ocultar dados de baja' : 'Ver dados de baja',
+      sinInsumosFiltrados: insumosFiltrados.length === 0,
+      textoSinInsumos: catTipo === 'todos' ? 'Sin insumos dados de baja.' : 'No hay insumos de tipo ' + catTipo + '.',
+      subCompradores: D.compradores.length + ' compradores · los de consignación entregan sin precio y liquidan después',
+      alternarBajaCompradores: () => this.setState((x) => ({ catBajaCompradores: !x.catBajaCompradores })),
+      chipBajaCompradores: chipToggle(s.catBajaCompradores), textoBajaCompradores: s.catBajaCompradores ? 'Ocultar dados de baja' : 'Ver dados de baja',
+      sinCompradoresFiltrados: compradoresFiltrados.length === 0,
+      compradores: compradoresFiltrados.map((cp) => {
+        const propias = todasVentas.filter((v) => v.compradorId === cp.id);
+        return {
+          nombre: cp.nombre, contacto: cp.contacto, cuit: cp.cuit, tel: cp.tel, plaza: cp.plaza, baja: !cp.activo,
+          ventasTxt: String(propias.length),
+          ventasSub: propias.length === 1 ? 'venta en la campaña' : 'ventas en la campaña',
+          modalidad: cp.consignacion ? 'Consignación' : 'Precio cerrado',
+          chip: cp.consignacion
+            ? { display: 'inline-flex', padding: '4px 9px', borderRadius: '999px', background: '#FDF3E7', border: '1px solid #F1DFC4', fontSize: '12px', fontWeight: 600, color: '#8A5A12' }
+            : { display: 'inline-flex', padding: '4px 9px', borderRadius: '999px', background: '#DFE9E1', fontSize: '12px', fontWeight: 600, color: '#1F3527' },
+          editar: () => this.abrir('compradorForm', { editId: cp.id })
+        };
+      })
+    };
+    const cultivosFiltrados = D.cultivos.filter((c) => c.activo || s.catBajaCultivos);
+    cat.subCultivos = D.cultivos.length + ' cultivos · sus precios de referencia valorizan stock y entregas sin liquidar';
+    cat.alternarBajaCultivos = () => this.setState((x) => ({ catBajaCultivos: !x.catBajaCultivos }));
+    cat.chipBajaCultivos = chipToggle(s.catBajaCultivos);
+    cat.textoBajaCultivos = s.catBajaCultivos ? 'Ocultar dados de baja' : 'Ver dados de baja';
+    cat.sinCultivosFiltrados = cultivosFiltrados.length === 0;
+    cat.cultivos = cultivosFiltrados.map((cu) => ({
+      nombre: cu.nombre, baja: !cu.activo, unidadPlural: cu.unidadPlural, kgTxt: M.coma(cu.kgPorUnidad),
+      precioPrimeraTxt: '$ ' + M.miles(cu.precioPrimera), precioSegundaTxt: '$ ' + M.miles(cu.precioSegunda),
+      actualizadoTxt: cu.fechaPrecio ? 'actualizado ' + M.fecha(cu.fechaPrecio) : 'sin actualizar',
+      editar: () => this.abrir('cultivoForm', { editId: cu.id })
+    }));
+
+    // formularios
+    const fo = s.form;
+    const f = {
+      titulo: '', sub: '', hayError: !!s.error, error: s.error, tieneGuardar: false, hayTotal: false,
+      totalEsPlata: true, totalEsCantidad: false, totalUnidad: '', puedeGuardar: true, hayPista: false, pista: '',
+      cancelar: () => this.cerrar()
+    };
+    const fso = s.formSub || {};
+    const fs = {
+      nombre: fso.nombre, setNombre: this.campoSub('nombre'),
+      tipo: fso.tipo, setTipo: this.campoSub('tipo'), tipos: M.INSUMO_TIPOS,
+      unidad: fso.unidad, setUnidad: this.campoSub('unidad'), unidades: M.UNIDADES_INSUMO,
+      precio: fso.precio, setPrecio: this.campoSub('precio'),
+      moneda: fso.moneda, setMoneda: this.campoSub('moneda'),
+      contacto: fso.contacto, setContacto: this.campoSub('contacto'),
+      cuit: fso.cuit, setCuit: this.campoSub('cuit'),
+      tel: fso.tel, setTel: this.campoSub('tel'),
+      plaza: fso.plaza, setPlaza: this.campoSub('plaza'),
+      consignacionTxt: fso.consignacionTxt, setModalidad: this.campoSub('consignacionTxt'),
+      presetId: fso.presetId, presets: M.UNIDADES_PRESET,
+      setPreset: (e) => {
+        const p = M.UNIDADES_PRESET.find((x) => x.id === e.target.value);
+        this.setState((s) => ({ formSub: Object.assign({}, s.formSub, { presetId: p.id, unidad: p.unidad, unidadPlural: p.unidadPlural, kgPorUnidad: String(p.kgPorUnidad) }) }));
+      },
+      unidadPlural: fso.unidadPlural, setUnidadPlural: this.campoSub('unidadPlural'),
+      kgPorUnidad: fso.kgPorUnidad, setKgPorUnidad: this.campoSub('kgPorUnidad'),
+      precioPrimera: fso.precioPrimera, setPrecioPrimera: this.campoSub('precioPrimera'),
+      precioSegunda: fso.precioSegunda, setPrecioSegunda: this.campoSub('precioSegunda')
+    };
+    const modoBtn = (on) => ({
+      minHeight: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '8px',
+      fontSize: '14px', fontWeight: 600, cursor: 'pointer',
+      border: on ? '1px solid #3F6B4E' : '1px solid #D3D9DE',
+      background: on ? '#DFE9E1' : '#FFFFFF', color: on ? '#1F3527' : '#46515A'
+    });
+
+    if (s.modal === 'tarea') {
+      const md = fo.modalidad;
+      const valor = this.num(fo.valor), cant = this.num(fo.cantidad);
+      const total = md === 'hectarea' ? valor * lcAct.haSembradas : md === 'total' ? valor : cant * valor;
+      Object.assign(f, {
+        esTarea: true, titulo: 'Nueva tarea', sub: nombreLote(lcAct) + ' · campaña ' + camp.nombre,
+        tareasTipo: M.TAREAS_TIPO, nombre: fo.nombre, fecha: fo.fecha, nota: fo.nota,
+        ejecutores: M.EJECUTORES, ejecutor: fo.ejecutor, setEjecutor: this.campo('ejecutor'),
+        notaEjecutor: (fo.ejecutor === 'Jornalero' || fo.ejecutor === 'Cuadrilla' || md === 'jornal' || md === 'destajo')
+          ? 'Va al rubro Mano de obra.'
+          : 'Va al rubro Labores y servicios.',
+        cantidad: fo.cantidad, valor: fo.valor,
+        setNombre: this.campo('nombre'), setFecha: this.campo('fecha'), setNota: this.campo('nota'),
+        setCantidad: this.campo('cantidad'), setValor: this.campo('valor'),
+        modoJornal: () => this.setState((x) => ({ form: Object.assign({}, x.form, { modalidad: 'jornal', valor: '35000', cantidad: '' }), error: null })),
+        modoDestajo: () => this.setState((x) => ({ form: Object.assign({}, x.form, { modalidad: 'destajo', valor: '600', cantidad: '' }), error: null })),
+        modoHa: () => this.setState((x) => ({ form: Object.assign({}, x.form, { modalidad: 'hectarea', valor: '120000' }), error: null })),
+        modoTotal: () => this.setState((x) => ({ form: Object.assign({}, x.form, { modalidad: 'total', valor: '' }), error: null })),
+        estJornal: modoBtn(md === 'jornal'), estDestajo: modoBtn(md === 'destajo'), estHa: modoBtn(md === 'hectarea'), estTotal: modoBtn(md === 'total'),
+        pideCantidad: md === 'jornal' || md === 'destajo', soloValor: md === 'hectarea' || md === 'total', esPorHa: md === 'hectarea',
+        labelCantidad: md === 'jornal' ? 'Cantidad de jornales' : 'Cantidad de ' + lcAct.unidadPlural,
+        labelValor: md === 'jornal' ? 'Valor del jornal' : md === 'destajo' ? 'Valor por ' + lcAct.unidad : md === 'hectarea' ? 'Valor por hectárea' : 'Monto acordado',
+        notaHa: 'Se multiplica por las ' + M.coma(lcAct.haSembradas) + ' ha sembradas del lote. La superficie no se carga acá.',
+        tieneGuardar: true, hayTotal: true, totalLabel: 'Total de la tarea',
+        totalDetalle: md === 'hectarea' ? M.miles(valor) + ' × ' + M.coma(lcAct.haSembradas) + ' ha'
+          : md === 'total' ? 'monto acordado'
+          : md === 'jornal' ? M.miles(cant) + ' jornales × ' + M.miles(valor)
+          : M.miles(cant) + ' ' + lcAct.unidadPlural + ' × ' + M.miles(valor),
+        totalTxt: M.miles(total), textoGuardar: 'Guardar tarea', guardar: () => this.guardarTarea(),
+        puedeGuardar: total > 0,
+        pista: (md === 'jornal' || md === 'destajo')
+          ? 'Poné cantidad y valor para poder guardar.'
+          : 'Poné el importe para poder guardar.'
+      });
+    }
+    if (s.modal === 'aplicacion') {
+      const insActivos = D.insumos.filter((i) => i.activo);
+      const ins = D.insumos.find((i) => i.id === fo.insumoId) || insActivos[0] || { unidad: '', moneda: 'ARS', precio: 0 };
+      const cantidad = this.num(fo.cantidad), precio = this.num(fo.precio), tc = this.num(fo.tc);
+      const total = Math.round(cantidad * precio * (fo.moneda === 'USD' ? tc : 1));
+      const sub = s.sub;
+      Object.assign(f, {
+        esAplicacion: true, titulo: sub === 'insumo' ? 'Nuevo insumo' : 'Nueva aplicación de insumo',
+        sub: sub === 'insumo' ? 'se agrega al catálogo' : nombreLote(lcAct) + ' · campaña ' + camp.nombre,
+        subNinguno: !sub, subInsumo: sub === 'insumo',
+        insumos: insActivos, insumoId: fo.insumoId, unidadInsumo: ins.unidad,
+        cantidad: fo.cantidad, precio: fo.precio, moneda: fo.moneda, tc: fo.tc, fecha: fo.fecha,
+        esDolar: fo.moneda === 'USD',
+        setInsumo: (e) => {
+          if (e.target.value === '__nuevo__') {
+            this.setState({ sub: 'insumo', formSub: { nombre: '', tipo: M.INSUMO_TIPOS[0], unidad: M.UNIDADES_INSUMO[0], precio: '', moneda: 'ARS' }, error: null });
+            return;
+          }
+          const i = D.insumos.find((x) => x.id === e.target.value);
+          this.setState((x) => ({ form: Object.assign({}, x.form, { insumoId: i.id, precio: String(i.precio), moneda: i.moneda }), error: null }));
+        },
+        setCantidad: this.campo('cantidad'), setPrecio: this.campo('precio'), setFecha: this.campo('fecha'),
+        setMoneda: this.campo('moneda'), setTc: this.campo('tc'),
+        notaPrecio: 'Precio traído del catálogo (' + (ins.moneda === 'USD' ? 'US$ ' : '$ ') + M.coma(ins.precio) + ' por ' + ins.unidad + '). Editalo si pagaste otro: el precio queda guardado con esta aplicación y no cambia si después se actualiza el catálogo.'
+          + (fo.moneda === 'USD' ? ' En dólares se guarda también el tipo de cambio: US$ ' + M.coma(cantidad * precio) + ' × ' + M.miles(tc) + '.' : ''),
+        cancelar: sub ? (() => this.setState({ sub: null, error: null })) : (() => this.cerrar())
+      });
+      if (sub === 'insumo') {
+        Object.assign(f, {
+          tieneGuardar: true, hayTotal: false, textoGuardar: 'Guardar insumo', guardar: () => this.guardarInsumoRapido(),
+          puedeGuardar: !!(fs.nombre && fs.nombre.trim()) && this.num(fs.precio) > 0,
+          pista: 'Poné nombre y precio para poder guardar.'
+        });
+      } else {
+        Object.assign(f, {
+          tieneGuardar: true, hayTotal: true, totalLabel: 'Total de la aplicación',
+          totalDetalle: M.coma(cantidad) + ' ' + ins.unidad + ' × ' + (fo.moneda === 'USD' ? 'US$ ' + M.coma(precio) + ' × TC ' + M.miles(tc) : '$ ' + M.miles(precio)),
+          totalTxt: M.miles(total), textoGuardar: 'Guardar aplicación', guardar: () => this.guardarAplicacion(),
+          puedeGuardar: total > 0 && !!fo.insumoId, pista: 'Poné la cantidad aplicada y el precio para poder guardar.'
+        });
+      }
+    }
+    if (s.modal === 'cosecha') {
+      const p = this.num(fo.primera), sg = this.num(fo.segunda);
+      Object.assign(f, {
+        esCosecha: true, titulo: 'Cargar cosecha', sub: nombreLote(lcAct) + ' · corte ' + fo.corte,
+        fecha: fo.fecha, corte: fo.corte, primera: fo.primera, segunda: fo.segunda, descarteKg: fo.descarteKg,
+        unidad: lcAct.unidad, unidadPlural: lcAct.unidadPlural,
+        setFecha: this.campo('fecha'), setCorte: this.campo('corte'), setPrimera: this.campo('primera'),
+        setSegunda: this.campo('segunda'), setDescarte: this.campo('descarteKg'),
+        tieneGuardar: true, hayTotal: true, totalLabel: 'Vendible en este corte',
+        totalDetalle: M.miles(p) + ' de primera + ' + M.miles(sg) + ' de segunda · descarte ' + M.miles(this.num(fo.descarteKg)) + ' kg aparte',
+        totalTxt: M.miles(p + sg), totalEsPlata: false, totalEsCantidad: true, totalUnidad: lcAct.unidadPlural,
+        textoGuardar: 'Guardar corte', guardar: () => this.guardarCosecha(),
+        puedeGuardar: p + sg > 0, pista: 'Cargá al menos una calidad con cantidad para poder guardar.'
+      });
+    }
+    if (s.modal === 'venta') {
+      const cerradaVenta = fo.tipo === 'cerrada';
+      const cant = this.num(fo.cantidad), precio = this.num(fo.precio), gastos = this.num(fo.gastos);
+      const factorV = M.factorGastos(D);
+      const refAct = M.precioRefDe(D, lcAct);
+      const neto = cerradaVenta ? Math.round(cant * precio - gastos) : Math.round(cant * refAct[fo.calidad] * factorV);
+      const dispQ = cAct.stock[fo.calidad];
+      const sinNada = cAct.cantStock === 0;
+      const compActivos = D.compradores.filter((c) => c.activo);
+      const sub = s.sub;
+      Object.assign(f, {
+        esVenta: true, titulo: sub === 'comprador' ? 'Nuevo comprador' : 'Nueva venta', sub: sub === 'comprador' ? 'se agrega al catálogo' : '',
+        subNinguno: !sub, subComprador: sub === 'comprador',
+        compradores: compActivos, compradorId: fo.compradorId, calidad: fo.calidad, cantidad: fo.cantidad,
+        precio: fo.precio, gastos: fo.gastos, unidad: lcAct.unidad, unidadPlural: lcAct.unidadPlural,
+        fecha: fo.fecha, setFecha: this.campo('fecha'),
+        calidades: [
+          { valor: 'primera', label: 'Primera · ' + M.miles(cAct.stock.primera) + ' en galpón' },
+          { valor: 'segunda', label: 'Segunda · ' + M.miles(cAct.stock.segunda) + ' en galpón' }
+        ],
+        ventaCerrada: cerradaVenta, ventaConsignacion: !cerradaVenta,
+        setComprador: (e) => {
+          if (e.target.value === '__nuevo__') {
+            this.setState({ sub: 'comprador', formSub: { nombre: '', contacto: '', cuit: '', tel: '', plaza: '', consignacionTxt: 'cerrado' }, error: null });
+            return;
+          }
+          this.campo('compradorId')(e);
+        },
+        setCalidad: (e) => {
+          const q = e.target.value;
+          this.setState((x) => ({ form: Object.assign({}, x.form, { calidad: q, precio: String(refAct[q]) }), error: null }));
+        },
+        setCantidad: this.campo('cantidad'), setPrecio: this.campo('precio'), setGastos: this.campo('gastos'),
+        modoCerrada: () => this.setState((x) => ({ form: Object.assign({}, x.form, { tipo: 'cerrada' }), error: null })),
+        modoConsignacion: () => this.setState((x) => ({ form: Object.assign({}, x.form, { tipo: 'consignacion' }), error: null })),
+        estCerrada: modoBtn(cerradaVenta), estConsignacion: modoBtn(!cerradaVenta),
+        avisaStock: sinNada || dispQ === 0 || cant > dispQ,
+        stockTxt: sinNada
+          ? 'No hay stock en galpón de este lote: cargá primero un corte de cosecha antes de vender.'
+          : dispQ === 0
+            ? 'No queda stock de ' + fo.calidad + ' en galpón. Elegí la otra calidad o cargá el corte que falta.'
+            : 'Estás vendiendo ' + M.miles(cant) + ' y en galpón quedan ' + M.miles(dispQ) + ' ' + lcAct.unidadPlural + ' de ' + fo.calidad + '.',
+        notaConsignacion: 'Se entrega sin precio y queda pendiente de liquidación. Desde la fecha de entrega se cuentan los días de espera, y hasta que llegue el papel se valoriza a $ ' + M.miles(refAct[fo.calidad]) + ' de referencia menos ' + M.coma(camp.gastosPct) + ' % de gastos, siempre marcada como estimada.',
+        cancelar: sub ? (() => this.setState({ sub: null, error: null })) : (() => this.cerrar())
+      });
+      if (sub === 'comprador') {
+        Object.assign(f, {
+          tieneGuardar: true, hayTotal: false, textoGuardar: 'Guardar comprador', guardar: () => this.guardarCompradorRapido(),
+          puedeGuardar: !!(fs.nombre && fs.nombre.trim()), pista: 'Poné al menos el nombre para poder guardar.'
+        });
+      } else {
+        Object.assign(f, {
+          tieneGuardar: true, hayTotal: true,
+          totalLabel: cerradaVenta ? 'Neto de la venta' : 'Valor estimado de la entrega',
+          totalDetalle: cerradaVenta ? M.miles(cant) + ' × ' + M.miles(precio) + ' − ' + M.miles(gastos) + ' de gastos' : M.miles(cant) + ' × ' + M.miles(refAct[fo.calidad]) + ' de referencia − ' + M.coma(camp.gastosPct) + ' %',
+          totalTxt: M.miles(neto), textoGuardar: cerradaVenta ? 'Guardar venta' : 'Guardar entrega', guardar: () => this.guardarVenta(),
+          puedeGuardar: cant > 0 && cant <= dispQ && (!cerradaVenta || precio > 0) && !!fo.compradorId,
+          pista: dispQ === 0 ? 'Elegí una calidad con stock disponible.' : 'Poné una cantidad dentro del stock' + (cerradaVenta ? ' y el precio' : '') + ' para poder guardar.'
+        });
+      }
+    }
+    if (s.modal === 'liquidacion' && s.ventaRef) {
+      const lcv = D.loteCampanias.find((l) => l.id === s.ventaRef.lcId);
+      const v = lcv.ventas.find((x) => x.id === s.ventaRef.vId);
+      const cl = M.calcularLote(D, lcv);
+      const precio = this.num(fo.precio), bruto = Math.round(v.cantidad * precio);
+      const comision = Math.round(bruto * this.num(fo.comision) / 100);
+      const gastos = this.num(fo.gastos);
+      const neto = bruto - comision - gastos;
+      const nuevoRealizado = cl.netoLiquidado + neto - cl.costoTotal;
+      Object.assign(f, {
+        esLiquidacion: true, titulo: 'Completar liquidación', sub: nombreLote(lcv) + ' · entrega del ' + M.fecha(v.fecha) + ' · ' + M.miles(v.cantidad) + ' ' + lcv.unidadPlural,
+        fecha: fo.fecha, precio: fo.precio, comision: fo.comision, gastos: fo.gastos, unidad: lcv.unidad,
+        setFecha: this.campo('fecha'), setPrecio: this.campo('precio'), setComision: this.campo('comision'), setGastos: this.campo('gastos'),
+        lineas: [
+          { concepto: M.miles(v.cantidad) + ' ' + lcv.unidadPlural + ' × ' + M.miles(precio), importeTxt: M.miles(bruto) },
+          { concepto: 'Comisión ' + M.coma(this.num(fo.comision)) + ' %', importeTxt: '−' + M.miles(comision) },
+          { concepto: 'Flete y gastos', importeTxt: '−' + M.miles(gastos) }
+        ],
+        netoTxt: M.miles(neto),
+        esperaTxt: 'Entregado el ' + M.fecha(v.fecha) + ' · ' + M.diasEntre(v.fecha, M.hoyISO()) + ' días esperando la liquidación.',
+        notaLiquidacion: 'Al confirmar, estas ' + M.miles(v.cantidad) + ' ' + lcv.unidadPlural + ' pasan de estimado a realizado: el margen realizado del lote queda en ' + firmadoPesos(nuevoRealizado) + ' y el estimado casi no se mueve.',
+        tieneGuardar: true, hayTotal: false, textoGuardar: 'Confirmar liquidación', guardar: () => this.guardarLiquidacion(),
+        puedeGuardar: precio > 0, pista: 'Poné el precio que liquidó el comprador.'
+      });
+    }
+    if (s.modal === 'indirecto') {
+      const importe = this.num(fo.importe);
+      const ha = C.ha;
+      let acum = 0;
+      const mayor = activos.reduce((a, b) => (b.haSembradas > a.haSembradas ? b : a), activos[0]);
+      const preview = activos.map((lc) => {
+        let parte;
+        if (lc.id === mayor.id) parte = 0;
+        else { parte = ha ? Math.round(importe * lc.haSembradas / ha) : 0; acum += parte; }
+        return { lc, parte };
+      }).map((x) => ({
+        lote: nombreLote(x.lc), haTxt: M.coma(x.lc.haSembradas),
+        importeTxt: M.miles(x.lc.id === mayor.id ? importe - acum : x.parte)
+      }));
+      Object.assign(f, {
+        esIndirecto: true, titulo: 'Nuevo costo indirecto', sub: 'Campaña ' + camp.nombre,
+        concepto: fo.concepto, importe: fo.importe,
+        setConcepto: this.campo('concepto'), setImporte: this.campo('importe'),
+        preview, previewTotalTxt: M.miles(importe),
+        tieneGuardar: true, hayTotal: false, textoGuardar: 'Confirmar reparto', guardar: () => this.guardarIndirecto(),
+        puedeGuardar: !!(fo.concepto && fo.concepto.trim()) && importe > 0,
+        pista: 'Poné concepto e importe para poder guardar.'
+      });
+    }
+    if (s.modal === 'campania') {
+      Object.assign(f, {
+        esCampania: true, titulo: 'Campaña activa', sub: 'Cargar un gasto en la campaña equivocada es el error más costoso',
+        nueva: () => this.abrir('nuevaCampania'),
+        puedeCerrar: true,
+        nombreActiva: camp.nombre,
+        textoCerrar: cerrada ? 'Reabrir la campaña ' + camp.nombre : 'Cerrar la campaña ' + camp.nombre,
+        cerrarCampania: () => (cerrada ? this.reabrirCampania() : this.cerrarCampania()),
+        notaCampania: cerrada
+          ? 'Reabrir vuelve a permitir cargas y avisa que los totales históricos van a cambiar.'
+          : 'Al cerrarla, los números quedan fijos para poder compararlos con las campañas siguientes y la campaña pasa a solo lectura.',
+        campanias: D.campanias.map((c) => ({
+          nombre: c.nombre,
+          sub: c.estado === 'abierta'
+            ? 'abierta · ' + M.fecha(c.inicio) + ' a ' + M.fecha(c.fin) + ' · gastos ' + M.coma(c.gastosPct) + ' %'
+            : 'cerrada el ' + M.fecha(c.cierre) + ' · solo lectura',
+          marca: c.id === D.campaniaActiva ? '✓' : '',
+          estilo: {
+            minHeight: '58px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px',
+            padding: '0 14px', borderRadius: '10px', cursor: 'pointer',
+            border: c.id === D.campaniaActiva ? '1px solid #3F6B4E' : '1px solid #D3D9DE',
+            background: c.id === D.campaniaActiva ? '#F1F5F1' : '#FFFFFF'
+          },
+          elegir: () => {
+            const nd = this.clon(); nd.campaniaActiva = c.id;
+            this.setState({ D: nd, modal: null, ruta: 'tablero', historial: [] });
+            this.toast('Campaña activa: ' + c.nombre + (c.estado === 'cerrada' ? ' · solo lectura' : ''));
+          }
+        }))
+      });
+    }
+    if (s.modal === 'nuevaCampania') {
+      const pctN = this.num(fo.gastosPct);
+      Object.assign(f, {
+        esNuevaCampania: true, titulo: 'Nueva campaña', sub: 'Queda activa al crearla, todavía sin lotes sembrados',
+        nombre: fo.nombre, inicio: fo.inicio, fin: fo.fin, gastosPct: fo.gastosPct,
+        setNombre: this.campo('nombre'), setInicio: this.campo('inicio'), setFin: this.campo('fin'), setGastosPct: this.campo('gastosPct'),
+        notaNueva: 'El porcentaje de gastos de comercialización es lo que se descuenta al valorizar lo entregado sin liquidar y el stock en galpón: define el margen estimado de toda la campaña. Por defecto 12 %.',
+        tieneGuardar: true, hayTotal: false, textoGuardar: 'Crear campaña', guardar: () => this.guardarNuevaCampania(),
+        puedeGuardar: /^\d{4}\/\d{2}$/.test((fo.nombre || '').trim()) && pctN >= 0 && pctN <= 60,
+        pista: 'El nombre va en formato 2026/27.'
+      });
+    }
+    if (s.modal === 'sembrar') {
+      const lotesAct = D.lotes.filter((l) => l.activo);
+      const cultAct = D.cultivos.filter((c) => c.activo);
+      const loteSel = D.lotes.find((l) => l.id === fo.loteId);
+      const cultSel = D.cultivos.find((c) => c.id === fo.cultivoId);
+      const yaSembrado = D.loteCampanias.filter((l) => l.campaniaId === D.campaniaActiva && l.loteId === fo.loteId).length;
+      const sub = s.sub;
+      Object.assign(f, {
+        esSembrar: true, titulo: sub === 'cultivo' ? 'Nuevo cultivo' : 'Sembrar un lote', sub: sub === 'cultivo' ? 'se agrega al catálogo' : 'Campaña ' + camp.nombre,
+        subNinguno: !sub, subCultivo: sub === 'cultivo',
+        hayLotesDisponibles: lotesAct.length > 0, sinLotesDisponibles: lotesAct.length === 0,
+        textoSinLotes: 'No hay lotes en el catálogo: primero cargá uno.',
+        irACatalogo: () => { this.setState({ modal: null }); this.ir('catLotes'); },
+        lotesDisponibles: lotesAct.map((l) => ({ id: l.id, label: l.nombre + ' · ' + M.coma(l.ha) + ' ha · ' + l.tipoSuelo })),
+        loteId: fo.loteId, setLoteId: this.campo('loteId'),
+        cultivosDisponibles: cultAct.map((c) => ({ id: c.id, nombre: c.nombre })),
+        cultivoId: fo.cultivoId,
+        setCultivoId: (e) => {
+          if (e.target.value === '__nuevo__') {
+            const preset = M.UNIDADES_PRESET[0];
+            this.setState({ sub: 'cultivo', formSub: { nombre: '', presetId: preset.id, unidad: preset.unidad, unidadPlural: preset.unidadPlural, kgPorUnidad: String(preset.kgPorUnidad), precioPrimera: '', precioSegunda: '' }, error: null });
+            return;
+          }
+          this.campo('cultivoId')(e);
+        },
+        hayCiclo: yaSembrado > 0,
+        cicloTxt: 'Este lote ya tiene ' + yaSembrado + (yaSembrado === 1 ? ' siembra' : ' siembras') + ' en la campaña ' + camp.nombre + ': esta va a quedar como ciclo ' + (yaSembrado + 1) + '.',
+        hayNotaCultivo: !!cultSel, notaCultivo: cultSel ? 'Se mide en ' + cultSel.unidadPlural + ' de ' + M.coma(cultSel.kgPorUnidad) + ' kg.' : '',
+        variedad: fo.variedad, setVariedad: this.campo('variedad'),
+        fechaSiembra: fo.fechaSiembra, setFechaSiembra: this.campo('fechaSiembra'),
+        fechaTrasplante: fo.fechaTrasplante, setFechaTrasplante: this.campo('fechaTrasplante'),
+        haSembradas: fo.haSembradas, setHaSembradas: this.campo('haSembradas'),
+        notaHaLote: loteSel ? 'El ' + loteSel.nombre + ' tiene ' + M.coma(loteSel.ha) + ' ha disponibles.' : '',
+        cancelar: sub ? (() => this.setState({ sub: null, error: null })) : (() => this.cerrar())
+      });
+      if (sub === 'cultivo') {
+        Object.assign(f, {
+          tieneGuardar: true, hayTotal: false, textoGuardar: 'Guardar cultivo', guardar: () => this.guardarCultivo(),
+          puedeGuardar: !!(fs.nombre && fs.nombre.trim()) && !!fs.unidad && !!fs.unidadPlural,
+          pista: 'Poné nombre y unidad de producción para poder guardar.'
+        });
+      } else {
+        Object.assign(f, {
+          tieneGuardar: lotesAct.length > 0, hayTotal: false, textoGuardar: 'Sembrar lote', guardar: () => this.guardarSembrar(),
+          puedeGuardar: !!fo.loteId && !!fo.cultivoId && this.num(fo.haSembradas) > 0,
+          pista: 'Elegí el lote, el cultivo y las hectáreas sembradas para poder guardar.'
+        });
+      }
+    }
+    if (s.modal === 'loteForm') {
+      Object.assign(f, {
+        esLoteForm: true, titulo: fo.editId ? 'Editar lote' : 'Nuevo lote', sub: 'Catálogo de lotes',
+        esEdicion: !!fo.editId,
+        nombre: fo.nombre, setNombre: this.campo('nombre'),
+        ha: fo.ha, setHa: this.campo('ha'),
+        tipoSuelo: fo.tipoSuelo, setTipoSuelo: this.campo('tipoSuelo'), suelos: M.SUELO_TIPOS,
+        comentarios: fo.comentarios, setComentarios: this.campo('comentarios'),
+        alternarBaja: () => this.alternarBajaLote(),
+        estiloBaja: fo.activo === false ? st.btnSecVerde : Object.assign({}, st.btnSec, { alignSelf: 'flex-start', color: '#B42318', border: '1px solid #F3D4D1' }),
+        textoBaja: fo.activo === false ? 'Reactivar lote' : 'Dar de baja este lote',
+        tieneGuardar: true, hayTotal: false, textoGuardar: fo.editId ? 'Guardar cambios' : 'Crear lote', guardar: () => this.guardarLote(),
+        puedeGuardar: !!(fo.nombre && fo.nombre.trim()) && this.num(fo.ha) > 0,
+        pista: 'Poné nombre y superficie para poder guardar.'
+      });
+    }
+    if (s.modal === 'insumoForm') {
+      Object.assign(f, {
+        esInsumoForm: true, titulo: fo.editId ? 'Editar insumo' : 'Nuevo insumo', sub: 'Catálogo de insumos',
+        esEdicion: !!fo.editId,
+        nombre: fo.nombre, setNombre: this.campo('nombre'),
+        tipo: fo.tipo, setTipo: this.campo('tipo'), tipos: M.INSUMO_TIPOS,
+        unidad: fo.unidad, setUnidad: this.campo('unidad'), unidades: M.UNIDADES_INSUMO,
+        precio: fo.precio, setPrecio: this.campo('precio'),
+        moneda: fo.moneda, setMoneda: this.campo('moneda'),
+        alternarBaja: () => this.alternarBajaInsumo(),
+        estiloBaja: fo.activo === false ? st.btnSecVerde : Object.assign({}, st.btnSec, { alignSelf: 'flex-start', color: '#B42318', border: '1px solid #F3D4D1' }),
+        textoBaja: fo.activo === false ? 'Reactivar insumo' : 'Dar de baja este insumo',
+        tieneGuardar: true, hayTotal: false, textoGuardar: fo.editId ? 'Guardar cambios' : 'Crear insumo', guardar: () => this.guardarInsumo(),
+        puedeGuardar: !!(fo.nombre && fo.nombre.trim()) && this.num(fo.precio) > 0 && !!fo.unidad,
+        pista: 'Poné nombre, unidad y precio para poder guardar.'
+      });
+    }
+    if (s.modal === 'compradorForm') {
+      Object.assign(f, {
+        esCompradorForm: true, titulo: fo.editId ? 'Editar comprador' : 'Nuevo comprador', sub: 'Catálogo de compradores',
+        esEdicion: !!fo.editId,
+        nombre: fo.nombre, setNombre: this.campo('nombre'),
+        cuit: fo.cuit, setCuit: this.campo('cuit'),
+        contacto: fo.contacto, setContacto: this.campo('contacto'),
+        tel: fo.tel, setTel: this.campo('tel'),
+        plaza: fo.plaza, setPlaza: this.campo('plaza'),
+        consignacionTxt: fo.consignacionTxt, setModalidad: this.campo('consignacionTxt'),
+        alternarBaja: () => this.alternarBajaComprador(),
+        estiloBaja: fo.activo === false ? st.btnSecVerde : Object.assign({}, st.btnSec, { alignSelf: 'flex-start', color: '#B42318', border: '1px solid #F3D4D1' }),
+        textoBaja: fo.activo === false ? 'Reactivar comprador' : 'Dar de baja este comprador',
+        tieneGuardar: true, hayTotal: false, textoGuardar: fo.editId ? 'Guardar cambios' : 'Crear comprador', guardar: () => this.guardarComprador(),
+        puedeGuardar: !!(fo.nombre && fo.nombre.trim()),
+        pista: 'Poné al menos el nombre para poder guardar.'
+      });
+    }
+    if (s.modal === 'cultivoForm') {
+      const pp = this.num(fo.precioPrimera), ps = this.num(fo.precioSegunda);
+      Object.assign(f, {
+        esCultivoForm: true, titulo: fo.editId ? 'Editar cultivo' : 'Nuevo cultivo', sub: 'Catálogo de cultivos',
+        esEdicion: !!fo.editId,
+        nombre: fo.nombre, setNombre: this.campo('nombre'),
+        presetId: fo.presetId, presets: M.UNIDADES_PRESET,
+        setPreset: (e) => {
+          const p = M.UNIDADES_PRESET.find((x) => x.id === e.target.value);
+          this.setState((x) => ({ form: Object.assign({}, x.form, { presetId: p.id, unidad: p.unidad, unidadPlural: p.unidadPlural, kgPorUnidad: String(p.kgPorUnidad) }), error: null }));
+        },
+        unidad: fo.unidad, setUnidad: this.campo('unidad'),
+        unidadPlural: fo.unidadPlural, setUnidadPlural: this.campo('unidadPlural'),
+        kgPorUnidad: fo.kgPorUnidad, setKgPorUnidad: this.campo('kgPorUnidad'),
+        precioPrimera: fo.precioPrimera, setPrecioPrimera: this.campo('precioPrimera'),
+        precioSegunda: fo.precioSegunda, setPrecioSegunda: this.campo('precioSegunda'),
+        hayActualizado: !!fo.editId && !!fo.fechaPrecio,
+        actualizadoTxt: fo.fechaPrecio ? 'Precio de referencia actualizado el ' + M.fecha(fo.fechaPrecio) + '.' : '',
+        alternarBaja: () => this.alternarBajaCultivo(),
+        estiloBaja: fo.activo === false ? st.btnSecVerde : Object.assign({}, st.btnSec, { alignSelf: 'flex-start', color: '#B42318', border: '1px solid #F3D4D1' }),
+        textoBaja: fo.activo === false ? 'Reactivar cultivo' : 'Dar de baja este cultivo',
+        tieneGuardar: true, hayTotal: false, textoGuardar: fo.editId ? 'Guardar cambios' : 'Crear cultivo', guardar: () => this.guardarCultivo(),
+        puedeGuardar: !!(fo.nombre && fo.nombre.trim()) && !!fo.unidad && !!fo.unidadPlural,
+        pista: 'Poné nombre y unidad de producción para poder guardar.'
+      });
+    }
+    if (s.modal === 'cargar') {
+      Object.assign(f, {
+        esCargar: true, titulo: '¿Qué querés cargar?', sub: 'Se carga en la campaña ' + camp.nombre,
+        loteActual: lcAct ? nombreLote(lcAct) : 'ningún lote todavía',
+        opciones: [
+          { label: 'Tarea', sub: 'jornal, destajo, ha', ir: () => this.abrir('tarea') },
+          { label: 'Aplicación de insumo', sub: 'con moneda y TC', ir: () => this.abrir('aplicacion') },
+          { label: 'Cosecha', sub: 'corte y calidades', ir: () => this.abrir('cosecha') },
+          { label: 'Venta', sub: 'precio cerrado o consignación', ir: () => this.abrir('venta') }
+        ]
+      });
+    }
+    if (s.modal === 'mas') {
+      Object.assign(f, {
+        esMas: true, titulo: 'Más', sub: 'Los dos usuarios ven todo',
+        masOpciones: [
+          { label: 'Costos indirectos', ir: () => this.ir('indirectos') },
+          { label: 'Catálogo de lotes', ir: () => this.ir('catLotes') },
+          { label: 'Catálogo de cultivos', ir: () => this.ir('catCultivos') },
+          { label: 'Catálogo de insumos', ir: () => this.ir('catInsumos') },
+          { label: 'Catálogo de compradores', ir: () => this.ir('catCompradores') },
+          { label: 'Campaña activa, crear y cerrar', ir: () => this.setState({ modal: 'campania', error: null }) },
+          { label: s.sinSenal ? 'Volver a tener señal' : 'Simular sin señal', ir: () => this.setState((x) => ({ sinSenal: !x.sinSenal, modal: null })) },
+          { label: 'Reiniciar datos de prueba', ir: () => { this.setState({ D: M.estadoInicial(), modal: null, ruta: 'tablero', loteId: 'LC3', historial: [], precio: '', sub: null, formSub: {}, catTipoInsumo: 'todos', catBajaLotes: false, catBajaInsumos: false, catBajaCompradores: false }); this.toast('Datos reiniciados al estado inicial'); } },
+          { label: 'Salir', ir: () => this.setState({ logueado: false, modal: null }) }
+        ]
+      });
+    }
+
+    f.hayPista = !f.puedeGuardar && !!f.pista;
+    f.estiloGuardar = f.puedeGuardar
+      ? st.btnPrimarioAncho
+      : Object.assign({}, st.btnPrimarioAncho, { background: '#F1F3F5', color: '#A2ABB2', border: '1px solid #E4E8EB', cursor: 'not-allowed' });
+    if (!f.puedeGuardar) f.guardar = () => {};
+
+    const titulos = { tablero: 'Tablero', detalle: cAct ? nombreLote(lcAct) : 'Lote', ventas: 'Ventas', indirectos: 'Costos indirectos', catLotes: 'Lotes', catCultivos: 'Cultivos', catInsumos: 'Insumos', catCompradores: 'Compradores' };
+
+    return Object.assign(base, {
+      camp: {
+        nombre: camp.nombre, cerrada: cerrada, abierta: !cerrada,
+        sub: cerrada ? 'cerrada · solo lectura' : 'abierta · ' + M.coma(C.ha) + ' ha',
+        avisoCerrada: 'Campaña ' + camp.nombre + ' cerrada el ' + M.fecha(camp.cierre) + '. Los números quedan fijos para poder compararlos con las campañas siguientes, así que no se puede cargar ni editar nada. Se reabre desde el selector de campaña.'
+      },
+      nav, navCat, navMovil, tituloVista: titulos[s.ruta] || 'Planilla de Campo',
+      r: { tablero: s.ruta === 'tablero', detalle: s.ruta === 'detalle' && !!cAct, ventas: s.ruta === 'ventas', indirectos: s.ruta === 'indirectos', catLotes: s.ruta === 'catLotes', catCultivos: s.ruta === 'catCultivos', catInsumos: s.ruta === 'catInsumos', catCompradores: s.ruta === 'catCompradores' },
+      tot, filas, det, vp, ind, cat, f,
+      tcTxt: M.miles(M.TC_ULTIMO),
+      verPesos: () => this.setState({ moneda: 'ARS' }), verDolares: () => this.setState({ moneda: 'USD' }),
+      volverTablero: () => this.ir('tablero'),
+      abrirTarea: () => this.abrir('tarea'), abrirAplicacion: () => this.abrir('aplicacion'),
+      abrirCosecha: () => this.abrir('cosecha'), abrirVenta: () => this.abrir('venta'),
+      abrirIndirecto: () => this.abrir('indirecto'), abrirCampania: () => this.setState({ modal: 'campania', error: null }),
+      abrirSembrar: () => this.abrir('sembrar'),
+      abrirLote: () => this.abrir('loteForm'), abrirInsumo: () => this.abrir('insumoForm'), abrirComprador: () => this.abrir('compradorForm'), abrirCultivo: () => this.abrir('cultivoForm'),
+      reiniciar: () => { this.setState({ D: M.estadoInicial(), ruta: 'tablero', loteId: 'LC3', modal: null, historial: [], precio: '', sub: null, formSub: {}, catTipoInsumo: 'todos', catBajaLotes: false, catBajaInsumos: false, catBajaCompradores: false }); this.toast('Datos reiniciados al estado inicial'); }
+    });
+  }
+}
+</script>
+</body>
+</html>

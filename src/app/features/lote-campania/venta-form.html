@@ -1,0 +1,130 @@
+<app-modal
+  [titulo]="editando() ? 'Editar venta' : 'Cargar venta'"
+  [subtitulo]="loteCampaniaTitulo()"
+  (cerrar)="cancelado.emit()"
+>
+  <form class="form-catalogo" novalidate (submit)="guardar($event)">
+    @if (editando()) {
+      <p class="campo__ayuda">
+        Esta entrega está en consignación, sin precio. Para cargarle un precio y liquidarla, usá "Completar
+        liquidación" en vez de este formulario.
+      </p>
+    } @else {
+      <div class="campo">
+        <span class="campo__etiqueta">Modalidad</span>
+        <div class="selector-modo">
+          <button
+            type="button"
+            class="selector-modo__opcion"
+            [class.selector-modo__opcion--activa]="modelo().modalidad === 'PRECIO_CERRADO'"
+            (click)="elegirModalidad('PRECIO_CERRADO')"
+          >
+            Precio cerrado
+          </button>
+          <button
+            type="button"
+            class="selector-modo__opcion"
+            [class.selector-modo__opcion--activa]="modelo().modalidad === 'CONSIGNACION'"
+            (click)="elegirModalidad('CONSIGNACION')"
+          >
+            Consignación
+          </button>
+        </div>
+        @if (modelo().modalidad === 'CONSIGNACION') {
+          <span class="campo__ayuda">
+            Se entrega sin precio. Vas a poder completar la liquidación cuando llegue el papel del consignatario.
+          </span>
+        }
+      </div>
+    }
+
+    <div class="campo-fila">
+      <label class="campo">
+        <span class="campo__etiqueta">Comprador</span>
+        <select class="campo__input" [formField]="ventaForm.compradorId">
+          <option value="" disabled>Elegí un comprador</option>
+          @for (comprador of compradores(); track comprador.id) {
+            <option [value]="comprador.id">{{ comprador.nombre }}</option>
+          }
+        </select>
+        @if (ventaForm.compradorId().touched() && ventaForm.compradorId().invalid()) {
+          <span class="campo__error">{{ ventaForm.compradorId().errors()[0]?.message }}</span>
+        }
+      </label>
+
+      <label class="campo">
+        <span class="campo__etiqueta">Fecha de entrega</span>
+        <input class="campo__input" type="date" [formField]="ventaForm.fechaEntrega" />
+      </label>
+    </div>
+
+    <div class="campo-fila">
+      <label class="campo">
+        <span class="campo__etiqueta">Calidad</span>
+        <select class="campo__input" [formField]="ventaForm.calidad">
+          <option value="" disabled>Elegí la calidad</option>
+          @for (opcion of calidadesVendibles(); track opcion.valor) {
+            <option [value]="opcion.valor">{{ opcion.etiqueta }}</option>
+          }
+        </select>
+        @if (ventaForm.calidad().touched() && ventaForm.calidad().invalid()) {
+          <span class="campo__error">{{ ventaForm.calidad().errors()[0]?.message }}</span>
+        }
+        @if (disponibleCalidadElegida() !== null) {
+          <span class="campo__ayuda">Disponible: {{ disponibleCalidadElegida() }} {{ etiquetaUnidadPlural() }}</span>
+        }
+      </label>
+
+      <label class="campo" for="cantidad">
+        <span class="campo__etiqueta">Cantidad</span>
+        <app-campo-cantidad id="cantidad" [formField]="ventaForm.cantidad" />
+        @if (ventaForm.cantidad().touched() && ventaForm.cantidad().invalid()) {
+          <span class="campo__error">{{ ventaForm.cantidad().errors()[0]?.message }}</span>
+        }
+      </label>
+    </div>
+
+    @if (esPrecioCerrado()) {
+      <div class="campo-fila">
+        <div class="campo">
+          <span class="campo__etiqueta">Precio unitario</span>
+          <div class="campo-precio">
+            <select class="campo-precio__moneda" [formField]="ventaForm.precioMoneda">
+              <option value="ARS">$</option>
+              <option value="USD">US$</option>
+            </select>
+            <app-campo-importe [formField]="ventaForm.precioImporte" />
+          </div>
+          @if (ventaForm.precioImporte().touched() && ventaForm.precioImporte().invalid()) {
+            <span class="campo__error">{{ ventaForm.precioImporte().errors()[0]?.message }}</span>
+          }
+        </div>
+
+        <label class="campo" for="precioTipoCambio">
+          <span class="campo__etiqueta">Tipo de cambio</span>
+          <app-campo-importe
+            id="precioTipoCambio"
+            variante="numerico"
+            tipo="tipoCambio"
+            [formField]="ventaForm.precioTipoCambio"
+          />
+          @if (ventaForm.precioTipoCambio().touched() && ventaForm.precioTipoCambio().invalid()) {
+            <span class="campo__error">{{ ventaForm.precioTipoCambio().errors()[0]?.message }}</span>
+          }
+        </label>
+      </div>
+
+      <div class="total-en-vivo">
+        <span class="total-en-vivo__etiqueta">Importe bruto de esta venta</span>
+        <span class="total-en-vivo__valor numero">{{ totalEnVivo() | importe: modelo().precioMoneda }}</span>
+      </div>
+    }
+
+    <div class="form-catalogo__pie">
+      <button type="button" class="boton-secundario" (click)="cancelado.emit()">Cancelar</button>
+      <button type="submit" class="boton-primario" [disabled]="enviando()">
+        {{ editando() ? 'Guardar cambios' : esPrecioCerrado() ? 'Cargar venta' : 'Registrar entrega' }}
+      </button>
+    </div>
+  </form>
+</app-modal>

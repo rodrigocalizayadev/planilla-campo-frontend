@@ -1,0 +1,95 @@
+<div class="shell">
+  <aside class="sidebar">
+    <div class="marca">
+      <div class="marca__icono"></div>
+      <div class="marca__nombre">Planilla de Campo</div>
+    </div>
+
+    <div class="sidebar__campania">
+      <div class="sidebar__titulo">Campaña activa</div>
+      <app-selector-campania />
+    </div>
+
+    <nav class="nav">
+      @for (item of navPrincipal; track item.ruta) {
+        <a class="nav__item" [routerLink]="item.ruta" routerLinkActive="nav__item--activo">{{
+          item.etiqueta
+        }}</a>
+      }
+    </nav>
+
+    <div class="nav">
+      <div class="sidebar__titulo">Catálogos</div>
+      @for (item of navCatalogos; track item.ruta) {
+        <a class="nav__item" [routerLink]="item.ruta" routerLinkActive="nav__item--activo">{{
+          item.etiqueta
+        }}</a>
+      }
+    </div>
+
+    <div class="sidebar__pie">
+      @if (usuario(); as u) {
+        <div class="usuario">
+          <div class="usuario__avatar">{{ iniciales(u) }}</div>
+          <div>
+            <div class="usuario__nombre">{{ u.nombre }} {{ u.apellido }}</div>
+            <div class="usuario__rol">{{ etiquetaRol(u) }}</div>
+          </div>
+        </div>
+        <button type="button" class="boton-salir" (click)="salir()">Salir</button>
+      }
+    </div>
+  </aside>
+
+  <div class="area-contenido">
+    <header class="header-movil">
+      <div class="marca marca--compacta">
+        <div class="marca__icono"></div>
+        <div class="marca__nombre">Planilla de Campo</div>
+      </div>
+      <app-selector-campania class="header-movil__selector" />
+    </header>
+
+    <main class="contenido">
+      <router-outlet />
+    </main>
+
+    <nav class="nav-movil">
+      @for (item of navPrincipal; track item.ruta) {
+        <a [routerLink]="item.ruta" routerLinkActive="nav-movil__item--activo">{{
+          item.etiqueta
+        }}</a>
+      }
+      <button
+        type="button"
+        class="nav-movil__mas"
+        [class.nav-movil__item--activo]="catalogoActivo()"
+        (click)="abrirMas()"
+      >
+        Más
+      </button>
+    </nav>
+  </div>
+
+  <app-aviso />
+
+  @if (campaniaActiva.selectorAbierto()) {
+    <app-campania-selector-modal (cerrado)="campaniaActiva.cerrarSelector()" />
+  }
+
+  @if (masAbierto()) {
+    <app-modal titulo="Más" subtitulo="Catálogos" (cerrar)="cerrarMas()">
+      <nav class="nav-mas">
+        @for (item of navCatalogos; track item.ruta) {
+          <a
+            class="nav-mas__item"
+            [routerLink]="item.ruta"
+            routerLinkActive="nav-mas__item--activo"
+            (click)="cerrarMas()"
+            >{{ item.etiqueta }}</a
+          >
+        }
+      </nav>
+    </app-modal>
+  }
+</div>

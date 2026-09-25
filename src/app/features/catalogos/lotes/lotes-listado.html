@@ -1,0 +1,80 @@
+<div class="catalogo">
+  <div class="catalogo__header">
+    <div class="catalogo__titulos">
+      <h1 class="catalogo__titulo">Lotes</h1>
+    </div>
+    <div class="catalogo__acciones">
+      <app-buscador [(texto)]="textoBusqueda" placeholder="Buscar lote…" />
+      <app-control-orden [opciones]="opcionesOrden" [(campo)]="ordenCampo" [(direccion)]="ordenDireccion" />
+      <button type="button" class="chip-toggle" [class.chip-toggle--activo]="verBaja()" (click)="alternarVerBaja()">
+        {{ verBaja() ? 'Ocultar dados de baja' : 'Ver dados de baja' }}
+      </button>
+      <button type="button" class="boton-primario catalogo__nuevo" (click)="abrirNuevo()">+ Nuevo lote</button>
+    </div>
+  </div>
+
+  <div class="catalogo__lista">
+    @for (lote of lotesVisibles(); track lote.id) {
+      <div class="fila-catalogo-fila">
+        <button type="button" class="fila-catalogo fila-catalogo--2col" (click)="editar(lote)">
+          <div class="fila-catalogo__principal">
+            <div class="fila-catalogo__nombre-linea">
+              <span class="fila-catalogo__nombre">{{ lote.nombre }}</span>
+              @if (!lote.activo) {
+                <span class="chip-baja">Dado de baja</span>
+              }
+            </div>
+            <div class="fila-catalogo__detalle">
+              {{ lote.tipoSuelo || 'Sin tipo de suelo cargado' }}
+              @if (lote.comentarios) {
+                · {{ lote.comentarios }}
+              }
+            </div>
+          </div>
+          <div class="fila-catalogo__numero">{{ lote.superficieHa | number: '1.0-2' }} ha</div>
+        </button>
+        @if (lote.activo) {
+          <button type="button" class="boton-baja fila-catalogo__accion" (click)="pedirBaja(lote)">
+            Dar de baja
+          </button>
+        } @else {
+          <button type="button" class="boton-reactivar fila-catalogo__accion" (click)="reactivar(lote)">
+            Reactivar
+          </button>
+        }
+      </div>
+    }
+    @if (!cargando() && lotesVisibles().length === 0) {
+      <div class="catalogo__vacio">
+        @if (totalElementos() > 0) {
+          Ningún lote coincide con "{{ textoBusqueda() }}" en esta página.
+        } @else if (verBaja()) {
+          Sin lotes cargados todavía.
+        } @else {
+          Sin lotes activos. Activá "Ver dados de baja" si hay alguno dado de baja.
+        }
+      </div>
+    }
+    <app-paginador
+      [pagina]="paginaSolicitada()"
+      [totalPaginas]="totalPaginas()"
+      [totalElementos]="totalElementos()"
+      etiqueta="lotes"
+      (cambiarPagina)="paginaSolicitada.set($event)"
+    />
+  </div>
+</div>
+
+@if (modalAbierto()) {
+  <app-lote-form [lote]="loteEditando()" (guardado)="onGuardado()" (cancelado)="cerrarModal()" />
+}
+
+@if (confirmandoBaja(); as lote) {
+  <app-confirmar-accion
+    titulo="¿Dar de baja este lote?"
+    [mensaje]="lote.nombre + ': sale de los desplegables, el histórico queda igual.'"
+    textoConfirmar="Dar de baja"
+    (confirmado)="confirmarBaja()"
+    (cancelado)="cancelarBaja()"
+  />
+}

@@ -1,0 +1,63 @@
+<app-modal
+  [titulo]="esEdicion() ? 'Editar comprador' : 'Nuevo comprador'"
+  subtitulo="Catálogo de compradores"
+  (cerrar)="cancelado.emit()"
+>
+  <form class="form-catalogo" novalidate (submit)="guardar($event)">
+    <div class="campo-fila">
+      <label class="campo">
+        <span class="campo__etiqueta">Nombre</span>
+        <input
+          class="campo__input"
+          type="text"
+          placeholder="Distribuidora San Jorge"
+          [formField]="compradorForm.nombre"
+        />
+        @if (compradorForm.nombre().touched() && compradorForm.nombre().invalid()) {
+          <span class="campo__error">{{ compradorForm.nombre().errors()[0]?.message }}</span>
+        }
+      </label>
+
+      <label class="campo">
+        <span class="campo__etiqueta">CUIT</span>
+        <input class="campo__input" type="text" placeholder="30-12345678-9" [formField]="compradorForm.cuit" />
+      </label>
+    </div>
+
+    <div class="campo-fila">
+      <label class="campo">
+        <span class="campo__etiqueta">Persona de contacto</span>
+        <input class="campo__input" type="text" [formField]="compradorForm.contacto" />
+      </label>
+
+      <label class="campo">
+        <span class="campo__etiqueta">Teléfono</span>
+        <input class="campo__input" type="text" [formField]="compradorForm.telefono" />
+      </label>
+    </div>
+
+    <div class="campo-fila">
+      <label class="campo">
+        <span class="campo__etiqueta">Localidad</span>
+        <input class="campo__input" type="text" [formField]="compradorForm.localidad" />
+      </label>
+
+      <label class="campo">
+        <span class="campo__etiqueta">Modalidad habitual</span>
+        <select class="campo__input" [formField]="compradorForm.modalidadHabitual">
+          <option value="" disabled>Elegí una modalidad</option>
+          @for (opcion of enums.opciones('modalidadVenta'); track opcion.valor) {
+            <option [value]="opcion.valor">{{ opcion.etiqueta }}</option>
+          }
+        </select>
+      </label>
+    </div>
+
+    <div class="form-catalogo__pie">
+      <button type="button" class="boton-secundario" (click)="cancelado.emit()">Cancelar</button>
+      <button type="submit" class="boton-primario" [disabled]="enviando()">
+        {{ esEdicion() ? 'Guardar cambios' : 'Crear comprador' }}
+      </button>
+    </div>
+  </form>
+</app-modal>

@@ -1,0 +1,75 @@
+@use '../../shared/styles/formularios';
+@use '../../shared/styles/botones';
+@use '../../shared/styles/tokens';
+
+.reparto-preview {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-md);
+  overflow: hidden;
+
+  &__nota {
+    padding: var(--espacio-6) var(--espacio-7);
+    background: var(--color-superficie-secundaria);
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--color-texto-secundario);
+  }
+
+  &__fila {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 64px 140px;
+    align-items: center;
+    gap: var(--espacio-5);
+    padding: var(--espacio-5) var(--espacio-7);
+    border-top: 1px solid var(--color-borde-fila);
+
+    @include tokens.movil {
+      grid-template-columns: minmax(0, 1fr) 120px;
+
+      &--input {
+        grid-template-columns: minmax(0, 1fr) 140px;
+      }
+
+      > :nth-child(2) {
+        display: none;
+      }
+
+      &--input > :nth-child(2) {
+        display: initial;
+      }
+    }
+  }
+
+  &__lote {
+    min-width: 0;
+    font-size: 14px;
+    color: var(--color-texto-sobre-superficie);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__ha,
+  &__importe {
+    min-width: 0;
+    text-align: right;
+  }
+
+  // Columna de importe a ancho fijo (ver grid-template-columns arriba): sin esto, un
+  // importe de 18 dígitos desborda la columna en vez de partirse de línea.
+  &__importe {
+    overflow-wrap: anywhere;
+    font-weight: 500;
+  }
+
+  &__fila--total {
+    background: var(--color-superficie-secundaria);
+    font-weight: 600;
+  }
+}
+
+.campo-precio--chico {
+  min-height: 34px;
+}

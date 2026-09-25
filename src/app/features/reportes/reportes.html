@@ -1,0 +1,213 @@
+<div class="reportes">
+  <div class="reportes__header">
+    <h1 class="reportes__titulo">Reportes</h1>
+    <div class="selector-modo reportes__selector">
+      <button
+        type="button"
+        class="selector-modo__opcion"
+        [class.selector-modo__opcion--activa]="vista() === 'resumen'"
+        (click)="elegirVista('resumen')"
+      >
+        Resumen de campaña
+      </button>
+      <button
+        type="button"
+        class="selector-modo__opcion"
+        [class.selector-modo__opcion--activa]="vista() === 'comparativa'"
+        (click)="elegirVista('comparativa')"
+      >
+        Comparativa entre campañas
+      </button>
+    </div>
+  </div>
+
+  @if (vista() === 'resumen') {
+    @if (!campaniaActiva.campania()) {
+      <div class="reportes-vacio">
+        <h2 class="reportes-vacio__titulo">Sin campaña activa</h2>
+        <p class="reportes-vacio__texto">Elegí una campaña para ver su resumen de costos por rubro.</p>
+        <button type="button" class="boton-primario" (click)="campaniaActiva.abrirSelector()">Elegir campaña</button>
+      </div>
+    } @else {
+      <div class="reportes__moneda">
+        <div class="selector-moneda">
+          <button
+            type="button"
+            class="selector-moneda__opcion"
+            [class.selector-moneda__opcion--activa]="monedaVista() === 'ARS'"
+            (click)="monedaVistaService.establecer('ARS')"
+          >
+            $ ARS
+          </button>
+          <button
+            type="button"
+            class="selector-moneda__opcion"
+            [class.selector-moneda__opcion--activa]="monedaVista() === 'USD'"
+            (click)="monedaVistaService.establecer('USD')"
+          >
+            US$
+          </button>
+        </div>
+      </div>
+
+      @if (!cargandoResumen() && costosPorRubro()) {
+        <div class="panel">
+          <div class="panel__header">
+            <h2 class="panel__titulo">Costos por rubro · {{ campaniaActiva.campania()!.nombre }}</h2>
+          </div>
+          @for (rubro of rubros(); track rubro.nombre) {
+            <div class="fila-rubro">
+              <div class="fila-rubro__nombre">
+                <span>{{ rubro.nombre }}</span>
+                <div class="fila-rubro__barra">
+                  <div class="fila-rubro__barra-relleno" [style.width.%]="rubro.pct"></div>
+                </div>
+              </div>
+              <span class="fila-rubro__pct numero">{{ rubro.pct | number: '1.0-1' }} %</span>
+              <span class="fila-rubro__importe numero">{{ rubro.importe | importe: monedaVista() }}</span>
+            </div>
+          }
+          <div class="fila-rubro fila-rubro--total">
+            <span class="fila-rubro__nombre">Costo total</span>
+            <span class="fila-rubro__pct numero">100 %</span>
+            <span class="fila-rubro__importe numero">{{ totalGeneral() | importe: monedaVista() }}</span>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel__header">
+            <h2 class="panel__titulo">Por lote-campaña</h2>
+          </div>
+          <div class="tabla-lotes">
+            <div class="tabla-lotes__fila tabla-lotes__fila--header">
+              <span>Lote</span>
+              <span>Ha</span>
+              <span>Insumos</span>
+              <span>Mano de obra</span>
+              <span>Labores y servicios</span>
+              <span>Indirectos</span>
+              <span>Total</span>
+            </div>
+            @for (fila of filasLotes(); track fila.loteCampaniaId) {
+              <div class="tabla-lotes__fila">
+                <span class="tabla-lotes__nombre">{{ fila.nombreLote }} · {{ fila.nombreCultivo }}</span>
+                <span class="numero" data-label="Ha">{{ fila.superficieSembradaHa | number: '1.0-2' }}</span>
+                <span class="numero" data-label="Insumos">{{ fila.insumos | importe: monedaVista() }}</span>
+                <span class="numero" data-label="Mano de obra">{{ fila.manoObra | importe: monedaVista() }}</span>
+                <span class="numero" data-label="Labores y servicios">{{ fila.laborMecanica | importe: monedaVista() }}</span>
+                <span class="numero" data-label="Indirectos">{{ fila.indirectos | importe: monedaVista() }}</span>
+                <span class="numero tabla-lotes__total" data-label="Total">{{ fila.total | importe: monedaVista() }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    }
+  } @else {
+    <div class="panel">
+      <div class="panel__header">
+        <h2 class="panel__titulo">Elegí campañas para comparar</h2>
+        <span class="panel__nota">{{ seleccionadas().size }} elegidas</span>
+      </div>
+      <div class="lista-campanias">
+        @for (campania of campanias(); track campania.id) {
+          <label class="lista-campanias__fila">
+            <input
+              type="checkbox"
+              [checked]="seleccionadas().has(campania.id)"
+              (change)="toggleCampania(campania.id)"
+            />
+            <span>{{ campania.nombre }}</span>
+          </label>
+        }
+      </div>
+      <div class="panel__pie">
+        <button
+          type="button"
+          class="boton-primario"
+          [disabled]="seleccionadas().size < 2 || cargandoComparativa()"
+          (click)="compararSeleccionadas()"
+        >
+          Comparar
+        </button>
+      </div>
+    </div>
+
+    @if (errorComparativa(); as mensaje) {
+      <p class="form-catalogo__error" role="alert">{{ mensaje }}</p>
+    }
+
+    @if (comparativaEjecutada() && comparativaFilas().length === 0 && !cargandoComparativa()) {
+      <p class="panel__nota">Las campañas elegidas no tienen lotes sembrados para comparar.</p>
+    }
+
+    @if (comparativaFilas().length > 0) {
+      <div class="reportes__moneda">
+        <div class="selector-moneda">
+          <button
+            type="button"
+            class="selector-moneda__opcion"
+            [class.selector-moneda__opcion--activa]="monedaVista() === 'ARS'"
+            (click)="monedaVistaService.establecer('ARS')"
+          >
+            $ ARS
+          </button>
+          <button
+            type="button"
+            class="selector-moneda__opcion"
+            [class.selector-moneda__opcion--activa]="monedaVista() === 'USD'"
+            (click)="monedaVistaService.establecer('USD')"
+          >
+            US$
+          </button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel__header">
+          <h2 class="panel__titulo">Costo total y margen realizado por cultivo</h2>
+        </div>
+        <div class="tabla-comparativa">
+          <div class="tabla-comparativa__fila tabla-comparativa__fila--header">
+            <span>Cultivo</span>
+            @for (campania of campaniasComparativa(); track campania.campaniaId) {
+              <span>{{ campania.nombreCampania }}</span>
+            }
+          </div>
+          @for (cultivo of cultivosComparativa(); track cultivo) {
+            <div class="tabla-comparativa__fila">
+              <span class="tabla-comparativa__cultivo">{{ cultivo }}</span>
+              @for (campania of campaniasComparativa(); track campania.campaniaId) {
+                @if (celda(cultivo, campania.campaniaId); as c) {
+                  <span class="tabla-comparativa__celda">
+                    <span class="tabla-comparativa__campania">{{ campania.nombreCampania }}</span>
+                    <span class="numero">
+                      {{ (monedaVista() === 'ARS' ? c.costoTotalArs : c.costoTotalUsd) | importe: monedaVista() }}
+                    </span>
+                    <span class="tabla-comparativa__sub numero">
+                      {{ (monedaVista() === 'ARS' ? c.costoPorHaArs : c.costoPorHaUsd) | importe: monedaVista() }}/ha
+                    </span>
+                    <span
+                      class="tabla-comparativa__sub numero"
+                      [class.valor-negativo]="(monedaVista() === 'ARS' ? c.margenRealizadoArs : c.margenRealizadoUsd) < 0"
+                    >
+                      Margen realizado:
+                      {{
+                        (monedaVista() === 'ARS' ? c.margenRealizadoArs : c.margenRealizadoUsd) | importe: monedaVista()
+                      }}
+                    </span>
+                  </span>
+                } @else {
+                  <span class="tabla-comparativa__celda tabla-comparativa__celda--vacia">
+                    <span class="tabla-comparativa__campania">{{ campania.nombreCampania }}</span>
+                    —
+                  </span>
+                }
+              }
+            </div>
+          }
+        </div>
+      </div>
+    }
+  }
+</div>

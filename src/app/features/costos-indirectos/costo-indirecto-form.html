@@ -1,0 +1,157 @@
+<app-modal titulo="Nuevo costo indirecto" (cerrar)="cancelado.emit()">
+  <form class="form-catalogo" novalidate (submit)="guardar($event)">
+    <div class="campo-fila">
+      <label class="campo">
+        <span class="campo__etiqueta">Concepto</span>
+        <input class="campo__input" type="text" placeholder="Canon de riego" [formField]="costoIndirectoForm.concepto" />
+        @if (costoIndirectoForm.concepto().touched() && costoIndirectoForm.concepto().invalid()) {
+          <span class="campo__error">{{ costoIndirectoForm.concepto().errors()[0]?.message }}</span>
+        }
+      </label>
+
+      <label class="campo">
+        <span class="campo__etiqueta">Fecha</span>
+        <input class="campo__input" type="date" [formField]="costoIndirectoForm.fecha" />
+      </label>
+    </div>
+
+    <div class="campo-fila">
+      <div class="campo">
+        <span class="campo__etiqueta">Importe</span>
+        <div class="campo-precio">
+          <select class="campo-precio__moneda" [formField]="costoIndirectoForm.moneda">
+            <option value="ARS">$</option>
+            <option value="USD">US$</option>
+          </select>
+          <app-campo-importe [formField]="costoIndirectoForm.importe" />
+        </div>
+        @if (costoIndirectoForm.importe().touched() && costoIndirectoForm.importe().invalid()) {
+          <span class="campo__error">{{ costoIndirectoForm.importe().errors()[0]?.message }}</span>
+        }
+      </div>
+
+      <label class="campo" for="tipoCambio">
+        <span class="campo__etiqueta">Tipo de cambio</span>
+        <app-campo-importe
+          id="tipoCambio"
+          variante="numerico"
+          tipo="tipoCambio"
+          [formField]="costoIndirectoForm.tipoCambio"
+        />
+        @if (costoIndirectoForm.tipoCambio().touched() && costoIndirectoForm.tipoCambio().invalid()) {
+          <span class="campo__error">{{ costoIndirectoForm.tipoCambio().errors()[0]?.message }}</span>
+        }
+      </label>
+    </div>
+
+    <div class="campo">
+      <span class="campo__etiqueta">Cómo se imputa</span>
+      <div class="selector-modo">
+        <button
+          type="button"
+          class="selector-modo__opcion"
+          [class.selector-modo__opcion--activa]="modelo().imputacion === 'PRORRATEAR'"
+          (click)="elegirImputacion('PRORRATEAR')"
+        >
+          A prorratear entre los lotes
+        </button>
+        <button
+          type="button"
+          class="selector-modo__opcion"
+          [class.selector-modo__opcion--activa]="modelo().imputacion === 'DIRECTA'"
+          (click)="elegirImputacion('DIRECTA')"
+        >
+          A un lote específico
+        </button>
+      </div>
+    </div>
+
+    @if (modelo().imputacion === 'DIRECTA') {
+      <label class="campo">
+        <span class="campo__etiqueta">Lote-campaña</span>
+        <select class="campo__input" [formField]="costoIndirectoForm.loteCampaniaId">
+          <option value="" disabled>Elegí un lote-campaña</option>
+          @for (lc of lotes(); track lc.id) {
+            <option [value]="lc.id">
+              {{ lc.loteNombre }} · {{ lc.cultivoNombre }}{{ lc.ciclo > 1 ? ' · ciclo ' + lc.ciclo : '' }}
+            </option>
+          }
+        </select>
+        @if (costoIndirectoForm.loteCampaniaId().touched() && costoIndirectoForm.loteCampaniaId().invalid()) {
+          <span class="campo__error">{{ costoIndirectoForm.loteCampaniaId().errors()[0]?.message }}</span>
+        }
+      </label>
+    } @else {
+      <div class="campo">
+        <span class="campo__etiqueta">Criterio de prorrateo</span>
+        <div class="selector-modo">
+          <button
+            type="button"
+            class="selector-modo__opcion"
+            [class.selector-modo__opcion--activa]="modelo().criterio === 'POR_HA'"
+            (click)="elegirCriterio('POR_HA')"
+          >
+            Por hectárea sembrada
+          </button>
+          <button
+            type="button"
+            class="selector-modo__opcion"
+            [class.selector-modo__opcion--activa]="modelo().criterio === 'MANUAL'"
+            (click)="elegirCriterio('MANUAL')"
+          >
+            Manual
+          </button>
+        </div>
+      </div>
+
+      @if (modelo().criterio === 'POR_HA') {
+        <div class="reparto-preview">
+          <div class="reparto-preview__nota">
+            Se reparte por hectárea sembrada entre los {{ lotes().length }} lote-campaña de la campaña.
+          </div>
+          @for (parte of previewPorHa(); track parte.loteCampaniaId) {
+            <div class="reparto-preview__fila">
+              <span class="reparto-preview__lote">{{ parte.lote?.loteNombre }} · {{ parte.lote?.cultivoNombre }}</span>
+              <span class="reparto-preview__ha numero">{{ parte.lote?.superficieSembradaHa | number: '1.0-2' }} ha</span>
+              <span class="reparto-preview__importe numero">{{ parte.importe | importe: modelo().moneda }}</span>
+            </div>
+          }
+          <div class="reparto-preview__fila reparto-preview__fila--total">
+            <span>Suma del reparto</span>
+            <span></span>
+            <span class="reparto-preview__importe numero">{{ sumaPreviewPorHa() | importe: modelo().moneda }}</span>
+          </div>
+        </div>
+      } @else {
+        <div class="reparto-preview">
+          <div class="reparto-preview__nota">Cargá el importe que le corresponde a cada lote.</div>
+          @for (lc of lotes(); track lc.id) {
+            <div class="reparto-preview__fila reparto-preview__fila--input">
+              <span class="reparto-preview__lote">{{ lc.loteNombre }} · {{ lc.cultivoNombre }}</span>
+              <span></span>
+              <div class="campo-precio campo-precio--chico">
+                <app-campo-importe
+                  [value]="partesManual()[lc.id] ?? ''"
+                  (valueChange)="actualizarParte(lc.id, $event)"
+                />
+              </div>
+            </div>
+          }
+          <div class="reparto-preview__fila reparto-preview__fila--total">
+            <span>Suma cargada</span>
+            <span></span>
+            <span class="reparto-preview__importe numero">{{ sumaManual() | importe: modelo().moneda }}</span>
+          </div>
+        </div>
+        @if (costoIndirectoForm.importe().touched() && costoIndirectoForm.importe().invalid()) {
+          <span class="campo__error">{{ costoIndirectoForm.importe().errors()[0]?.message }}</span>
+        }
+      }
+    }
+
+    <div class="form-catalogo__pie">
+      <button type="button" class="boton-secundario" (click)="cancelado.emit()">Cancelar</button>
+      <button type="submit" class="boton-primario" [disabled]="enviando()">Guardar</button>
+    </div>
+  </form>
+</app-modal>

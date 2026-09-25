@@ -1,0 +1,8 @@
+@use '../../styles/formularios';
+
+// `display: contents` para que el `<input>` real quede como hijo directo del layout
+// del padre (`.campo`, `.campo-fila`, grillas propias de cada pantalla) — el
+// componente no debe agregar una caja propia que rompa ese layout.
+:host {
+  display: contents;
+}

@@ -1,0 +1,73 @@
+// Botones compartidos por login, listados de catálogo (boton-primario) y formularios
+// de catálogo (los cuatro). Separado de _formularios.scss para que un listado que solo
+// necesita "+ Nuevo X" no cargue también los estilos de inputs de formulario.
+.boton-primario {
+  min-height: var(--objetivo-tactil-min);
+  border-radius: var(--radio-sm);
+  border: none;
+  background: var(--color-verde-600);
+  color: var(--color-superficie);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: var(--color-verde-700);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: default;
+  }
+}
+
+.boton-secundario {
+  min-height: var(--objetivo-tactil-min);
+  border-radius: var(--radio-sm);
+  border: 1px solid var(--color-borde-input);
+  background: var(--color-superficie);
+  color: var(--color-texto-sobre-superficie);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--color-superficie-secundaria);
+  }
+}
+
+// Botón de baja/reactivación dentro de un formulario de edición (docs/design-brief.md,
+// patrón confirmado en el prototipo: sin diálogo de confirmación aparte).
+.boton-baja {
+  min-height: var(--objetivo-tactil-min);
+  align-self: flex-start;
+  padding: 0 var(--espacio-8);
+  border-radius: var(--radio-sm);
+  border: 1px solid var(--color-baja-borde);
+  background: var(--color-superficie);
+  color: var(--color-negativo);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--color-baja-fondo);
+  }
+}
+
+.boton-reactivar {
+  min-height: var(--objetivo-tactil-min);
+  align-self: flex-start;
+  padding: 0 var(--espacio-8);
+  border-radius: var(--radio-sm);
+  border: 1px solid var(--color-verde-600);
+  background: var(--color-superficie);
+  color: var(--color-verde-900);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--color-verde-50);
+  }
+}

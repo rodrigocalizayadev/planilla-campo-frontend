@@ -1,0 +1,147 @@
+<app-modal titulo="Cargar tarea" [subtitulo]="loteCampaniaTitulo()" (cerrar)="cancelado.emit()">
+  <form class="form-catalogo" novalidate (submit)="guardar($event)">
+    <div class="campo">
+      <span class="campo__etiqueta">Cómo se paga</span>
+      <div class="selector-modo">
+        <button
+          type="button"
+          class="selector-modo__opcion"
+          [class.selector-modo__opcion--activa]="modelo().modoCosto === 'JORNAL'"
+          (click)="elegirModo('JORNAL')"
+        >
+          Jornal
+        </button>
+        <button
+          type="button"
+          class="selector-modo__opcion"
+          [class.selector-modo__opcion--activa]="modelo().modoCosto === 'DESTAJO'"
+          (click)="elegirModo('DESTAJO')"
+        >
+          Destajo
+        </button>
+        <button
+          type="button"
+          class="selector-modo__opcion"
+          [class.selector-modo__opcion--activa]="modelo().modoCosto === 'POR_HA'"
+          (click)="elegirModo('POR_HA')"
+        >
+          Por hectárea
+        </button>
+        <button
+          type="button"
+          class="selector-modo__opcion"
+          [class.selector-modo__opcion--activa]="modelo().modoCosto === 'TOTAL'"
+          (click)="elegirModo('TOTAL')"
+        >
+          Monto total
+        </button>
+      </div>
+    </div>
+
+    @if (pideCantidad()) {
+      <div class="campo-fila">
+        <label class="campo" for="cantidad">
+          <span class="campo__etiqueta">{{ etiquetaCantidad() }}</span>
+          <app-campo-cantidad id="cantidad" [enteros]="true" [formField]="tareaForm.cantidad" />
+          @if (tareaForm.cantidad().touched() && tareaForm.cantidad().invalid()) {
+            <span class="campo__error">{{ tareaForm.cantidad().errors()[0]?.message }}</span>
+          }
+        </label>
+
+        <div class="campo">
+          <span class="campo__etiqueta">{{ etiquetaValor() }}</span>
+          <div class="campo-precio">
+            <select class="campo-precio__moneda" [formField]="tareaForm.valorMoneda">
+              <option value="ARS">$</option>
+              <option value="USD">US$</option>
+            </select>
+            <app-campo-importe [formField]="tareaForm.valorImporte" />
+          </div>
+          @if (tareaForm.valorImporte().touched() && tareaForm.valorImporte().invalid()) {
+            <span class="campo__error">{{ tareaForm.valorImporte().errors()[0]?.message }}</span>
+          }
+        </div>
+      </div>
+    } @else {
+      <div class="campo">
+        <span class="campo__etiqueta">{{ etiquetaValor() }}</span>
+        <div class="campo-precio">
+          <select class="campo-precio__moneda" [formField]="tareaForm.valorMoneda">
+            <option value="ARS">$</option>
+            <option value="USD">US$</option>
+          </select>
+          <app-campo-importe [formField]="tareaForm.valorImporte" />
+        </div>
+        @if (tareaForm.valorImporte().touched() && tareaForm.valorImporte().invalid()) {
+          <span class="campo__error">{{ tareaForm.valorImporte().errors()[0]?.message }}</span>
+        }
+        @if (modelo().modoCosto === 'POR_HA') {
+          <span class="campo__ayuda">
+            Se multiplica por las {{ superficieSembradaHa() | number: '1.0-2' }} ha sembradas de este
+            lote-campaña.
+          </span>
+        }
+      </div>
+    }
+
+    <label class="campo" for="valorTipoCambio">
+      <span class="campo__etiqueta">Tipo de cambio</span>
+      <app-campo-importe
+        id="valorTipoCambio"
+        variante="numerico"
+        tipo="tipoCambio"
+        [formField]="tareaForm.valorTipoCambio"
+      />
+      @if (tareaForm.valorTipoCambio().touched() && tareaForm.valorTipoCambio().invalid()) {
+        <span class="campo__error">{{ tareaForm.valorTipoCambio().errors()[0]?.message }}</span>
+      }
+      <span class="campo__ayuda">Se precarga con el último que cargaste, incluso pagando en pesos.</span>
+    </label>
+
+    <div class="campo-fila">
+      <label class="campo">
+        <span class="campo__etiqueta">Tarea</span>
+        <select class="campo__input" [formField]="tareaForm.tipo">
+          <option value="" disabled>Elegí una tarea</option>
+          @for (opcion of enums.opciones('tipoTarea'); track opcion.valor) {
+            <option [value]="opcion.valor">{{ opcion.etiqueta }}</option>
+          }
+        </select>
+        @if (tareaForm.tipo().touched() && tareaForm.tipo().invalid()) {
+          <span class="campo__error">{{ tareaForm.tipo().errors()[0]?.message }}</span>
+        }
+      </label>
+
+      <label class="campo">
+        <span class="campo__etiqueta">Fecha</span>
+        <input class="campo__input" type="date" [formField]="tareaForm.fecha" />
+      </label>
+    </div>
+
+    <label class="campo">
+      <span class="campo__etiqueta">Quién la hizo</span>
+      <select class="campo__input" [formField]="tareaForm.ejecutor">
+        <option value="" disabled>Elegí quién la hizo</option>
+        @for (opcion of enums.opciones('ejecutor'); track opcion.valor) {
+          <option [value]="opcion.valor">{{ opcion.etiqueta }}</option>
+        }
+      </select>
+      @if (tareaForm.ejecutor().touched() && tareaForm.ejecutor().invalid()) {
+        <span class="campo__error">{{ tareaForm.ejecutor().errors()[0]?.message }}</span>
+      }
+      <span class="campo__ayuda">
+        Jornalero y cuadrilla cuentan como mano de obra; propio y contratista, como labores y servicios.
+      </span>
+    </label>
+
+    <div class="total-en-vivo">
+      <span class="total-en-vivo__etiqueta">Total de esta tarea</span>
+      <span class="total-en-vivo__valor numero">{{ totalEnVivo() | importe: modelo().valorMoneda }}</span>
+    </div>
+
+    <div class="form-catalogo__pie">
+      <button type="button" class="boton-secundario" (click)="cancelado.emit()">Cancelar</button>
+      <button type="submit" class="boton-primario" [disabled]="enviando()">Cargar tarea</button>
+    </div>
+  </form>
+</app-modal>

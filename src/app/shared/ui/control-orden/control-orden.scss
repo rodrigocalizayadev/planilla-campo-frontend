@@ -1,0 +1,78 @@
+:host {
+  display: contents;
+}
+
+.control-orden {
+  display: flex;
+  align-items: center;
+}
+
+// Misma escala que `.catalogo__filtro`/`.buscador__input`/`.chip-toggle` (38px, mismo
+// fondo/color/tipografía): antes eran más chicos a propósito (32px) para no competir
+// con el CTA principal, pero al lado de los demás filtros en catálogos desentonaban por
+// tamaño — la consistencia de escala entre controles "hermanos" pesa más acá.
+.control-orden__select {
+  min-height: 38px;
+  padding: 0 var(--espacio-5);
+  border-radius: var(--radio-sm) 0 0 var(--radio-sm);
+  border: 1px solid var(--color-borde-input);
+  border-right: none;
+  background: var(--color-sidebar-fondo);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-texto-secundario);
+
+  // El outline de foco (styles.scss) se dibuja por fuera de la caja, así que el botón
+  // de al lado, pintado después en el DOM, lo tapa donde se solapan — subirlo por
+  // encima de su vecino en el eje z alcanza para que el aro de foco se vea completo.
+  &:focus {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.control-orden__boton {
+  min-height: 38px;
+  // Sin esto, cuando va pegado al <select> y solo muestra la flecha (sin etiqueta de
+  // campo), el padding lo deja angosto y desproporcionado — un rectángulo alto y
+  // finito en vez de un botón cómodo de tocar.
+  min-width: 38px;
+  padding: 0 var(--espacio-5);
+  border-radius: var(--radio-sm);
+  border: 1px solid var(--color-borde-input);
+  background: var(--color-sidebar-fondo);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-texto-secundario);
+  cursor: pointer;
+  white-space: nowrap;
+
+  &:hover {
+    background: var(--color-superficie-secundaria);
+  }
+
+  // Mismo motivo que en `.control-orden__select`: sin esto, tabular hasta acá deja el
+  // aro de foco parcialmente tapado por el <select> de al lado.
+  &:focus-visible {
+    position: relative;
+    z-index: 1;
+  }
+
+  // Pegado al <select> (hay más de una opción para elegir campo): forma un solo
+  // control segmentado, sin esquina redondeada ni doble borde en la unión — se lee
+  // como "una pieza con dos zonas" (elegir columna | cambiar dirección) en vez de dos
+  // botones sueltos, que es justo lo que se confundía al lado de los demás filtros.
+  &--unido {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-left: 1px solid var(--color-borde-input);
+    padding: 0 var(--espacio-4);
+  }
+}
+
+// Un poco más grande que el resto del texto del botón: la flecha es la parte
+// interactiva que cambia de estado (asc/desc), conviene que se note más que la
+// etiqueta del campo activo.
+.control-orden__flecha {
+  font-size: 15px;
+}

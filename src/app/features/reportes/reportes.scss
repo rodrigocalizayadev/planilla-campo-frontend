@@ -1,0 +1,248 @@
+@use '../../shared/styles/tokens';
+@use '../../shared/styles/botones';
+@use '../../shared/styles/formularios';
+@use '../../shared/styles/indicadores';
+
+.reportes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-8);
+}
+
+.reportes__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-7);
+  flex-wrap: wrap;
+}
+
+.reportes__titulo {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--color-texto);
+}
+
+.reportes__selector {
+  max-width: 420px;
+}
+
+.reportes__moneda {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.reportes-vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--espacio-6);
+  max-width: 480px;
+  padding: var(--espacio-14) 0;
+
+  &__titulo {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--color-texto);
+  }
+
+  &__texto {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--color-texto-secundario);
+  }
+}
+
+.tabla-lotes {
+  overflow-x: auto;
+
+  &__fila {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) repeat(6, minmax(90px, 1fr));
+    gap: var(--espacio-5);
+    padding: var(--espacio-5) var(--espacio-8);
+    border-bottom: 1px solid var(--color-borde-fila);
+    font-size: 13px;
+
+    > span:not(:first-child) {
+      text-align: right;
+    }
+
+    // Por debajo de 900px la fila de 7 columnas fijas no entra en una pantalla de
+    // 360-430px (docs/plan-frontend.md "móvil real"): en vez de forzar scroll
+    // horizontal en una tabla densa, colapsa a tarjeta de 2 columnas con etiqueta
+    // arriba de cada valor (vía `data-label`, mismo patrón visual que `.campo__etiqueta`).
+    @include tokens.movil {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--espacio-5) var(--espacio-6);
+
+      > span:not(:first-child) {
+        text-align: left;
+      }
+
+      > span[data-label] {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+
+        &::before {
+          content: attr(data-label);
+          font-family: var(--font-ui);
+          font-size: 10px;
+          font-weight: 600;
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
+          color: var(--color-texto-terciario);
+        }
+      }
+    }
+  }
+
+  &__fila--header {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--color-texto-terciario);
+    background: var(--color-superficie-secundaria);
+
+    // Los data-label de la tarjeta mobile reemplazan a este header.
+    @include tokens.movil {
+      display: none;
+    }
+  }
+
+  &__nombre {
+    @include tokens.movil {
+      grid-column: 1 / -1;
+      font-family: var(--font-ui);
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--color-texto);
+    }
+  }
+
+  &__total {
+    font-weight: 600;
+    color: var(--color-texto);
+  }
+}
+
+.panel__pie {
+  padding: var(--espacio-7) var(--espacio-8);
+}
+
+.lista-campanias {
+  display: flex;
+  flex-direction: column;
+
+  &__fila {
+    display: flex;
+    align-items: center;
+    gap: var(--espacio-5);
+    min-height: var(--objetivo-tactil-min);
+    padding: var(--espacio-4) var(--espacio-8);
+    border-bottom: 1px solid var(--color-borde-fila);
+    font-size: 14px;
+    color: var(--color-texto-sobre-superficie);
+    cursor: pointer;
+  }
+}
+
+.tabla-comparativa {
+  overflow-x: auto;
+
+  &__fila {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(180px, 1fr);
+    grid-template-columns: minmax(0, 1.4fr);
+    gap: var(--espacio-6);
+    padding: var(--espacio-6) var(--espacio-8);
+    border-bottom: 1px solid var(--color-borde-fila);
+    align-items: start;
+
+    // El grid de N columnas (una por campaña) no tiene ancho fijo que respetar en
+    // mobile: cada fila es su propio grid, así que columnas con contenido más angosto
+    // en una fila que en otra no se alinean entre filas, y un importe de varios
+    // dígitos sin punto de corte se pinta encima de la columna vecina en vez de
+    // desbordar de forma prolija. Por debajo de 900px cada campaña pasa a ser un
+    // bloque apilado dentro de la tarjeta del cultivo, con su nombre como etiqueta
+    // (agregado en el HTML con `.tabla-comparativa__campania`, oculto en escritorio
+    // porque ahí ya lo muestra el header de columna).
+    @include tokens.movil {
+      display: flex;
+      flex-direction: column;
+      gap: var(--espacio-5);
+    }
+  }
+
+  &__fila--header {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--color-texto-terciario);
+    background: var(--color-superficie-secundaria);
+
+    // Reemplazado por `.tabla-comparativa__campania` dentro de cada celda en mobile.
+    @include tokens.movil {
+      display: none;
+    }
+  }
+
+  &__cultivo {
+    @include tokens.movil {
+      font-family: var(--font-ui);
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--color-texto);
+    }
+  }
+
+  &__celda {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-texto);
+
+    @include tokens.movil {
+      // `& + &` para no ponerle borde de separación al primer bloque de campaña
+      // (su hermano anterior es `.tabla-comparativa__cultivo`, no otra celda).
+      & + & {
+        padding-top: var(--espacio-4);
+        border-top: 1px solid var(--color-borde-fila);
+      }
+    }
+  }
+
+  &__celda--vacia {
+    color: var(--color-texto-terciario);
+    font-weight: 400;
+  }
+
+  &__campania {
+    display: none;
+
+    @include tokens.movil {
+      display: block;
+      font-family: var(--font-ui);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--color-texto-terciario);
+    }
+  }
+
+  &__sub {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--color-texto-terciario);
+  }
+}

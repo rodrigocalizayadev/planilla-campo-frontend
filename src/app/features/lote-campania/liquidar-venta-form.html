@@ -1,0 +1,82 @@
+<app-modal titulo="Completar liquidación" [subtitulo]="loteCampaniaTitulo()" (cerrar)="cancelado.emit()">
+  <form class="form-catalogo" novalidate (submit)="guardar($event)">
+    <p class="campo__ayuda">
+      {{ venta().compradorNombre }} · {{ venta().cantidad | number: '1.0-2' }} {{ venta().unidad }} entregadas
+    </p>
+
+    <div class="campo-fila">
+      <div class="campo">
+        <span class="campo__etiqueta">Precio unitario</span>
+        <div class="campo-precio">
+          <select class="campo-precio__moneda" [formField]="liquidacionForm.precioMoneda">
+            <option value="ARS">$</option>
+            <option value="USD">US$</option>
+          </select>
+          <app-campo-importe [formField]="liquidacionForm.precioImporte" />
+        </div>
+        @if (liquidacionForm.precioImporte().touched() && liquidacionForm.precioImporte().invalid()) {
+          <span class="campo__error">{{ liquidacionForm.precioImporte().errors()[0]?.message }}</span>
+        }
+      </div>
+
+      <label class="campo" for="precioTipoCambio">
+        <span class="campo__etiqueta">Tipo de cambio</span>
+        <app-campo-importe
+          id="precioTipoCambio"
+          variante="numerico"
+          tipo="tipoCambio"
+          [formField]="liquidacionForm.precioTipoCambio"
+        />
+        @if (liquidacionForm.precioTipoCambio().touched() && liquidacionForm.precioTipoCambio().invalid()) {
+          <span class="campo__error">{{ liquidacionForm.precioTipoCambio().errors()[0]?.message }}</span>
+        }
+      </label>
+    </div>
+
+    <label class="campo">
+      <span class="campo__etiqueta">Fecha de liquidación</span>
+      <input class="campo__input" type="date" [formField]="liquidacionForm.fechaLiquidacion" />
+    </label>
+
+    <div class="campo">
+      <span class="campo__etiqueta">Gastos descontados (opcional)</span>
+      <span class="campo__ayuda">Se descuentan en la misma moneda y tipo de cambio de arriba. Dejá en blanco lo que no aplique.</span>
+    </div>
+
+    <div class="campo-fila-gastos">
+      <label class="campo" for="comisionImporte">
+        <span class="campo__etiqueta">Comisión</span>
+        <app-campo-importe id="comisionImporte" variante="numerico" [formField]="liquidacionForm.comisionImporte" />
+        @if (liquidacionForm.comisionImporte().touched() && liquidacionForm.comisionImporte().invalid()) {
+          <span class="campo__error">{{ liquidacionForm.comisionImporte().errors()[0]?.message }}</span>
+        }
+      </label>
+
+      <label class="campo" for="fleteImporte">
+        <span class="campo__etiqueta">Flete</span>
+        <app-campo-importe id="fleteImporte" variante="numerico" [formField]="liquidacionForm.fleteImporte" />
+        @if (liquidacionForm.fleteImporte().touched() && liquidacionForm.fleteImporte().invalid()) {
+          <span class="campo__error">{{ liquidacionForm.fleteImporte().errors()[0]?.message }}</span>
+        }
+      </label>
+
+      <label class="campo" for="otrosGastosImporte">
+        <span class="campo__etiqueta">Otros gastos</span>
+        <app-campo-importe id="otrosGastosImporte" variante="numerico" [formField]="liquidacionForm.otrosGastosImporte" />
+        @if (liquidacionForm.otrosGastosImporte().touched() && liquidacionForm.otrosGastosImporte().invalid()) {
+          <span class="campo__error">{{ liquidacionForm.otrosGastosImporte().errors()[0]?.message }}</span>
+        }
+      </label>
+    </div>
+
+    <div class="total-en-vivo">
+      <span class="total-en-vivo__etiqueta">Neto a liquidar</span>
+      <span class="total-en-vivo__valor numero">{{ importeNetoEnVivo() | importe: modelo().precioMoneda }}</span>
+    </div>
+
+    <div class="form-catalogo__pie">
+      <button type="button" class="boton-secundario" (click)="cancelado.emit()">Cancelar</button>
+      <button type="submit" class="boton-primario" [disabled]="enviando()">Guardar liquidación</button>
+    </div>
+  </form>
+</app-modal>

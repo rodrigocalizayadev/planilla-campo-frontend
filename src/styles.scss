@@ -1,1 +1,38 @@
-/* You can add global styles to this file, and also import other style files */
+@use './app/shared/styles/tokens';
+
+html,
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--color-fondo);
+  color: var(--color-texto);
+  font-family: var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: var(--color-verde-600);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--color-verde-700);
+  }
+}
+
+input,
+select,
+button,
+textarea {
+  font-family: var(--font-ui);
+}
+
+input:focus,
+select:focus,
+button:focus-visible {
+  outline: 2px solid var(--color-verde-600);
+  outline-offset: 1px;
+}

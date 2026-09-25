@@ -1,0 +1,16 @@
+@use '../../shared/styles/formularios';
+@use '../../shared/styles/botones';
+@use '../../shared/styles/tokens';
+
+// Primera / Segunda / Descarte de un mismo corte, una al lado de la otra
+// (docs/design-brief.md §7 pantalla 5: cargar varias calidades sin repetir el
+// formulario entero).
+.campo-fila-cosecha {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--espacio-6);
+
+  @include tokens.movil {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

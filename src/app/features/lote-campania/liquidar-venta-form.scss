@@ -1,0 +1,14 @@
+@use '../../shared/styles/formularios';
+@use '../../shared/styles/botones';
+@use '../../shared/styles/tokens';
+
+// `.total-en-vivo` vive en shared/styles/_formularios.scss.
+.campo-fila-gastos {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--espacio-6);
+
+  @include tokens.movil {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

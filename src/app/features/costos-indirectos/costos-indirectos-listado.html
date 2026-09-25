@@ -1,0 +1,108 @@
+@if (!campaniaActiva.campania()) {
+  <div class="costos-indirectos-vacio">
+    <h1 class="costos-indirectos-vacio__titulo">Sin campaña activa</h1>
+    <p class="costos-indirectos-vacio__texto">Elegí una campaña para ver y cargar sus costos indirectos.</p>
+    <button type="button" class="boton-primario" (click)="campaniaActiva.abrirSelector()">Elegir campaña</button>
+  </div>
+} @else {
+  <div class="catalogo">
+    <div class="catalogo__header">
+      <div class="catalogo__titulos">
+        <h1 class="catalogo__titulo">Costos indirectos</h1>
+        <div class="catalogo__sub">Gastos que no son de un lote específico: se prorratean o se imputan directo.</div>
+      </div>
+      <div class="catalogo__acciones">
+        <app-buscador [(texto)]="textoBusqueda" placeholder="Buscar concepto…" />
+        <app-control-orden [opciones]="opcionesOrden" [(campo)]="ordenCampo" [(direccion)]="ordenDireccion" />
+        @if (!esCerrada()) {
+          <button type="button" class="boton-primario catalogo__nuevo" (click)="abrirNuevo()">
+            + Nuevo costo indirecto
+          </button>
+        }
+      </div>
+    </div>
+
+    @if (errorEliminar(); as mensaje) {
+      <p class="form-catalogo__error" role="alert">{{ mensaje }}</p>
+    }
+
+    <div class="catalogo__lista">
+      @for (costo of costosPagina(); track costo.id) {
+        <div class="fila-catalogo fila-catalogo--indirecto">
+          <div class="fila-catalogo__principal">
+            <div class="fila-catalogo__nombre-linea">
+              <span class="fila-catalogo__nombre">{{ costo.concepto }}</span>
+            </div>
+            <div class="fila-catalogo__detalle">
+              {{ etiquetaImputacion(costo) }} · {{ costo.fecha | fecha }}
+            </div>
+          </div>
+          <div class="fila-catalogo__numero">{{ costo.importe.importe | importe: costo.importe.moneda }}</div>
+          @if (!esCerrada()) {
+            <button
+              type="button"
+              class="boton-baja fila-catalogo__accion"
+              [disabled]="eliminando() === costo.id"
+              (click)="pedirEliminar(costo)"
+            >
+              Eliminar
+            </button>
+          }
+        </div>
+      }
+      @if (!cargando() && costosVisibles().length === 0) {
+        <div class="catalogo__vacio">
+          @if (costos().length > 0) {
+            Ningún costo indirecto coincide con "{{ textoBusqueda() }}".
+          } @else {
+            Sin costos indirectos cargados todavía en esta campaña.
+          }
+        </div>
+      }
+      <app-paginador
+        [pagina]="pagina()"
+        [totalPaginas]="totalPaginas()"
+        [totalElementos]="costosVisibles().length"
+        etiqueta="costos indirectos"
+        (cambiarPagina)="paginaSolicitada.set($event)"
+      />
+    </div>
+
+    @if (reparto().length > 0) {
+      <div class="panel">
+        <div class="panel__header">
+          <h2 class="panel__titulo">Reparto entre lotes</h2>
+        </div>
+        @for (fila of reparto(); track fila.lote.id) {
+          <div class="fila-reparto">
+            <span class="fila-reparto__lote">{{ fila.lote.loteNombre }} · {{ fila.lote.cultivoNombre }}</span>
+            <span class="fila-reparto__importe numero">{{ fila.importe | importe: monedaVista() }}</span>
+          </div>
+        }
+        <div class="fila-reparto fila-reparto--total">
+          <span>Total indirectos</span>
+          <span class="numero">{{ totalReparto() | importe: monedaVista() }}</span>
+        </div>
+      </div>
+    }
+  </div>
+
+  @if (modalAbierto()) {
+    <app-costo-indirecto-form
+      [campaniaId]="campaniaActiva.campania()!.id"
+      [lotes]="lotes()"
+      (guardado)="onGuardado()"
+      (cancelado)="cerrarModal()"
+    />
+  }
+
+  @if (confirmandoEliminar(); as costo) {
+    <app-confirmar-accion
+      titulo="¿Eliminar este costo indirecto?"
+      [mensaje]="costo.concepto + ' · ' + (costo.importe.importe | importe: costo.importe.moneda)"
+      textoConfirmar="Eliminar"
+      (confirmado)="confirmarEliminar()"
+      (cancelado)="cancelarEliminar()"
+    />
+  }
+}

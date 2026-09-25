@@ -1,0 +1,11 @@
+@if (campania(); as c) {
+  <button type="button" class="selector" (click)="abrir()">
+    <span class="selector__nombre numero">{{ c.nombre }}</span>
+    <span class="selector__flecha">▼</span>
+  </button>
+} @else {
+  <button type="button" class="selector selector--vacio" (click)="abrir()">
+    <span class="selector__nombre">Elegir campaña</span>
+    <span class="selector__flecha">▼</span>
+  </button>
+}

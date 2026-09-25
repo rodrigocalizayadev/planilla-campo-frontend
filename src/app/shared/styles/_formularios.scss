@@ -1,0 +1,199 @@
+// Clases de campo compartidas por login y por los formularios de catálogo (lote,
+// cultivo, insumo, comprador) y, en slices futuros, por cualquier formulario que se
+// abra dentro de <app-modal>. Los botones viven aparte en _botones.scss.
+@use 'tokens';
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+
+  &__etiqueta {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-texto-terciario);
+  }
+
+  &__input {
+    height: var(--altura-input);
+    padding: 0 var(--espacio-6);
+    border-radius: var(--radio-sm);
+    border: 1px solid var(--color-borde-input);
+    background: var(--color-superficie);
+    font-size: 15px;
+    color: var(--color-texto);
+    box-sizing: border-box;
+
+    &:focus {
+      outline: 2px solid var(--color-verde-300);
+      outline-offset: 1px;
+    }
+  }
+
+  &__input--numerico {
+    font-family: var(--font-numerica);
+    font-variant-numeric: tabular-nums;
+    font-size: 16px;
+    text-align: right;
+  }
+
+  &__error {
+    font-size: 12px;
+    color: var(--color-negativo);
+  }
+
+  &__ayuda {
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--color-texto-terciario);
+  }
+}
+
+// Input de monto con moneda (docs/design-brief.md §6.4): selector de moneda pegado a la
+// izquierda de un input numérico. Lo usa el formulario de insumo y, en slices futuros,
+// cualquier importe multimoneda (aplicación de insumo, venta).
+.campo-precio {
+  display: flex;
+  align-items: stretch;
+  min-height: var(--altura-input);
+  border: 1px solid var(--color-borde-input);
+  border-radius: var(--radio-sm);
+  overflow: hidden;
+  background: var(--color-superficie);
+
+  &__moneda {
+    border: none;
+    background: var(--color-verde-50);
+    padding: 0 var(--espacio-5);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-verde-900);
+  }
+
+  &__monto {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    padding: 0 var(--espacio-6);
+    background: transparent;
+    font-family: var(--font-numerica);
+    font-variant-numeric: tabular-nums;
+    font-size: 16px;
+    text-align: right;
+    color: var(--color-texto);
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+// El st.formCol2 del prototipo: 2 columnas en escritorio, 1 en móvil.
+.campo-fila {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--espacio-6);
+
+  @include tokens.movil {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+// Cuerpo de los cuatro formularios de catálogo (lote, cultivo, insumo, comprador),
+// dentro de <app-modal>: mismo padding, mismo pie con Cancelar/Guardar. Requiere que
+// el componente también @use 'botones' (.boton-primario/.boton-secundario).
+.form-catalogo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-7);
+  padding: var(--espacio-10);
+
+  &__error {
+    padding: var(--espacio-5) var(--espacio-6);
+    border-radius: var(--radio-sm);
+    background: var(--color-baja-fondo);
+    border: 1px solid var(--color-baja-borde);
+    color: var(--color-baja-texto);
+    font-size: 13px;
+    margin: 0;
+  }
+
+  &__pie {
+    display: flex;
+    gap: var(--espacio-4);
+
+    .boton-secundario,
+    .boton-primario {
+      flex: 1;
+    }
+  }
+}
+
+// Grid de opciones tipo toggle (docs/design-brief.md §6.3): modalidad de pago de tarea,
+// modalidad de venta. El formulario cambia de campos según cuál esté activa, sin
+// sentirse como un formulario que muta.
+.selector-modo {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--espacio-4);
+
+  &__opcion {
+    min-height: var(--objetivo-tactil-min);
+    border-radius: var(--radio-sm);
+    border: 1px solid var(--color-borde-input);
+    background: var(--color-superficie);
+    color: var(--color-texto-sobre-superficie);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+
+    &:hover {
+      background: var(--color-superficie-secundaria);
+    }
+
+    &--activa {
+      border-color: var(--color-verde-600);
+      background: var(--color-verde-50);
+      color: var(--color-verde-900);
+    }
+  }
+}
+
+// Total en vivo (única excepción de CLAUDE.md regla 1: previsualización, no el
+// importe que se persiste).
+.total-en-vivo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--espacio-3) var(--espacio-6);
+  padding: var(--espacio-6);
+  border-radius: var(--radio-md);
+  background: var(--color-verde-50);
+  border: 1px solid var(--color-verde-100);
+
+  &__etiqueta {
+    flex-shrink: 0;
+    white-space: nowrap;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-texto-terciario);
+  }
+
+  // `min-width: 0` para que, como flex item, pueda encogerse por debajo de su
+  // min-content (el ancho de un importe de 18 dígitos sin espacios) en vez de
+  // desbordar la tarjeta; `overflow-wrap: anywhere` lo parte de línea si ni así entra.
+  &__valor {
+    flex: 1 1 auto;
+    min-width: 0;
+    text-align: right;
+    overflow-wrap: anywhere;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--color-texto);
+  }
+}

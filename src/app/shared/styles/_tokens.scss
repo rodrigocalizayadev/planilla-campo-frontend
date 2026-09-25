@@ -1,0 +1,159 @@
+// Tokens visuales extraídos de docs/design-reference/project/Prototipo Planilla de Campo.dc.html
+// (objeto `estilos()` del prototipo). Es la fuente de verdad visual: paleta, tipografía,
+// espaciado y los tres estados semánticos (positivo, negativo, estimado).
+
+:root {
+  // Verde de marca — acento, no fondo (docs/design-brief.md §4)
+  --color-verde-600: #3f6b4e; // acciones primarias, elementos activos de navegación
+  --color-verde-700: #35583f; // hover de lo anterior
+  --color-verde-900: #1f3527; // texto de marca sobre superficie clara
+  --color-verde-300: #9fb8a6; // borde suave (selector de campaña activa)
+  --color-verde-100: #dfe9e1; // fondo suave (avatar, chips)
+  --color-verde-50: #f1f5f1; // fondo muy suave (nota destacada)
+
+  // Neutros — sostienen la legibilidad, no el verde
+  --color-fondo: #f7f8f9;
+  --color-superficie: #ffffff;
+  --color-superficie-secundaria: #fbfcfc;
+  // Fondo del sidebar de navegación: un paso más gris que --color-fondo (que ya usa
+  // el área de contenido) para que las dos superficies se distingan a simple vista.
+  // Gris frío y neutro, no verde (docs/design-brief.md §4: "el verde es acento, no
+  // fondo") — nunca reusar --color-verde-50/100 para esto.
+  --color-sidebar-fondo: #eef1f2;
+  --color-borde: #e4e8eb;
+  --color-borde-input: #d3d9de;
+  --color-borde-fila: #f1f3f5;
+
+  --color-texto: #14181b;
+  --color-texto-secundario: #46515a;
+  --color-texto-terciario: #5f6a73;
+  --color-texto-sobre-superficie: #22303a;
+
+  // Estados semánticos reservados (docs/design-brief.md §4, §6.1) — no reusar estos
+  // colores para otro significado.
+  --color-positivo: #0e7a46; // margen a favor
+  --color-negativo: #b42318; // pérdida
+  --color-estimado-texto: #3e5c7a; // todo valor estimado (margen, valorización de stock)
+  --color-estimado-borde: #a9bacb;
+  --color-estimado-fondo-a: #f5f8fb;
+  --color-estimado-fondo-b: #edf2f7;
+
+  // Advertencia (sin señal / pendiente de subir)
+  --color-advertencia-texto: #8a5a12;
+  --color-advertencia-fondo: #fdf3e7;
+  --color-advertencia-borde: #f1dfc4;
+
+  // Chip "dado de baja"
+  --color-baja-texto: #8e2018;
+  --color-baja-fondo: #fcedec;
+  --color-baja-borde: #f3d4d1;
+
+  // Toast de confirmación de acción (AvisoService) — distintos de --color-positivo/
+  // --color-negativo de arriba, que están reservados para indicadores financieros
+  // (margen a favor / pérdida) y no hay que reutilizar para otro significado.
+  // El verde usa el mismo tono que los botones primarios (--color-verde-600): el
+  // 1f3527 original se veía casi negro en pantalla.
+  --color-aviso-exito: #3f6b4e;
+  --color-aviso-error: #7a231d;
+
+  // Tipografía — la utilitaria (IBM Plex Mono) es para todo número: importes, fechas,
+  // superficies, códigos de campaña. La UI general usa Helvetica Neue.
+  --font-ui: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-numerica: 'IBM Plex Mono', monospace;
+
+  // Escala de espaciado
+  --espacio-1: 2px;
+  --espacio-2: 4px;
+  --espacio-3: 6px;
+  --espacio-4: 8px;
+  --espacio-5: 10px;
+  --espacio-6: 12px;
+  --espacio-7: 14px;
+  --espacio-8: 16px;
+  --espacio-9: 18px;
+  --espacio-10: 20px;
+  --espacio-12: 24px;
+  --espacio-14: 28px;
+
+  // Radios
+  --radio-sm: 6px;
+  --radio-md: 8px;
+  --radio-lg: 10px;
+  --radio-xl: 12px;
+  --radio-pill: 999px;
+
+  // Objetivos táctiles (docs/design-brief.md §9)
+  --objetivo-tactil-min: 44px;
+  --altura-input: 48px;
+}
+
+// Breakpoints reales del prototipo (window.innerWidth, no CSS media queries en el
+// original): por debajo de 900px es "móvil" (sidebar oculta, nav inferior fija); por
+// debajo de 1120px las grillas de varias columnas se apilan a 1-2 columnas aunque la
+// sidebar de escritorio siga visible.
+$bp-movil: 900px;
+$bp-angosto: 1120px;
+
+@mixin desde($ancho) {
+  @media (min-width: $ancho) {
+    @content;
+  }
+}
+
+@mixin movil {
+  @media (max-width: #{$bp-movil - 1px}) {
+    @content;
+  }
+}
+
+@mixin angosto {
+  @media (max-width: #{$bp-angosto - 1px}) {
+    @content;
+  }
+}
+
+@mixin escritorio {
+  @media (min-width: $bp-angosto) {
+    @content;
+  }
+}
+
+// Utilidades de estado semántico. Aplicar a cualquier importe/indicador, nunca a
+// contenido que no sea uno de los tres estados reservados.
+.numero {
+  font-family: var(--font-numerica);
+  font-variant-numeric: tabular-nums;
+}
+
+.valor-positivo {
+  color: var(--color-positivo);
+}
+
+.valor-negativo {
+  color: var(--color-negativo);
+}
+
+.valor-estimado {
+  color: var(--color-estimado-texto);
+}
+
+.superficie-estimado {
+  background: repeating-linear-gradient(
+    135deg,
+    var(--color-estimado-fondo-a) 0 8px,
+    var(--color-estimado-fondo-b) 8px 16px
+  );
+  border: 1px dashed var(--color-estimado-borde);
+}
+
+.badge-estimado {
+  display: inline-block;
+  padding: 2px 6px;
+  border: 1px dashed var(--color-estimado-borde);
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-estimado-texto);
+}

@@ -1,0 +1,475 @@
+@use '../../shared/styles/tokens';
+@use '../../shared/styles/botones';
+@use '../../shared/styles/formularios';
+@use '../../shared/styles/indicadores';
+@use '../../shared/styles/catalogo';
+
+.detalle-vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--espacio-6);
+  max-width: 480px;
+  padding: var(--espacio-14) 0;
+
+  &__titulo {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 600;
+  }
+
+  &__texto {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--color-texto-secundario);
+  }
+
+  &__boton {
+    display: inline-flex;
+    align-items: center;
+    padding: 0 var(--espacio-8);
+  }
+}
+
+.detalle {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-9);
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--espacio-7);
+    flex-wrap: wrap;
+
+    @include tokens.movil {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+
+  &__titulos {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-3);
+    min-width: 0;
+  }
+
+  &__volver {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-verde-700);
+  }
+
+  &__titulo {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__sub {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.4;
+    color: var(--color-texto-secundario);
+  }
+
+  &__acciones {
+    display: flex;
+    align-items: center;
+    gap: var(--espacio-4);
+    flex-wrap: wrap;
+  }
+
+  &__aviso-cerrada {
+    margin: 0;
+    padding: var(--espacio-6) var(--espacio-7);
+    border-radius: var(--radio-md);
+    background: var(--color-advertencia-fondo);
+    border: 1px solid var(--color-advertencia-borde);
+    color: var(--color-advertencia-texto);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  &__moneda {
+    display: flex;
+  }
+
+  &__hero-fila {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--espacio-8);
+    align-items: start;
+
+    @include tokens.angosto {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  &__kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--espacio-6);
+
+    &--2 {
+      margin-top: var(--espacio-6);
+    }
+  }
+
+  &__col2 {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--espacio-8);
+    align-items: start;
+
+    @include tokens.angosto {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  &__col-izq,
+  &__col-der {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-8);
+    min-width: 0;
+  }
+}
+
+// Costo por unidad: el número más prominente de la pantalla (docs/design-brief.md §6.2).
+.hero-costo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-6);
+  padding: var(--espacio-9);
+  border: 1px solid var(--color-verde-300);
+  border-radius: var(--radio-lg);
+  background: var(--color-superficie-secundaria);
+
+  &--vacio {
+    border: 1px dashed var(--color-borde-input);
+    background: var(--color-superficie);
+  }
+
+  &__etiqueta {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-verde-700);
+
+    .hero-costo--vacio & {
+      color: var(--color-texto-terciario);
+    }
+  }
+
+  &__numero {
+    font-size: 34px;
+    font-weight: 600;
+  }
+
+  &__titulo-vacio {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--color-texto-secundario);
+  }
+
+  &__nota {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--color-texto-secundario);
+  }
+
+  &__oferta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-4);
+    padding-top: var(--espacio-6);
+    border-top: 1px solid var(--color-verde-100);
+  }
+
+  &__input {
+    width: 180px;
+  }
+
+  &__resultado {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+}
+
+// .panel vive en shared/styles/_indicadores.scss (extraído en slice 6: lo usan también
+// el listado de costos indirectos y el reporte de campaña).
+
+// .fila-rubro vive en shared/styles/_indicadores.scss (extraído en slice 6).
+
+.fila-desglose {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--espacio-6);
+  padding: var(--espacio-6) var(--espacio-8);
+  border-bottom: 1px solid var(--color-borde-fila);
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &__concepto {
+    display: flex;
+    align-items: center;
+    gap: var(--espacio-4);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-texto-sobre-superficie);
+  }
+
+  &__importe {
+    font-size: 15px;
+    font-weight: 500;
+  }
+}
+
+// Botón (no <div>): la fila entera es clickeable para editar el corte, mismo patrón
+// que `.fila-catalogo` (reset de estilos de <button> + wrapper `.fila-catalogo-fila`
+// con el botón "Eliminar" al lado, para no anidar un <button> dentro de otro).
+.fila-cosecha {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) repeat(3, 88px);
+  align-items: center;
+  gap: var(--espacio-5);
+  width: 100%;
+  padding: var(--espacio-6) var(--espacio-8);
+  border: none;
+  background: transparent;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: var(--color-superficie-secundaria);
+  }
+
+  &:disabled {
+    cursor: default;
+  }
+
+  &__titulo {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-texto-sobre-superficie);
+  }
+
+  &__fecha {
+    font-size: 12px;
+    color: var(--color-texto-terciario);
+  }
+
+  &__cantidad {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+  }
+
+  &__etiqueta {
+    font-size: 11px;
+    color: var(--color-texto-terciario);
+  }
+
+  @include tokens.movil {
+    grid-template-columns: minmax(0, 1fr) repeat(3, 1fr);
+  }
+}
+
+.fila-catalogo-fila .fila-cosecha {
+  flex: 1;
+  min-width: 0;
+}
+
+.fila-venta {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 120px 100px;
+  align-items: center;
+  gap: var(--espacio-6);
+  padding: var(--espacio-6) var(--espacio-8);
+  border-bottom: 1px solid var(--color-borde-fila);
+
+  &:last-of-type {
+    border-bottom: none;
+  }
+
+  &__principal {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  &__comprador {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-texto-sobre-superficie);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__detalle {
+    font-size: 12px;
+    color: var(--color-texto-terciario);
+  }
+
+  &__importe {
+    font-size: 14px;
+    text-align: right;
+  }
+
+  &__acciones {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--espacio-5);
+  }
+
+  // Mismo tamaño compacto que `.fila-catalogo__accion` (Eliminar/Dar de baja de los
+  // listados de catálogo): son botones reales (`.boton-primario`/`.boton-secundario`/
+  // `.boton-baja`), no texto, para que "Eliminar" en particular sea consistente con el
+  // resto de la app en vez de un link suelto.
+  &__accion {
+    min-height: 32px;
+    padding: 0 var(--espacio-6);
+    font-size: 12px;
+  }
+}
+
+.panel__header-boton {
+  padding: 0 var(--espacio-6);
+  white-space: nowrap;
+}
+
+.panel__header-acciones {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-6);
+}
+
+// Fila de filtros + orden del panel de movimientos: a diferencia del sort suelto de
+// cosecha/venta (que entra en el header, junto al botón primario), acá hay cuatro
+// controles reales (tipo, desde, hasta, orden) — sí amerita una fila propia. Misma
+// escala que `.control-orden`/los filtros de catálogo (38px): son controles hermanos
+// en la misma fila, tienen que verse del mismo tamaño entre sí.
+.panel__toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--espacio-4);
+  padding: var(--espacio-6) var(--espacio-8) 0;
+}
+
+.panel__toolbar-filtro {
+  min-height: 38px;
+  padding: 0 var(--espacio-5);
+  border-radius: var(--radio-sm);
+  border: 1px solid var(--color-borde-input);
+  background: var(--color-sidebar-fondo);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-texto-secundario);
+}
+
+.panel__toolbar-separador {
+  color: var(--color-texto-terciario);
+  font-size: 12px;
+}
+
+.chip-estado {
+  justify-self: end;
+  padding: 2px 8px;
+  border-radius: var(--radio-pill);
+  background: var(--color-advertencia-fondo);
+  border: 1px solid var(--color-advertencia-borde);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-advertencia-texto);
+
+  &--liquidada {
+    background: var(--color-verde-100);
+    border-color: var(--color-verde-300);
+    color: var(--color-verde-900);
+  }
+}
+
+.fila-movimiento {
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr) 130px;
+  align-items: center;
+  gap: var(--espacio-6);
+  padding: var(--espacio-6) var(--espacio-8);
+  border-bottom: 1px solid var(--color-borde-fila);
+
+  &:last-of-type {
+    border-bottom: none;
+  }
+
+  &__fecha {
+    font-size: 12px;
+    color: var(--color-texto-terciario);
+  }
+
+  &__detalle {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  &__titulo-linea {
+    display: flex;
+    align-items: center;
+    gap: var(--espacio-4);
+    flex-wrap: wrap;
+  }
+
+  &__titulo {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-texto-sobre-superficie);
+  }
+
+  &__calculo {
+    font-size: 12px;
+    color: var(--color-texto-terciario);
+  }
+
+  &__importe {
+    font-size: 14px;
+    font-weight: 500;
+    text-align: right;
+  }
+
+  @include tokens.movil {
+    grid-template-columns: minmax(0, 1fr) auto;
+
+    .fila-movimiento__fecha {
+      grid-row: 1;
+      grid-column: 1 / -1;
+    }
+  }
+}
+
+// .chip-tipo vive ahora en shared/styles/_catalogo.scss (se reusa en insumos-listado).

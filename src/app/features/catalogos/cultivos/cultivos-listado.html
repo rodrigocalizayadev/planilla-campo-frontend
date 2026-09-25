@@ -1,0 +1,88 @@
+<div class="catalogo">
+  <div class="catalogo__header">
+    <div class="catalogo__titulos">
+      <h1 class="catalogo__titulo">Cultivos</h1>
+      <div class="catalogo__sub">Sus precios de referencia valorizan stock y entregas sin liquidar.</div>
+    </div>
+    <div class="catalogo__acciones">
+      <app-buscador [(texto)]="textoBusqueda" placeholder="Buscar cultivo…" />
+      <app-control-orden [opciones]="opcionesOrden" [(campo)]="ordenCampo" [(direccion)]="ordenDireccion" />
+      <button type="button" class="chip-toggle" [class.chip-toggle--activo]="verBaja()" (click)="alternarVerBaja()">
+        {{ verBaja() ? 'Ocultar dados de baja' : 'Ver dados de baja' }}
+      </button>
+      <button type="button" class="boton-primario catalogo__nuevo" (click)="abrirNuevo()">+ Nuevo cultivo</button>
+    </div>
+  </div>
+
+  <div class="catalogo__lista">
+    @for (cultivo of cultivosVisibles(); track cultivo.id) {
+      <div class="fila-catalogo-fila">
+        <button type="button" class="fila-catalogo" (click)="editar(cultivo)">
+          <div class="fila-catalogo__principal">
+            <div class="fila-catalogo__nombre-linea">
+              <span class="fila-catalogo__nombre">{{ cultivo.nombre }}</span>
+              @if (!cultivo.activo) {
+                <span class="chip-baja">Dado de baja</span>
+              }
+            </div>
+            <div class="fila-catalogo__detalle">
+              Se mide en {{ cultivo.nombrePlural }}
+              @if (cultivo.kgPorUnidad) {
+                de {{ cultivo.kgPorUnidad }} kg
+              }
+            </div>
+          </div>
+          <div class="fila-catalogo__numero">
+            {{ cultivo.precioReferenciaPrimera?.importe | importe: cultivo.precioReferenciaPrimera?.moneda }}
+            <div class="fila-catalogo__detalle">1ª de referencia</div>
+          </div>
+          <div class="fila-catalogo__extra">
+            {{ cultivo.precioReferenciaSegunda?.importe | importe: cultivo.precioReferenciaSegunda?.moneda }}
+            <div class="fila-catalogo__detalle">2ª de referencia</div>
+          </div>
+        </button>
+        @if (cultivo.activo) {
+          <button type="button" class="boton-baja fila-catalogo__accion" (click)="pedirBaja(cultivo)">
+            Dar de baja
+          </button>
+        } @else {
+          <button type="button" class="boton-reactivar fila-catalogo__accion" (click)="reactivar(cultivo)">
+            Reactivar
+          </button>
+        }
+      </div>
+    }
+    @if (!cargando() && cultivosVisibles().length === 0) {
+      <div class="catalogo__vacio">
+        @if (totalElementos() > 0) {
+          Ningún cultivo coincide con "{{ textoBusqueda() }}" en esta página.
+        } @else if (verBaja()) {
+          Sin cultivos cargados todavía.
+        } @else {
+          Sin cultivos activos. Activá "Ver dados de baja" si hay alguno dado de baja.
+        }
+      </div>
+    }
+    <app-paginador
+      [pagina]="paginaSolicitada()"
+      [totalPaginas]="totalPaginas()"
+      [totalElementos]="totalElementos()"
+      etiqueta="cultivos"
+      (cambiarPagina)="paginaSolicitada.set($event)"
+    />
+  </div>
+</div>
+
+@if (modalAbierto()) {
+  <app-cultivo-form [cultivo]="cultivoEditando()" (guardado)="onGuardado()" (cancelado)="cerrarModal()" />
+}
+
+@if (confirmandoBaja(); as cultivo) {
+  <app-confirmar-accion
+    titulo="¿Dar de baja este cultivo?"
+    [mensaje]="cultivo.nombre + ': sale de los desplegables, el histórico queda igual.'"
+    textoConfirmar="Dar de baja"
+    (confirmado)="confirmarBaja()"
+    (cancelado)="cancelarBaja()"
+  />
+}

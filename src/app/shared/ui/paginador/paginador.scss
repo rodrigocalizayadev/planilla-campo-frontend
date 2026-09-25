@@ -1,0 +1,53 @@
+:host {
+  display: contents;
+}
+
+.paginador {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-5);
+  padding: var(--espacio-6) var(--espacio-9);
+}
+
+.paginador__total {
+  font-size: 12px;
+  color: var(--color-texto-terciario);
+}
+
+.paginador__nav {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-5);
+  margin-left: auto;
+}
+
+// Misma escala que `.control-orden__boton` (32px, borde tenue): paginado y orden son
+// las dos acciones terciarias de un listado, comparten peso visual entre sí.
+.paginador__boton {
+  min-height: 32px;
+  padding: 0 var(--espacio-5);
+  border-radius: var(--radio-sm);
+  border: 1px solid var(--color-borde);
+  background: var(--color-superficie);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-texto-terciario);
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    border-color: var(--color-borde-input);
+    background: var(--color-superficie-secundaria);
+    color: var(--color-texto-secundario);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+}
+
+.paginador__info {
+  font-size: 12px;
+  color: var(--color-texto-terciario);
+}

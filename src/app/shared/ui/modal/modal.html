@@ -1,0 +1,17 @@
+<div class="modal-overlay" tabindex="-1" (keydown.escape)="cerrar.emit()">
+  <div class="modal-caja" role="dialog" aria-modal="true" [attr.aria-label]="titulo()">
+    <header class="modal-caja__header">
+      <div class="modal-caja__titulos">
+        <div class="modal-caja__titulo">{{ titulo() }}</div>
+        @if (subtitulo()) {
+          <div class="modal-caja__subtitulo">{{ subtitulo() }}</div>
+        }
+      </div>
+      <button type="button" class="modal-caja__cerrar" (click)="cerrar.emit()" aria-label="Cerrar">✕</button>
+    </header>
+
+    <div class="modal-caja__cuerpo">
+      <ng-content />
+    </div>
+  </div>
+</div>

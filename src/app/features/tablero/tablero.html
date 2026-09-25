@@ -1,0 +1,175 @@
+@if (!campaniaActiva.campania()) {
+  <div class="tablero-vacio">
+    <h1 class="tablero-vacio__titulo">Sin campaña activa</h1>
+    <p class="tablero-vacio__texto">
+      Elegí una campaña para ver sus indicadores, o creá una nueva si es la primera vez que usás el sistema.
+    </p>
+    <button type="button" class="boton-primario" (click)="campaniaActiva.abrirSelector()">Elegir campaña</button>
+  </div>
+} @else {
+  <div class="tablero">
+    <header class="tablero__header">
+      <div class="tablero__titulos">
+        <div class="tablero__titulo-linea">
+          <h1 class="tablero__titulo">{{ campaniaActiva.campania()!.nombre }}</h1>
+          <span class="tablero__estado" [class.tablero__estado--cerrada]="esCerrada()">{{ etiquetaEstado() }}</span>
+        </div>
+        <div class="tablero__moneda">
+          <div class="selector-moneda">
+            <button
+              type="button"
+              class="selector-moneda__opcion"
+              [class.selector-moneda__opcion--activa]="monedaVista() === 'ARS'"
+              (click)="monedaVistaService.establecer('ARS')"
+            >
+              $ ARS
+            </button>
+            <button
+              type="button"
+              class="selector-moneda__opcion"
+              [class.selector-moneda__opcion--activa]="monedaVista() === 'USD'"
+              (click)="monedaVistaService.establecer('USD')"
+            >
+              US$
+            </button>
+          </div>
+
+          @if (!editandoCotizacion()) {
+            <button type="button" class="tablero__tc" (click)="abrirEdicionCotizacion()">
+              @if (campaniaDetalle()?.cotizacionVigente; as tc) {
+                TC {{ tc | number: '1.2-2' }}
+              } @else {
+                Sin cotización cargada
+              }
+              · editar
+            </button>
+          } @else {
+            <form class="tablero__tc-form" (submit)="guardarCotizacion($event)">
+              <app-campo-importe
+                variante="numerico"
+                tipo="tipoCambio"
+                placeholder="1200,50"
+                [value]="cotizacionEditada()"
+                (valueChange)="cotizacionEditada.set($event)"
+              />
+              <button type="submit" class="boton-primario tablero__tc-boton" [disabled]="guardandoCotizacion()">
+                Guardar
+              </button>
+              <button type="button" class="boton-secundario tablero__tc-boton" (click)="cancelarEdicionCotizacion()">
+                Cancelar
+              </button>
+            </form>
+          }
+        </div>
+      </div>
+      <div class="tablero__acciones">
+        @if (!esCerrada()) {
+          <button type="button" class="boton-primario" (click)="abrirSembrar()">+ Sembrar un lote</button>
+        }
+        @if (campaniaActiva.campania()!.estado === 'PLANIFICADA') {
+          <button type="button" class="boton-secundario" [disabled]="cambiandoEstado()" (click)="marcarEnCurso()">
+            Marcar en curso
+          </button>
+        } @else if (campaniaActiva.campania()!.estado === 'EN_CURSO') {
+          <button type="button" class="boton-secundario" [disabled]="cambiandoEstado()" (click)="cerrarCampania()">
+            Cerrar campaña
+          </button>
+        } @else {
+          <button type="button" class="boton-secundario" [disabled]="cambiandoEstado()" (click)="reabrir()">
+            Reabrir campaña
+          </button>
+        }
+      </div>
+    </header>
+
+    @if (errorEstado(); as mensaje) {
+      <p class="tablero__error" role="alert">{{ mensaje }}</p>
+    }
+
+    @if (esCerrada()) {
+      <p class="tablero__aviso-cerrada">
+        Esta campaña está cerrada: no se pueden sembrar lotes ni cargar movimientos nuevos. Los datos quedan de
+        solo lectura.
+      </p>
+    }
+
+    <div class="tablero__indicadores">
+      <div class="indicador">
+        <span class="indicador__etiqueta">Costo total</span>
+        <span class="indicador__valor numero">{{ vista().costoTotal | importe: monedaVista() }}</span>
+      </div>
+      <div class="indicador">
+        <span class="indicador__etiqueta">Superficie sembrada</span>
+        <span class="indicador__valor numero">{{ resumen()?.superficieTotalHa | number: '1.0-2' }} ha</span>
+      </div>
+      <div class="indicador">
+        <span class="indicador__etiqueta">Costo por hectárea</span>
+        <span class="indicador__valor numero">{{ vista().costoPorHa | importe: monedaVista() }}</span>
+      </div>
+      <div class="indicador">
+        <span class="indicador__etiqueta">Ingreso realizado</span>
+        <span class="indicador__valor numero">{{ vista().ingresoRealizado | importe: monedaVista() }}</span>
+      </div>
+      <div class="indicador">
+        <span class="indicador__etiqueta">Margen realizado</span>
+        <span
+          class="indicador__valor numero"
+          [class.valor-positivo]="margenRealizadoNumero() > 0"
+          [class.valor-negativo]="margenRealizadoNumero() < 0"
+        >
+          {{ vista().margenRealizado | importe: monedaVista() }}
+        </span>
+      </div>
+    </div>
+    <p class="tablero__nota-margen">
+      Margen realizado sobre lo efectivamente liquidado. El margen estimado —con stock y entregas sin liquidar— se
+      muestra en el detalle de cada lote una vez que haya cosecha y ventas cargadas.
+    </p>
+
+    <div class="catalogo">
+      <div class="catalogo__header">
+        <div class="catalogo__titulos">
+          <h2 class="catalogo__titulo">Lotes sembrados</h2>
+          <div class="catalogo__sub">{{ filas().length }} lote-campaña</div>
+        </div>
+      </div>
+
+      <div class="catalogo__lista">
+        @for (fila of filas(); track fila.loteCampaniaId) {
+          <a class="fila-catalogo fila-catalogo--tablero" [routerLink]="rutaLoteCampania(fila.loteCampaniaId)">
+            <div class="fila-catalogo__principal">
+              <div class="fila-catalogo__nombre-linea">
+                <span class="fila-catalogo__nombre">{{ fila.nombreLote }} · {{ fila.nombreCultivo }}</span>
+              </div>
+              <div class="fila-catalogo__detalle">
+                {{ fila.superficieSembradaHa | number: '1.0-2' }} ha sembradas
+                @if (fila.ciclo > 1) {
+                  · ciclo {{ fila.ciclo }}
+                }
+              </div>
+            </div>
+            <div class="fila-catalogo__numero">{{ fila.costoTotal | importe: monedaVista() }}</div>
+            <div class="fila-catalogo__numero">{{ fila.costoPorHa | importe: monedaVista() }}/ha</div>
+          </a>
+        }
+        @if (!cargando() && filas().length === 0) {
+          <div class="catalogo__vacio">
+            Todavía no sembraste ningún lote en esta campaña.
+            @if (!esCerrada()) {
+              Usá "+ Sembrar un lote" para empezar.
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+}
+
+@if (modalSembrarAbierto()) {
+  <app-sembrar-lote-form
+    [campaniaId]="campaniaActiva.campania()!.id"
+    [existentes]="loteCampanias()"
+    (guardado)="onLoteSembrado()"
+    (cancelado)="cerrarSembrar()"
+  />
+}

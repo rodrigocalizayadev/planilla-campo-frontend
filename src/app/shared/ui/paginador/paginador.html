@@ -1,0 +1,25 @@
+@if (totalElementos() !== null || totalPaginas() > 1) {
+  <div class="paginador">
+    @if (totalElementos() !== null) {
+      <span class="paginador__total"><span class="numero">{{ totalElementos() }}</span> {{ etiqueta() }}</span>
+    }
+    @if (totalPaginas() > 1) {
+      <div class="paginador__nav">
+        <button type="button" class="paginador__boton" [disabled]="pagina() === 0" (click)="anterior()">
+          ‹ Anterior
+        </button>
+        <span class="paginador__info">
+          Página <span class="numero">{{ pagina() + 1 }}</span> de <span class="numero">{{ totalPaginas() }}</span>
+        </span>
+        <button
+          type="button"
+          class="paginador__boton"
+          [disabled]="pagina() >= totalPaginas() - 1"
+          (click)="siguiente()"
+        >
+          Siguiente ›
+        </button>
+      </div>
+    }
+  </div>
+}

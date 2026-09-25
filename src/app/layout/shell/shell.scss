@@ -1,0 +1,266 @@
+@use '../../shared/styles/tokens';
+
+.shell {
+  display: flex;
+  min-height: 100vh;
+  background: var(--color-fondo);
+
+  @include tokens.movil {
+    flex-direction: column;
+  }
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-5);
+  padding: 0 var(--espacio-3);
+
+  &__icono {
+    width: 26px;
+    height: 26px;
+    flex: none;
+    border-radius: 5px;
+    background: var(--color-verde-600);
+  }
+
+  &__nombre {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-verde-900);
+  }
+
+  &--compacta {
+    padding: 0;
+  }
+}
+
+// Sidebar — solo en escritorio (>=900px, breakpoint real del prototipo)
+.sidebar {
+  display: none;
+  width: 236px;
+  flex: none;
+  flex-direction: column;
+  gap: var(--espacio-9);
+  padding: var(--espacio-10) var(--espacio-7);
+  background: var(--color-sidebar-fondo);
+  border-right: 1px solid var(--color-borde);
+  // `height` (no `min-height`) + `position: sticky` para que el sidebar quede fijo en
+  // pantalla mientras se scrollea el contenido: en un flex row, un hijo con altura
+  // explícita no se estira por `align-items: stretch` para igualar al hermano más
+  // alto, así que su caja queda acotada al viewport en vez de crecer con el contenido
+  // (con `min-height: 100vh` el pie con "Salir" terminaba mucho más abajo que la
+  // pantalla en lote-campaña, la vista con más contenido de toda la app).
+  // `overflow-y: auto` es defensivo: si el nav creciera más que el alto disponible en
+  // una pantalla baja, se scrollea el sidebar solo, no desaparece el pie.
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  overflow-y: auto;
+  box-sizing: border-box;
+
+  @include tokens.desde(900px) {
+    display: flex;
+  }
+
+  &__campania {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-3);
+  }
+
+  &__titulo {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-texto-terciario);
+    padding: 0 var(--espacio-3);
+  }
+
+  &__pie {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-4);
+    padding-top: var(--espacio-6);
+    border-top: 1px solid var(--color-borde);
+  }
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+
+  &__item {
+    min-height: var(--objetivo-tactil-min);
+    display: flex;
+    align-items: center;
+    padding: 0 var(--espacio-6);
+    border-radius: var(--radio-sm);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-texto-secundario);
+
+    &:hover {
+      background: var(--color-superficie);
+    }
+
+    &--activo {
+      background: var(--color-verde-100);
+      color: var(--color-verde-900);
+    }
+  }
+}
+
+.usuario {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-4);
+
+  &__avatar {
+    width: 32px;
+    height: 32px;
+    flex: none;
+    border-radius: var(--radio-pill);
+    background: var(--color-verde-100);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-verde-900);
+  }
+
+  &__nombre {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-texto-sobre-superficie);
+  }
+
+  &__rol {
+    font-size: 11px;
+    color: var(--color-texto-terciario);
+  }
+}
+
+.boton-salir {
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espacio-4);
+  padding: 0 var(--espacio-5);
+  border-radius: var(--radio-sm);
+  border: 1px solid var(--color-borde-input);
+  background: var(--color-superficie);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-texto-secundario);
+  cursor: pointer;
+}
+
+.area-contenido {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+// Header — solo en móvil (<900px)
+.header-movil {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-6);
+  padding: var(--espacio-6) var(--espacio-8);
+  background: var(--color-superficie);
+  border-bottom: 1px solid var(--color-borde);
+  position: sticky;
+  top: 0;
+  z-index: 3;
+
+  @include tokens.desde(900px) {
+    display: none;
+  }
+
+  &__selector {
+    flex: none;
+    max-width: 55%;
+  }
+}
+
+.contenido {
+  flex: 1;
+  min-width: 0;
+  padding: var(--espacio-10) var(--espacio-14) var(--espacio-12);
+  box-sizing: border-box;
+
+  @include tokens.movil {
+    padding: var(--espacio-8) var(--espacio-8) 84px;
+  }
+}
+
+// Nav inferior — solo en móvil (<900px)
+.nav-movil {
+  display: none;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--color-superficie);
+  border-top: 1px solid var(--color-borde);
+  z-index: 4;
+
+  @include tokens.movil {
+    display: grid;
+  }
+
+  a,
+  &__mas {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--objetivo-tactil-min);
+    padding: var(--espacio-4);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-texto-secundario);
+    text-align: center;
+  }
+
+  &__mas {
+    border: 0;
+    background: none;
+    font-family: inherit;
+    cursor: pointer;
+  }
+
+  &__item--activo {
+    color: var(--color-verde-900);
+  }
+}
+
+.nav-mas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+
+  &__item {
+    min-height: var(--objetivo-tactil-min);
+    display: flex;
+    align-items: center;
+    padding: 0 var(--espacio-6);
+    border-radius: var(--radio-sm);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-texto-secundario);
+
+    &--activo {
+      background: var(--color-verde-100);
+      color: var(--color-verde-900);
+    }
+  }
+}

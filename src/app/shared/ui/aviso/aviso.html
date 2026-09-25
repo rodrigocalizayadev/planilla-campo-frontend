@@ -1,0 +1,3 @@
+@if (aviso(); as estado) {
+  <div class="aviso" [class.aviso--error]="estado.tipo === 'error'" role="status">{{ estado.mensaje }}</div>
+}

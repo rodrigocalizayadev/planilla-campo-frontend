@@ -1,0 +1,99 @@
+@if (modo() === 'lista') {
+  <app-modal titulo="Elegir campaña" subtitulo="Campaña activa" (cerrar)="cerrado.emit()">
+    <div class="selector-modal">
+      <div class="selector-modal__lista">
+        @for (campania of campanias(); track campania.id) {
+          <button
+            type="button"
+            class="fila-campania"
+            [class.fila-campania--activa]="campania.id === idActiva()"
+            (click)="elegir(campania)"
+          >
+            <div class="fila-campania__principal">
+              <span class="fila-campania__nombre numero">{{ campania.nombre }}</span>
+              <span class="fila-campania__periodo">{{ campania.fechaInicio }} – {{ campania.fechaFin }}</span>
+            </div>
+            <span
+              class="fila-campania__estado"
+              [class.fila-campania__estado--en-curso]="campania.estado === 'EN_CURSO'"
+              [class.fila-campania__estado--cerrada]="campania.estado === 'CERRADA'"
+            >
+              {{ etiquetaEstado(campania.estado) }}
+            </span>
+          </button>
+        }
+        @if (!cargando() && campanias().length === 0) {
+          <div class="selector-modal__vacio">Todavía no creaste ninguna campaña.</div>
+        }
+      </div>
+
+      <button type="button" class="boton-primario selector-modal__nueva" (click)="abrirNueva()">
+        + Nueva campaña
+      </button>
+    </div>
+  </app-modal>
+} @else {
+  <app-modal titulo="Nueva campaña" subtitulo="Campaña activa" (cerrar)="cerrado.emit()">
+    <form class="form-catalogo" novalidate (submit)="guardar($event)">
+      <label class="campo">
+        <span class="campo__etiqueta">Nombre</span>
+        <input class="campo__input" type="text" placeholder="2025/26" [formField]="campaniaForm.nombre" />
+        @if (campaniaForm.nombre().touched() && campaniaForm.nombre().invalid()) {
+          <span class="campo__error">{{ campaniaForm.nombre().errors()[0]?.message }}</span>
+        }
+      </label>
+
+      <div class="campo-fila">
+        <label class="campo">
+          <span class="campo__etiqueta">Fecha de inicio</span>
+          <input class="campo__input" type="date" [formField]="campaniaForm.fechaInicio" />
+          @if (campaniaForm.fechaInicio().touched() && campaniaForm.fechaInicio().invalid()) {
+            <span class="campo__error">{{ campaniaForm.fechaInicio().errors()[0]?.message }}</span>
+          }
+        </label>
+
+        <label class="campo">
+          <span class="campo__etiqueta">Fecha de fin</span>
+          <input class="campo__input" type="date" [formField]="campaniaForm.fechaFin" />
+          @if (campaniaForm.fechaFin().touched() && campaniaForm.fechaFin().invalid()) {
+            <span class="campo__error">{{ campaniaForm.fechaFin().errors()[0]?.message }}</span>
+          }
+        </label>
+      </div>
+
+      <label class="campo" for="gastosComercializacionPct">
+        <span class="campo__etiqueta">Gastos de comercialización estimados (%)</span>
+        <app-campo-cantidad id="gastosComercializacionPct" [formField]="campaniaForm.gastosComercializacionPct" />
+        @if (campaniaForm.gastosComercializacionPct().touched() && campaniaForm.gastosComercializacionPct().invalid()) {
+          <span class="campo__error">{{ campaniaForm.gastosComercializacionPct().errors()[0]?.message }}</span>
+        }
+        <span class="campo__ayuda">
+          Se usa para valorizar el stock y las entregas sin liquidar al calcular el margen estimado de cada lote.
+          12% es el valor típico.
+        </span>
+      </label>
+
+      <label class="campo" for="cotizacionVigente">
+        <span class="campo__etiqueta">Cotización del dólar (opcional)</span>
+        <app-campo-importe
+          id="cotizacionVigente"
+          variante="numerico"
+          tipo="tipoCambio"
+          [formField]="campaniaForm.cotizacionVigente"
+        />
+        @if (campaniaForm.cotizacionVigente().touched() && campaniaForm.cotizacionVigente().invalid()) {
+          <span class="campo__error">{{ campaniaForm.cotizacionVigente().errors()[0]?.message }}</span>
+        }
+        <span class="campo__ayuda">
+          Se usa para mostrar los costos e ingresos de la campaña también en pesos. Se puede dejar sin cargar y
+          completar después; sin esto, los importes solo se ven en dólares.
+        </span>
+      </label>
+
+      <div class="form-catalogo__pie">
+        <button type="button" class="boton-secundario" (click)="volverALista()">Volver</button>
+        <button type="submit" class="boton-primario" [disabled]="enviando()">Crear campaña</button>
+      </div>
+    </form>
+  </app-modal>
+}

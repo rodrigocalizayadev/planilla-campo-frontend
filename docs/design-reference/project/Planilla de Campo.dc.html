@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#F7F8F9; -webkit-font-smoothing:antialiased; }
+  a { color:#35583F; text-decoration:none; }
+  a:hover { color:#1F3527; text-decoration:underline; }
+</style>
+</helmet>
+
+<section style="display:flex;flex-direction:column;gap:20px">
+  <div style="display:flex;flex-direction:column;gap:6px;max-width:860px">
+    <div style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#6B7780">Fundamentos</div>
+    <h1 style="margin:0;font:600 34px/1.1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:-0.02em;color:#14181B">Planilla de Campo — sistema visual</h1>
+    <p style="margin:0;font:400 15px/1.55 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A;text-wrap:pretty">Verde profundo desaturado como acento sobre superficie blanca. El gris frío sostiene la legibilidad. Los importes son el contenido: siempre en tipografía tabular, alineados a la derecha, con separador de miles.</p>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;width:1280px">
+    <div style="background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;padding:24px;display:flex;flex-direction:column;gap:18px">
+      <div style="font:600 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#6B7780">Verde de marca — acento, nunca fondo</div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px">
+        <div style="display:flex;flex-direction:column;gap:6px"><div style="height:56px;border-radius:6px;background:#F1F5F1;border:1px solid #E4E8EB"></div><div style="font:500 12px/1.3 'IBM Plex Mono',monospace;color:#46515A">#F1F5F1<br><span style="color:#5F6A73">verde-50</span></div></div>
+        <div style="display:flex;flex-direction:column;gap:6px"><div style="height:56px;border-radius:6px;background:#DFE9E1"></div><div style="font:500 12px/1.3 'IBM Plex Mono',monospace;color:#46515A">#DFE9E1<br><span style="color:#5F6A73">verde-100</span></div></div>
+        <div style="display:flex;flex-direction:column;gap:6px"><div style="height:56px;border-radius:6px;background:#9FB8A6"></div><div style="font:500 12px/1.3 'IBM Plex Mono',monospace;color:#46515A">#9FB8A6<br><span style="color:#5F6A73">verde-300</span></div></div>
+        <div style="display:flex;flex-direction:column;gap:6px"><div style="height:56px;border-radius:6px;background:#3F6B4E"></div><div style="font:500 12px/1.3 'IBM Plex Mono',monospace;color:#46515A">#3F6B4E<br><span style="color:#5F6A73">verde-600 · acción</span></div></div>
+        <div style="display:flex;flex-direction:column;gap:6px"><div style="height:56px;border-radius:6px;background:#1F3527"></div><div style="font:500 12px/1.3 'IBM Plex Mono',monospace;color:#46515A">#1F3527<br><span style="color:#5F6A73">verde-900 · texto</span></div></div>
+      </div>
+      <div style="font:600 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#6B7780">Grises fríos — texto, bordes, superficies</div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px">
+        <div style="display:flex;flex-direction:column;gap:6px"><div style="height:44px;border-radius:6px;background:#F7F8F9;border:1px solid #E4E8EB"></div><div style="font:500 12px/1.3 'IBM Plex Mono',monospace;color:#46515A">#F7F8F9</div></div>
+        <div style="display:flex;flex-direction:column;gap:6px"><div style="height:44px;border-radius:6px;background:#E4E8EB"></div><div style="font:500 12px/1.3 'IBM Plex Mono',monospace;color:#46515A">#E4E8EB</div></div>
+        <div style="display:flex;flex-direction:column;gap:6px"><div style="height:44px;border-radius:6px;background:#D3D9DE"></div><div style="font:500 12px/1.3 'IBM Plex Mono',monospace;color:#46515A">#D3D9DE</div></div>
+        <div style="display:flex;flex-direction:column;gap:6px"><div style="height:44px;border-radius:6px;background:#6B7780"></div><div style="font:500 12px/1.3 'IBM Plex Mono',monospace;color:#46515A">#6B7780</div></div>
+        <div style="display:flex;flex-direction:column;gap:6px"><div style="height:44px;border-radius:6px;background:#14181B"></div><div style="font:500 12px/1.3 'IBM Plex Mono',monospace;color:#46515A">#14181B</div></div>
+      </div>
+    </div>
+
+    <div style="background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;padding:24px;display:flex;flex-direction:column;gap:16px">
+      <div style="font:600 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#6B7780">Los tres estados semánticos</div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 14px;border:1px solid #E4E8EB;border-radius:8px">
+          <div style="display:flex;flex-direction:column;gap:2px"><div style="font:600 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Positivo · margen a favor</div><div style="font:400 12px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">#0E7A46 · signo + · solo en números</div></div>
+          <div style="font:600 20px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#0E7A46">+3.263.840</div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 14px;border:1px solid #E4E8EB;border-radius:8px">
+          <div style="display:flex;flex-direction:column;gap:2px"><div style="font:600 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Negativo · pérdida</div><div style="font:400 12px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">#B42318 · signo − · solo en números</div></div>
+          <div style="font:600 20px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#B42318">−9.499.590</div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 14px;border:1px solid #E4E8EB;border-radius:8px">
+          <div style="display:flex;flex-direction:column;gap:2px"><div style="font:600 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Estimado · todavía sin liquidar</div><div style="font:400 12px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">Azul acero #3E5C7A + trama + prefijo ≈ + borde punteado</div></div>
+          <div style="display:inline-flex;align-items:center;gap:4px;padding:4px 8px;border:1px dashed #A9BACB;border-radius:5px;background:repeating-linear-gradient(135deg,#F0F4F8 0 6px,#E6ECF3 6px 12px);font:600 20px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#3E5C7A">≈17.927.840</div>
+        </div>
+      </div>
+      <div style="padding:12px 14px;border-radius:8px;background:#F1F5F1;border:1px solid #DFE9E1;font:400 13px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527;text-wrap:pretty"><strong style="font-weight:600">Verde de marca vs. verde de margen positivo.</strong> El verde oliva #3F6B4E aparece solo en cromo: botones primarios, ítem de navegación activo, líneas de estructura. Nunca en un número. El verde de “positivo” #0E7A46 es más frío y saturado y aparece solo como color de cifra, nunca como relleno. Un número verde siempre significa plata a favor.</div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;width:1280px">
+    <div style="background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;padding:24px;display:flex;flex-direction:column;gap:14px">
+      <div style="font:600 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#6B7780">Tipografía por rol</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:baseline;gap:14px;border-bottom:1px solid #F1F3F5;padding-bottom:10px"><div style="width:150px;flex:none;font:400 12px/1.3 'IBM Plex Mono',monospace;color:#6B7780">Título 34/600</div><div style="font:600 34px/1.1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:-0.02em;color:#14181B">Lote 3 · Cebolla</div></div>
+        <div style="display:flex;align-items:baseline;gap:14px;border-bottom:1px solid #F1F3F5;padding-bottom:10px"><div style="width:150px;flex:none;font:400 12px/1.3 'IBM Plex Mono',monospace;color:#6B7780">Sección 20/600</div><div style="font:600 20px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Desglose de costos</div></div>
+        <div style="display:flex;align-items:baseline;gap:14px;border-bottom:1px solid #F1F3F5;padding-bottom:10px"><div style="width:150px;flex:none;font:400 12px/1.3 'IBM Plex Mono',monospace;color:#6B7780">Cuerpo 15/400</div><div style="font:400 15px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A">Helvetica Neue para todo el texto de interfaz</div></div>
+        <div style="display:flex;align-items:baseline;gap:14px;border-bottom:1px solid #F1F3F5;padding-bottom:10px"><div style="width:150px;flex:none;font:400 12px/1.3 'IBM Plex Mono',monospace;color:#6B7780">Etiqueta 12/600 ↑</div><div style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#6B7780">Costo por bolsa</div></div>
+        <div style="display:flex;align-items:baseline;gap:14px"><div style="width:150px;flex:none;font:400 12px/1.3 'IBM Plex Mono',monospace;color:#6B7780">Cifra IBM Plex Mono<br>tabular-nums</div><div style="font:600 40px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;letter-spacing:-0.01em;color:#14181B">5.511</div></div>
+      </div>
+      <div style="font:400 13px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A;text-wrap:pretty">Toda cifra usa IBM Plex Mono con <span style="font-family:'IBM Plex Mono',monospace">tabular-nums</span> y alineación a la derecha, para que nueve dígitos en pesos sigan leyéndose en columna.</div>
+    </div>
+
+    <div style="background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;padding:24px;display:flex;flex-direction:column;gap:16px">
+      <div style="font:600 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#6B7780">Escala de espaciado — base 4</div>
+      <div style="display:flex;align-items:flex-end;gap:10px">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:4px;height:4px;background:#3F6B4E"></div><div style="font:400 11px/1 'IBM Plex Mono',monospace;color:#6B7780">4</div></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:8px;height:8px;background:#3F6B4E"></div><div style="font:400 11px/1 'IBM Plex Mono',monospace;color:#6B7780">8</div></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:12px;height:12px;background:#3F6B4E"></div><div style="font:400 11px/1 'IBM Plex Mono',monospace;color:#6B7780">12</div></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:16px;height:16px;background:#3F6B4E"></div><div style="font:400 11px/1 'IBM Plex Mono',monospace;color:#6B7780">16</div></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:24px;height:24px;background:#3F6B4E"></div><div style="font:400 11px/1 'IBM Plex Mono',monospace;color:#6B7780">24</div></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:32px;height:32px;background:#3F6B4E"></div><div style="font:400 11px/1 'IBM Plex Mono',monospace;color:#6B7780">32</div></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:48px;height:48px;background:#3F6B4E"></div><div style="font:400 11px/1 'IBM Plex Mono',monospace;color:#6B7780">48</div></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:64px;height:64px;background:#3F6B4E"></div><div style="font:400 11px/1 'IBM Plex Mono',monospace;color:#6B7780">64</div></div>
+      </div>
+      <div style="font:600 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#6B7780">Controles — 44px mínimo, foco visible</div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+        <div style="min-height:44px;display:inline-flex;align-items:center;padding:0 18px;border-radius:6px;background:#3F6B4E;color:#FFFFFF;font:600 14px/1 'Helvetica Neue',Helvetica,Arial,sans-serif">Guardar tarea</div>
+        <div style="min-height:44px;display:inline-flex;align-items:center;padding:0 18px;border-radius:6px;background:#FFFFFF;border:1px solid #D3D9DE;color:#22303A;font:600 14px/1 'Helvetica Neue',Helvetica,Arial,sans-serif">Cancelar</div>
+        <div style="min-height:44px;display:inline-flex;align-items:center;padding:0 18px;border-radius:6px;background:#FFFFFF;border:1px solid #3F6B4E;color:#1F3527;font:600 14px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;box-shadow:0 0 0 3px #DFE9E1">Foco de teclado</div>
+        <div style="min-height:44px;display:inline-flex;align-items:center;padding:0 18px;border-radius:6px;background:#F7F8F9;border:1px solid #E4E8EB;color:#5F6A73;font:600 14px/1 'Helvetica Neue',Helvetica,Arial,sans-serif">Deshabilitado</div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px">
+        <div style="display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:#DFE9E1;color:#1F3527;font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif">Liquidada</div>
+        <div style="display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:#FDF3E7;color:#8A5A12;border:1px solid #F1DFC4;font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif">Pendiente de liquidación</div>
+        <div style="display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:#F1F3F5;color:#46515A;font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif">En galpón</div>
+        <div style="display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:#FCEDEC;color:#B42318;border:1px solid #F3D4D1;font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif">Campaña cerrada</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:20px">
+  <div style="display:flex;flex-direction:column;gap:4px">
+    <div style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#6B7780">Pantalla 1 ⭐ · escritorio 1280</div>
+    <h2 style="margin:0;font:600 24px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Detalle de lote-campaña</h2>
+  </div>
+
+  <div style="width:1280px;display:flex;background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;overflow:hidden">
+    <div style="width:236px;flex:none;background:#FBFCFC;border-right:1px solid #E4E8EB;display:flex;flex-direction:column;gap:20px;padding:20px 14px">
+      <div style="display:flex;align-items:center;gap:10px;padding:0 6px">
+        <div style="width:26px;height:26px;border-radius:5px;background:#3F6B4E"></div>
+        <div style="font:600 15px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527">Planilla de Campo</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div style="font:600 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#5F6A73;padding:0 6px">Campaña activa</div>
+        <div style="min-height:44px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 12px;border-radius:6px;background:#FFFFFF;border:1px solid #9FB8A6">
+          <div style="display:flex;flex-direction:column;gap:2px">
+            <div style="font:600 15px/1 'IBM Plex Mono',monospace;color:#1F3527">2025/26</div>
+            <div style="font:400 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">abierta · 22,0 ha</div>
+          </div>
+          <div style="font:400 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">▼</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <div style="min-height:40px;display:flex;align-items:center;gap:10px;padding:0 12px;border-radius:6px;font:600 14px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">Tablero</div>
+        <div style="min-height:40px;display:flex;align-items:center;gap:10px;padding:0 12px;border-radius:6px;background:#DFE9E1;font:600 14px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527">Lotes de la campaña</div>
+        <div style="min-height:40px;display:flex;align-items:center;gap:10px;padding:0 12px;border-radius:6px;font:600 14px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">Ventas</div>
+        <div style="min-height:40px;display:flex;align-items:center;gap:10px;padding:0 12px;border-radius:6px;font:600 14px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">Costos indirectos</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:2px;padding-top:8px;border-top:1px solid #E4E8EB">
+        <div style="font:600 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#5F6A73;padding:8px 6px">Catálogos</div>
+        <div style="min-height:40px;display:flex;align-items:center;gap:10px;padding:0 12px;border-radius:6px;font:600 14px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">Lotes</div>
+        <div style="min-height:40px;display:flex;align-items:center;gap:10px;padding:0 12px;border-radius:6px;font:600 14px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">Insumos</div>
+        <div style="min-height:40px;display:flex;align-items:center;gap:10px;padding:0 12px;border-radius:6px;font:600 14px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">Trabajadores</div>
+      </div>
+      <div style="margin-top:auto;display:flex;align-items:center;gap:10px;padding:10px 6px;border-top:1px solid #E4E8EB">
+        <div style="width:30px;height:30px;border-radius:999px;background:#DFE9E1;display:flex;align-items:center;justify-content:center;font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527">MR</div>
+        <div style="display:flex;flex-direction:column;gap:2px"><div style="font:600 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A">Marcelo Ré</div><div style="font:400 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">Salir</div></div>
+      </div>
+    </div>
+
+    <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 28px;border-bottom:1px solid #E4E8EB">
+        <div style="font:400 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">Lotes de la campaña <span style="color:#C2C9CE">/</span> <span style="color:#22303A;font-weight:600">Lote 3 · Cebolla</span></div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="display:flex;border:1px solid #D3D9DE;border-radius:6px;overflow:hidden">
+            <div style="min-height:34px;display:flex;align-items:center;padding:0 12px;background:#F1F5F1;font:600 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527">$ ARS</div>
+            <div style="min-height:34px;display:flex;align-items:center;padding:0 12px;background:#FFFFFF;font:600 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">US$</div>
+          </div>
+          <div style="font:400 12px/1 'IBM Plex Mono',monospace;color:#6B7780">TC 1.285</div>
+        </div>
+      </div>
+
+      <div style="padding:24px 28px;display:flex;flex-direction:column;gap:20px">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:24px">
+          <div style="display:flex;flex-direction:column;gap:8px;min-width:0">
+            <h1 style="margin:0;font:600 32px/1.1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:-0.02em;color:#14181B">Lote 3 · Cebolla</h1>
+            <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;font:400 14px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">
+              <span>Variedad Valcatorce INTA</span><span style="color:#C2C9CE">·</span>
+              <span><span style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums">4,2</span> ha sembradas de <span style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums">5,0</span></span><span style="color:#C2C9CE">·</span>
+              <span>Siembra <span style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums">24/03/25</span></span><span style="color:#C2C9CE">·</span>
+              <span>Arrancado <span style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums">12/12/25</span></span>
+            </div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end">
+            <div style="min-height:44px;display:inline-flex;align-items:center;padding:0 16px;border-radius:6px;background:#3F6B4E;color:#FFFFFF;font:600 14px/1 'Helvetica Neue',Helvetica,Arial,sans-serif">+ Cargar tarea</div>
+            <div style="min-height:44px;display:inline-flex;align-items:center;padding:0 16px;border-radius:6px;background:#FFFFFF;border:1px solid #D3D9DE;color:#22303A;font:600 14px/1 'Helvetica Neue',Helvetica,Arial,sans-serif">Aplicación</div>
+            <div style="min-height:44px;display:inline-flex;align-items:center;padding:0 16px;border-radius:6px;background:#FFFFFF;border:1px solid #D3D9DE;color:#22303A;font:600 14px/1 'Helvetica Neue',Helvetica,Arial,sans-serif">Cosecha</div>
+            <div style="min-height:44px;display:inline-flex;align-items:center;padding:0 16px;border-radius:6px;background:#FFFFFF;border:1px solid #D3D9DE;color:#22303A;font:600 14px/1 'Helvetica Neue',Helvetica,Arial,sans-serif">Venta</div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:16px">
+          <div style="border:1px solid #9FB8A6;border-radius:10px;padding:22px 24px;background:#FBFDFB;display:flex;flex-direction:column;gap:10px">
+            <div style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#3F6B4E">Costo por bolsa</div>
+            <div style="display:flex;align-items:baseline;gap:8px">
+              <div style="font:400 26px/1 'IBM Plex Mono',monospace;color:#6B7780">$</div>
+              <div style="font:600 64px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;letter-spacing:-0.02em;color:#14181B">5.511</div>
+              <div style="font:400 15px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">por bolsa</div>
+            </div>
+            <div style="font:400 13px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A;text-wrap:pretty"><span style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums">26.781.160</span> ÷ <span style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums">4.860</span> bolsas vendibles (no se cuenta el descarte).</div>
+            <div style="margin-top:2px;padding:10px 12px;border-radius:6px;background:#DFE9E1;font:600 13px/1.4 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527">Por debajo de este precio, vender da pérdida.</div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">
+            <div style="border:1px solid #E4E8EB;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px">
+              <div style="font:600 11px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#6B7780">Costo total</div>
+              <div style="font:600 26px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">26.781.160</div>
+              <div style="font:400 12px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#5F6A73">54 movimientos cargados</div>
+            </div>
+            <div style="border:1px solid #E4E8EB;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px">
+              <div style="font:600 11px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#6B7780">Costo por hectárea</div>
+              <div style="font:600 26px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">6.376.467</div>
+              <div style="font:400 12px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#5F6A73">sobre 4,2 ha sembradas</div>
+            </div>
+            <div style="border:1px solid #E4E8EB;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px">
+              <div style="font:600 11px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#6B7780">Margen realizado</div>
+              <div style="font:600 26px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#0E7A46">+3.263.840</div>
+              <div style="font:400 12px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#5F6A73">solo lo ya liquidado</div>
+            </div>
+            <div style="border:1px dashed #A9BACB;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px;background:repeating-linear-gradient(135deg,#F5F8FB 0 8px,#EDF2F7 8px 16px)">
+              <div style="font:600 11px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#3E5C7A">Margen estimado</div>
+              <div style="font:600 26px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#3E5C7A">≈17.927.840</div>
+              <div style="font:400 12px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#3E5C7A">incluye sin liquidar y galpón</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px">
+          <div style="border:1px solid #E4E8EB;border-radius:10px;overflow:hidden;display:flex;flex-direction:column">
+            <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:16px 18px;border-bottom:1px solid #E4E8EB">
+              <div style="font:600 16px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Costos por rubro</div>
+              <div style="font:400 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">Campaña 2025/26</div>
+            </div>
+            <div style="display:flex;flex-direction:column">
+              <div style="display:grid;grid-template-columns:minmax(0,1fr) 92px 132px;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid #F1F3F5">
+                <div style="display:flex;flex-direction:column;gap:6px"><div style="font:500 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A">Mano de obra</div><div style="height:5px;border-radius:3px;background:#F1F3F5"><div style="width:44.5%;height:5px;border-radius:3px;background:#3F6B4E"></div></div></div>
+                <div style="font:400 13px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#6B7780;text-align:right">44,5 %</div>
+                <div style="font:500 15px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B;text-align:right">11.905.400</div>
+              </div>
+              <div style="display:grid;grid-template-columns:minmax(0,1fr) 92px 132px;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid #F1F3F5">
+                <div style="display:flex;flex-direction:column;gap:6px"><div style="font:500 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A">Insumos</div><div style="height:5px;border-radius:3px;background:#F1F3F5"><div style="width:31.6%;height:5px;border-radius:3px;background:#3F6B4E"></div></div></div>
+                <div style="font:400 13px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#6B7780;text-align:right">31,6 %</div>
+                <div style="font:500 15px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B;text-align:right">8.472.310</div>
+              </div>
+              <div style="display:grid;grid-template-columns:minmax(0,1fr) 92px 132px;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid #F1F3F5">
+                <div style="display:flex;flex-direction:column;gap:6px"><div style="font:500 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A">Labores con maquinaria</div><div style="height:5px;border-radius:3px;background:#F1F3F5"><div style="width:15.8%;height:5px;border-radius:3px;background:#3F6B4E"></div></div></div>
+                <div style="font:400 13px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#6B7780;text-align:right">15,8 %</div>
+                <div style="font:500 15px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B;text-align:right">4.238.600</div>
+              </div>
+              <div style="display:grid;grid-template-columns:minmax(0,1fr) 92px 132px;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid #E4E8EB">
+                <div style="display:flex;flex-direction:column;gap:6px"><div style="font:500 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A">Indirectos prorrateados</div><div style="height:5px;border-radius:3px;background:#F1F3F5"><div style="width:8.1%;height:5px;border-radius:3px;background:#9FB8A6"></div></div></div>
+                <div style="font:400 13px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#6B7780;text-align:right">8,1 %</div>
+                <div style="font:500 15px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B;text-align:right">2.164.850</div>
+              </div>
+              <div style="display:grid;grid-template-columns:minmax(0,1fr) 92px 132px;align-items:center;gap:12px;padding:14px 18px;background:#FBFCFC">
+                <div style="font:600 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Costo total</div>
+                <div style="font:400 13px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#6B7780;text-align:right">100 %</div>
+                <div style="font:600 17px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B;text-align:right">26.781.160</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="border:1px solid #E4E8EB;border-radius:10px;overflow:hidden;display:flex;flex-direction:column">
+            <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:16px 18px;border-bottom:1px solid #E4E8EB">
+              <div style="font:600 16px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">De dónde sale cada margen</div>
+              <div style="font:400 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">4.860 bolsas vendibles</div>
+            </div>
+            <div style="display:flex;flex-direction:column">
+              <div style="display:grid;grid-template-columns:minmax(0,1fr) 92px 132px;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid #F1F3F5">
+                <div style="display:flex;flex-direction:column;gap:3px"><div style="font:500 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A">Liquidado</div><div style="font:400 12px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">precio confirmado</div></div>
+                <div style="font:400 13px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#6B7780;text-align:right">3.300 b.</div>
+                <div style="font:500 15px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B;text-align:right">30.045.000</div>
+              </div>
+              <div style="display:grid;grid-template-columns:minmax(0,1fr) 92px 132px;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid #F1F3F5;background:repeating-linear-gradient(135deg,#F7FAFC 0 8px,#F1F5F9 8px 16px)">
+                <div style="display:flex;flex-direction:column;gap:3px"><div style="display:flex;align-items:center;gap:6px"><div style="font:500 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A">Entregado sin liquidar</div><div style="padding:2px 6px;border:1px dashed #A9BACB;border-radius:4px;font:600 10px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#3E5C7A">Estimado</div></div><div style="font:400 12px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">consignación · a $9.400 de referencia</div></div>
+                <div style="font:400 13px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#6B7780;text-align:right">980 b.</div>
+                <div style="font:500 15px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#3E5C7A;text-align:right">≈9.212.000</div>
+              </div>
+              <div style="display:grid;grid-template-columns:minmax(0,1fr) 92px 132px;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid #E4E8EB;background:repeating-linear-gradient(135deg,#F7FAFC 0 8px,#F1F5F9 8px 16px)">
+                <div style="display:flex;flex-direction:column;gap:3px"><div style="display:flex;align-items:center;gap:6px"><div style="font:500 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A">Stock en galpón</div><div style="padding:2px 6px;border:1px dashed #A9BACB;border-radius:4px;font:600 10px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#3E5C7A">Estimado</div></div><div style="font:400 12px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">curado, todavía sin vender</div></div>
+                <div style="font:400 13px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#6B7780;text-align:right">580 b.</div>
+                <div style="font:500 15px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#3E5C7A;text-align:right">≈5.452.000</div>
+              </div>
+              <div style="display:grid;grid-template-columns:minmax(0,1fr) 224px;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid #F1F3F5">
+                <div style="font:500 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A">Menos costo total</div>
+                <div style="font:500 15px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#46515A;text-align:right">−26.781.160</div>
+              </div>
+              <div style="display:grid;grid-template-columns:minmax(0,1fr) 224px;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid #F1F3F5;background:#FBFCFC">
+                <div style="display:flex;flex-direction:column;gap:2px"><div style="font:600 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Margen realizado</div><div style="font:400 12px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">liquidado − costo</div></div>
+                <div style="font:600 19px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#0E7A46;text-align:right">+3.263.840</div>
+              </div>
+              <div style="display:grid;grid-template-columns:minmax(0,1fr) 224px;align-items:center;gap:12px;padding:14px 18px;background:repeating-linear-gradient(135deg,#F5F8FB 0 8px,#EDF2F7 8px 16px);border-top:1px dashed #A9BACB">
+                <div style="display:flex;flex-direction:column;gap:2px"><div style="font:600 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Margen estimado</div><div style="font:400 12px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#3E5C7A">con lo entregado y el galpón valorizados</div></div>
+                <div style="font:600 19px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#3E5C7A;text-align:right">≈+17.927.840</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px">
+          <div style="border:1px solid #E4E8EB;border-radius:10px;overflow:hidden">
+            <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:16px 18px;border-bottom:1px solid #E4E8EB">
+              <div style="font:600 16px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Cosecha</div>
+              <div style="font:600 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#35583F">Cargar corte</div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:#F1F3F5">
+              <div style="background:#FFFFFF;padding:14px 18px;display:flex;flex-direction:column;gap:6px"><div style="font:600 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#6B7780">Primera</div><div style="font:600 20px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">3.640</div><div style="font:400 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#5F6A73">bolsas</div></div>
+              <div style="background:#FFFFFF;padding:14px 18px;display:flex;flex-direction:column;gap:6px"><div style="font:600 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#6B7780">Segunda</div><div style="font:600 20px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">1.220</div><div style="font:400 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#5F6A73">bolsas</div></div>
+              <div style="background:#FFFFFF;padding:14px 18px;display:flex;flex-direction:column;gap:6px"><div style="font:600 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#6B7780">Descarte</div><div style="font:600 20px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#6B7780">430</div><div style="font:400 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#5F6A73">no entra al costo por bolsa</div></div>
+            </div>
+          </div>
+          <div style="border:1px solid #E4E8EB;border-radius:10px;overflow:hidden">
+            <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:16px 18px;border-bottom:1px solid #E4E8EB">
+              <div style="font:600 16px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Últimos movimientos</div>
+              <div style="font:600 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#35583F">Ver los 54</div>
+            </div>
+            <div style="display:flex;flex-direction:column">
+              <div style="display:grid;grid-template-columns:74px minmax(0,1fr) 128px;align-items:center;gap:12px;padding:11px 18px;border-bottom:1px solid #F1F3F5"><div style="font:400 12px/1 'IBM Plex Mono',monospace;color:#6B7780">08/02/26</div><div style="font:500 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Embolsado · destajo 1.180 bolsas</div><div style="font:500 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B;text-align:right">507.400</div></div>
+              <div style="display:grid;grid-template-columns:74px minmax(0,1fr) 128px;align-items:center;gap:12px;padding:11px 18px;border-bottom:1px solid #F1F3F5"><div style="font:400 12px/1 'IBM Plex Mono',monospace;color:#6B7780">21/01/26</div><div style="font:500 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Cuadrilla Ramírez · arrancado</div><div style="font:500 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B;text-align:right">2.940.000</div></div>
+              <div style="display:grid;grid-template-columns:74px minmax(0,1fr) 128px;align-items:center;gap:12px;padding:11px 18px;border-bottom:1px solid #F1F3F5"><div style="font:400 12px/1 'IBM Plex Mono',monospace;color:#6B7780">04/12/25</div><div style="font:500 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Fosfato diamónico · 350 kg</div><div style="font:500 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B;text-align:right">413.770</div></div>
+              <div style="display:grid;grid-template-columns:74px minmax(0,1fr) 128px;align-items:center;gap:12px;padding:11px 18px"><div style="font:400 12px/1 'IBM Plex Mono',monospace;color:#6B7780">18/11/25</div><div style="font:500 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Carpida · 6 jornales</div><div style="font:500 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B;text-align:right">171.000</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:32px;align-items:flex-start;flex-wrap:wrap">
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#6B7780">Pantalla 1 ⭐ · móvil 390 · dos toques desde el inicio</div>
+      <div style="width:390px;background:#FFFFFF;border:1px solid #D3D9DE;border-radius:22px;overflow:hidden;display:flex;flex-direction:column">
+        <div style="padding:10px 16px 0;display:flex;justify-content:space-between;font:600 12px/1 'IBM Plex Mono',monospace;color:#6B7780"><span>9:41</span><span>▮▮▮ 68%</span></div>
+        <div style="padding:10px 16px 12px;display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid #E4E8EB">
+          <div style="display:flex;align-items:center;gap:10px;min-width:0">
+            <div style="width:32px;height:32px;flex:none;border-radius:8px;border:1px solid #D3D9DE;display:flex;align-items:center;justify-content:center;font:600 15px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">‹</div>
+            <div style="min-width:0"><div style="font:600 16px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Lote 3 · Cebolla</div><div style="font:400 12px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">Valcatorce · 4,2 ha</div></div>
+          </div>
+          <div style="flex:none;padding:5px 9px;border-radius:999px;background:#DFE9E1;font:600 12px/1 'IBM Plex Mono',monospace;color:#1F3527">2025/26</div>
+        </div>
+        <div style="padding:16px;display:flex;flex-direction:column;gap:12px">
+          <div style="border:1px solid #9FB8A6;border-radius:12px;background:#FBFDFB;padding:18px;display:flex;flex-direction:column;gap:8px">
+            <div style="font:600 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#3F6B4E">Costo por bolsa</div>
+            <div style="display:flex;align-items:baseline;gap:6px"><div style="font:400 20px/1 'IBM Plex Mono',monospace;color:#6B7780">$</div><div style="font:600 52px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;letter-spacing:-0.02em;color:#14181B">5.511</div></div>
+            <div style="font:400 13px/1.45 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">Sobre 4.860 bolsas vendibles. Por debajo de este precio, vender da pérdida.</div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
+            <div style="border:1px solid #E4E8EB;border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:6px"><div style="font:600 10px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#6B7780">Costo total</div><div style="font:600 20px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">26.781.160</div></div>
+            <div style="border:1px solid #E4E8EB;border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:6px"><div style="font:600 10px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#6B7780">Costo por ha</div><div style="font:600 20px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">6.376.467</div></div>
+            <div style="border:1px solid #E4E8EB;border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:6px"><div style="font:600 10px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#6B7780">Margen realizado</div><div style="font:600 20px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#0E7A46">+3.263.840</div></div>
+            <div style="border:1px dashed #A9BACB;border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:6px;background:repeating-linear-gradient(135deg,#F5F8FB 0 8px,#EDF2F7 8px 16px)"><div style="font:600 10px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#3E5C7A">Margen estimado</div><div style="font:600 20px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#3E5C7A">≈17.927.840</div></div>
+          </div>
+          <div style="border:1px solid #E4E8EB;border-radius:10px;overflow:hidden">
+            <div style="padding:12px 14px;border-bottom:1px solid #E4E8EB;font:600 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Costos por rubro</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 14px;border-bottom:1px solid #F1F3F5"><div style="font:500 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A">Mano de obra</div><div style="font:500 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">11.905.400</div></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 14px;border-bottom:1px solid #F1F3F5"><div style="font:500 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A">Insumos</div><div style="font:500 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">8.472.310</div></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 14px;border-bottom:1px solid #F1F3F5"><div style="font:500 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A">Labores</div><div style="font:500 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">4.238.600</div></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 14px;border-bottom:1px solid #E4E8EB"><div style="font:500 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A">Indirectos</div><div style="font:500 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">2.164.850</div></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 14px;background:#FBFCFC"><div style="font:600 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Total</div><div style="font:600 15px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">26.781.160</div></div>
+          </div>
+        </div>
+        <div style="margin-top:auto;padding:12px 16px 16px;border-top:1px solid #E4E8EB;background:#FFFFFF;display:flex;flex-direction:column;gap:8px">
+          <div style="min-height:52px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:#3F6B4E;color:#FFFFFF;font:600 16px/1 'Helvetica Neue',Helvetica,Arial,sans-serif">+ Cargar tarea</div>
+          <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">
+            <div style="min-height:44px;display:flex;align-items:center;justify-content:center;border-radius:8px;border:1px solid #D3D9DE;font:600 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A">Aplicación</div>
+            <div style="min-height:44px;display:flex;align-items:center;justify-content:center;border-radius:8px;border:1px solid #D3D9DE;font:600 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A">Cosecha</div>
+            <div style="min-height:44px;display:flex;align-items:center;justify-content:center;border-radius:8px;border:1px solid #D3D9DE;font:600 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A">Venta</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:12px;max-width:420px">
+      <div style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#6B7780">Decisiones de esta pantalla</div>
+      <div style="background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;gap:10px"><div style="width:22px;height:22px;flex:none;border-radius:999px;background:#DFE9E1;display:flex;align-items:center;justify-content:center;font:600 12px/1 'IBM Plex Mono',monospace;color:#1F3527">1</div><div style="font:400 13px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A;text-wrap:pretty">El costo por bolsa es el primer elemento en las dos anchuras. Sin tabs, sin scroll previo: en móvil entra completo antes del pliegue.</div></div>
+        <div style="display:flex;gap:10px"><div style="width:22px;height:22px;flex:none;border-radius:999px;background:#DFE9E1;display:flex;align-items:center;justify-content:center;font:600 12px/1 'IBM Plex Mono',monospace;color:#1F3527">2</div><div style="font:400 13px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A;text-wrap:pretty">Los dos márgenes aparecen siempre juntos y con distinto tratamiento; el estimado lleva trama, borde punteado y prefijo ≈.</div></div>
+        <div style="display:flex;gap:10px"><div style="width:22px;height:22px;flex:none;border-radius:999px;background:#DFE9E1;display:flex;align-items:center;justify-content:center;font:600 12px/1 'IBM Plex Mono',monospace;color:#1F3527">3</div><div style="font:400 13px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A;text-wrap:pretty">La tabla “de dónde sale cada margen” hace visible el desglose liquidado / sin liquidar / galpón sin una nota al pie.</div></div>
+        <div style="display:flex;gap:10px"><div style="width:22px;height:22px;flex:none;border-radius:999px;background:#DFE9E1;display:flex;align-items:center;justify-content:center;font:600 12px/1 'IBM Plex Mono',monospace;color:#1F3527">4</div><div style="font:400 13px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A;text-wrap:pretty">Los rubros suman exactamente el costo total; los porcentajes son informativos y el total nunca se recalcula desde ellos.</div></div>
+        <div style="display:flex;gap:10px"><div style="width:22px;height:22px;flex:none;border-radius:999px;background:#DFE9E1;display:flex;align-items:center;justify-content:center;font:600 12px/1 'IBM Plex Mono',monospace;color:#1F3527">5</div><div style="font:400 13px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A;text-wrap:pretty">En móvil las cuatro acciones de carga viven fijas al pie, al alcance del pulgar; la principal ocupa el ancho completo.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section style="display:flex;flex-direction:column;gap:20px">
+  <div style="display:flex;flex-direction:column;gap:4px">
+    <div style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#6B7780">Pantalla 2 ⭐ · escritorio 1280 · misma navegación lateral</div>
+    <h2 style="margin:0;font:600 24px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Tablero de campaña</h2>
+  </div>
+
+  <div style="width:1280px;background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;overflow:hidden;display:flex;flex-direction:column">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 28px;border-bottom:1px solid #E4E8EB">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="font:600 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A">Tablero</div>
+        <div style="min-height:32px;display:flex;align-items:center;gap:8px;padding:0 10px;border-radius:6px;border:1px solid #9FB8A6;background:#FBFDFB"><span style="font:600 13px/1 'IBM Plex Mono',monospace;color:#1F3527">Campaña 2025/26</span><span style="font:400 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">abierta ▼</span></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="display:flex;border:1px solid #D3D9DE;border-radius:6px;overflow:hidden">
+          <div style="{{ estiloPesos }}" onClick="{{ verPesos }}">$ ARS</div>
+          <div style="{{ estiloDolares }}" onClick="{{ verDolares }}">US$</div>
+        </div>
+        <div style="font:400 12px/1 'IBM Plex Mono',monospace;color:#6B7780">TC {{ tc }}</div>
+      </div>
+    </div>
+
+    <div style="padding:24px 28px;display:flex;flex-direction:column;gap:20px">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px">
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <h1 style="margin:0;font:600 30px/1.1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:-0.02em;color:#14181B">Campaña 2025/26</h1>
+          <div style="font:400 14px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">5 lote-campaña sembrados · <span style="font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums">{{ campHa }}</span> ha · última carga hoy 07:40</div>
+        </div>
+        <div style="min-height:44px;display:inline-flex;align-items:center;padding:0 16px;border-radius:6px;background:#3F6B4E;color:#FFFFFF;font:600 14px/1 'Helvetica Neue',Helvetica,Arial,sans-serif">+ Sembrar un lote</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px">
+        <div style="border:1px solid #E4E8EB;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px">
+          <div style="font:600 11px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#6B7780">Costo total de campaña</div>
+          <div style="display:flex;align-items:baseline;gap:5px"><span style="font:400 14px/1 'IBM Plex Mono',monospace;color:#6B7780">{{ simbolo }}</span><span style="font:600 26px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">{{ campCosto }}</span></div>
+          <div style="font:400 12px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#5F6A73">incluye indirectos prorrateados</div>
+        </div>
+        <div style="border:1px solid #E4E8EB;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px">
+          <div style="font:600 11px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#6B7780">Superficie sembrada</div>
+          <div style="display:flex;align-items:baseline;gap:5px"><span style="font:600 26px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">{{ campHa }}</span><span style="font:400 14px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">ha</span></div>
+          <div style="font:400 12px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#5F6A73">de 24,5 ha disponibles</div>
+        </div>
+        <div style="border:1px solid #E4E8EB;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px">
+          <div style="font:600 11px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#6B7780">Margen realizado</div>
+          <div style="display:flex;align-items:baseline;gap:5px"><span style="font:400 14px/1 'IBM Plex Mono',monospace;color:#6B7780">{{ simbolo }}</span><span style="font:600 26px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#B42318">{{ campRealizado }}</span></div>
+          <div style="font:400 12px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#5F6A73">3 de 5 lotes todavía sin vender</div>
+        </div>
+        <div style="border:1px dashed #A9BACB;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px;background:repeating-linear-gradient(135deg,#F5F8FB 0 8px,#EDF2F7 8px 16px)">
+          <div style="font:600 11px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#3E5C7A">Margen estimado</div>
+          <div style="display:flex;align-items:baseline;gap:5px"><span style="font:400 14px/1 'IBM Plex Mono',monospace;color:#3E5C7A">{{ simbolo }}</span><span style="font:600 26px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#3E5C7A">{{ campEstimado }}</span></div>
+          <div style="font:400 12px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#3E5C7A">con consignaciones y galpón valorizados</div>
+        </div>
+      </div>
+
+      <div style="padding:12px 14px;border-radius:8px;background:#F1F5F1;border:1px solid #DFE9E1;display:flex;align-items:center;gap:10px;font:400 13px/1.4 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527"><span style="font-weight:600">El realizado está en rojo y la campaña va bien.</span> Todavía no se liquidaron 980 bolsas de cebolla y quedan 3 lotes sin vender: por eso hay que leer los dos números juntos.</div>
+
+      <div style="border:1px solid #E4E8EB;border-radius:10px;overflow:hidden">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:16px 18px;border-bottom:1px solid #E4E8EB">
+          <div style="font:600 16px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Lote-campaña</div>
+          <div style="font:400 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">Ordenado por costo total · importes en pesos</div>
+        </div>
+        <div style="display:grid;grid-template-columns:minmax(0,1.5fr) 74px 132px 122px 128px 132px 148px;align-items:center;gap:12px;padding:10px 18px;background:#FBFCFC;border-bottom:1px solid #E4E8EB">
+          <div style="font:600 11px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#6B7780">Lote y cultivo</div>
+          <div style="font:600 11px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#6B7780;text-align:right">ha</div>
+          <div style="font:600 11px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#6B7780;text-align:right">Costo total</div>
+          <div style="font:600 11px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#6B7780;text-align:right">Costo / ha</div>
+          <div style="font:600 11px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#6B7780;text-align:right">Costo / unidad</div>
+          <div style="font:600 11px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#6B7780;text-align:right">M. realizado</div>
+          <div style="font:600 11px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#6B7780;text-align:right">M. estimado</div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:minmax(0,1.5fr) 74px 132px 122px 128px 132px 148px;align-items:center;gap:12px;padding:13px 18px;border-bottom:1px solid #F1F3F5" style-hover="background:#FBFDFB">
+          <div style="display:flex;flex-direction:column;gap:3px;min-width:0"><div style="font:600 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527">Lote 3 · Cebolla</div><div style="font:400 12px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Valcatorce INTA · arrancado y embolsado</div></div>
+          <div style="font:400 13px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#22303A;text-align:right">4,2</div>
+          <div style="font:500 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B;text-align:right">26.781.160</div>
+          <div style="font:400 13px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#46515A;text-align:right">6.376.467</div>
+          <div style="display:flex;flex-direction:column;gap:2px;text-align:right"><div style="font:600 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">5.511</div><div style="font:400 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#5F6A73">por bolsa</div></div>
+          <div style="font:500 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#0E7A46;text-align:right">+3.263.840</div>
+          <div style="text-align:right"><span style="display:inline-block;padding:3px 7px;border:1px dashed #A9BACB;border-radius:5px;background:repeating-linear-gradient(135deg,#F5F8FB 0 6px,#EDF2F7 6px 12px);font:500 14px/1.2 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#3E5C7A">≈+17.927.840</span></div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:minmax(0,1.5fr) 74px 132px 122px 128px 132px 148px;align-items:center;gap:12px;padding:13px 18px;border-bottom:1px solid #F1F3F5">
+          <div style="display:flex;flex-direction:column;gap:3px;min-width:0"><div style="font:600 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527">Lote 5 · Zapallo</div><div style="font:400 12px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Anco · cosecha en curso, 2º corte</div></div>
+          <div style="font:400 13px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#22303A;text-align:right">6,5</div>
+          <div style="font:500 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B;text-align:right">19.443.980</div>
+          <div style="font:400 13px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#46515A;text-align:right">2.991.382</div>
+          <div style="display:flex;flex-direction:column;gap:2px;text-align:right"><div style="font:600 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">13.693</div><div style="font:400 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#5F6A73">por bin</div></div>
+          <div style="font:500 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#B42318;text-align:right">−2.140.870</div>
+          <div style="text-align:right"><span style="display:inline-block;padding:3px 7px;border:1px dashed #A9BACB;border-radius:5px;background:repeating-linear-gradient(135deg,#F5F8FB 0 6px,#EDF2F7 6px 12px);font:500 14px/1.2 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#3E5C7A">≈+9.884.120</span></div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:minmax(0,1.5fr) 74px 132px 122px 128px 132px 148px;align-items:center;gap:12px;padding:13px 18px;border-bottom:1px solid #F1F3F5">
+          <div style="display:flex;flex-direction:column;gap:3px;min-width:0"><div style="font:600 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527">Lote 1 · Melón</div><div style="font:400 12px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Amarillo oro · 3 cortes cargados</div></div>
+          <div style="font:400 13px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#22303A;text-align:right">2,8</div>
+          <div style="font:500 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B;text-align:right">9.860.450</div>
+          <div style="font:400 13px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#46515A;text-align:right">3.521.589</div>
+          <div style="display:flex;flex-direction:column;gap:2px;text-align:right"><div style="font:600 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">4.607</div><div style="font:400 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#5F6A73">por jaula</div></div>
+          <div style="font:500 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#0E7A46;text-align:right">+1.208.640</div>
+          <div style="text-align:right"><span style="display:inline-block;padding:3px 7px;border:1px dashed #A9BACB;border-radius:5px;background:repeating-linear-gradient(135deg,#F5F8FB 0 6px,#EDF2F7 6px 12px);font:500 14px/1.2 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#3E5C7A">≈+3.470.560</span></div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:minmax(0,1.5fr) 74px 132px 122px 128px 132px 148px;align-items:center;gap:12px;padding:13px 18px;border-bottom:1px solid #F1F3F5">
+          <div style="display:flex;flex-direction:column;gap:3px;min-width:0"><div style="font:600 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527">Lote 7 · Sandía</div><div style="font:400 12px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Crimson Sweet · sin cosecha todavía</div></div>
+          <div style="font:400 13px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#22303A;text-align:right">3,5</div>
+          <div style="font:500 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B;text-align:right">7.318.900</div>
+          <div style="font:400 13px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#46515A;text-align:right">2.091.114</div>
+          <div style="display:flex;flex-direction:column;gap:2px;text-align:right"><div style="font:500 14px/1 'IBM Plex Mono',monospace;color:#5F6A73">—</div><div style="font:400 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#5F6A73">sin cosecha</div></div>
+          <div style="font:500 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#B42318;text-align:right">−7.318.900</div>
+          <div style="text-align:right"><span style="display:inline-block;padding:3px 7px;border:1px dashed #A9BACB;border-radius:5px;background:repeating-linear-gradient(135deg,#F5F8FB 0 6px,#EDF2F7 6px 12px);font:500 14px/1.2 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#3E5C7A">≈+2.640.300</span></div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:minmax(0,1.5fr) 74px 132px 122px 128px 132px 148px;align-items:center;gap:12px;padding:13px 18px;border-bottom:1px solid #E4E8EB">
+          <div style="display:flex;flex-direction:column;gap:3px;min-width:0"><div style="font:600 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527">Lote 2 · Maíz</div><div style="font:400 12px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Dulce · para venta en choclo</div></div>
+          <div style="font:400 13px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#22303A;text-align:right">5,0</div>
+          <div style="font:500 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B;text-align:right">4.512.300</div>
+          <div style="font:400 13px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#46515A;text-align:right">902.460</div>
+          <div style="display:flex;flex-direction:column;gap:2px;text-align:right"><div style="font:500 14px/1 'IBM Plex Mono',monospace;color:#5F6A73">—</div><div style="font:400 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#5F6A73">sin cosecha</div></div>
+          <div style="font:500 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#B42318;text-align:right">−4.512.300</div>
+          <div style="text-align:right"><span style="display:inline-block;padding:3px 7px;border:1px dashed #A9BACB;border-radius:5px;background:repeating-linear-gradient(135deg,#F5F8FB 0 6px,#EDF2F7 6px 12px);font:500 14px/1.2 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#3E5C7A">≈+1.185.700</span></div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:minmax(0,1.5fr) 74px 132px 122px 128px 132px 148px;align-items:center;gap:12px;padding:15px 18px;background:#FBFCFC">
+          <div style="font:600 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Total campaña</div>
+          <div style="font:600 13px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B;text-align:right">22,0</div>
+          <div style="font:600 15px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B;text-align:right">67.916.790</div>
+          <div style="font:400 13px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#46515A;text-align:right">3.087.127</div>
+          <div style="font:400 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#5F6A73;text-align:right">unidades distintas</div>
+          <div style="font:600 15px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#B42318;text-align:right">−9.499.590</div>
+          <div style="text-align:right"><span style="display:inline-block;padding:3px 7px;border:1px dashed #A9BACB;border-radius:5px;background:repeating-linear-gradient(135deg,#F5F8FB 0 6px,#EDF2F7 6px 12px);font:600 15px/1.2 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#3E5C7A">≈+35.108.520</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:32px;align-items:flex-start;flex-wrap:wrap">
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#6B7780">Pantalla 2 ⭐ · móvil 390</div>
+      <div style="width:390px;background:#FFFFFF;border:1px solid #D3D9DE;border-radius:22px;overflow:hidden;display:flex;flex-direction:column">
+        <div style="padding:10px 16px 0;display:flex;justify-content:space-between;font:600 12px/1 'IBM Plex Mono',monospace;color:#6B7780"><span>9:41</span><span>▮▮▮ 68%</span></div>
+        <div style="padding:10px 16px 12px;display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid #E4E8EB">
+          <div style="font:600 17px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Tablero</div>
+          <div style="min-height:34px;display:flex;align-items:center;gap:6px;padding:0 10px;border-radius:999px;border:1px solid #9FB8A6;background:#FBFDFB"><span style="font:600 13px/1 'IBM Plex Mono',monospace;color:#1F3527">2025/26</span><span style="font:400 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">▼</span></div>
+        </div>
+        <div style="padding:16px;display:flex;flex-direction:column;gap:12px">
+          <div style="border:1px solid #E4E8EB;border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px"><div style="font:600 11px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#6B7780">Costo de campaña</div><div style="font:600 22px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">67.916.790</div></div>
+            <div style="height:1px;background:#F1F3F5"></div>
+            <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px"><div style="font:600 11px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#6B7780">Margen realizado</div><div style="font:600 20px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#B42318">−9.499.590</div></div>
+            <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:8px 10px;border:1px dashed #A9BACB;border-radius:8px;background:repeating-linear-gradient(135deg,#F5F8FB 0 8px,#EDF2F7 8px 16px)"><div style="font:600 11px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#3E5C7A">Margen estimado</div><div style="font:600 20px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#3E5C7A">≈+35.108.520</div></div>
+            <div style="font:400 12px/1.45 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">Faltan liquidar 980 bolsas y 3 lotes sin vender: el realizado en rojo es normal en esta fecha.</div>
+          </div>
+
+          <div style="font:600 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#6B7780">Lotes sembrados · 22,0 ha</div>
+
+          <div style="border:1px solid #9FB8A6;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px"><div><div style="font:600 15px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527">Lote 3 · Cebolla</div><div style="font:400 12px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">4,2 ha · Valcatorce INTA</div></div><div style="font:400 16px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#9FB8A6">›</div></div>
+            <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
+              <div style="display:flex;flex-direction:column;gap:3px"><div style="font:400 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">Costo por bolsa</div><div style="font:600 19px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">5.511</div></div>
+              <div style="display:flex;flex-direction:column;gap:3px"><div style="font:400 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">Costo por ha</div><div style="font:600 19px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">6.376.467</div></div>
+              <div style="display:flex;flex-direction:column;gap:3px"><div style="font:400 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">Realizado</div><div style="font:600 15px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#0E7A46">+3.263.840</div></div>
+              <div style="display:flex;flex-direction:column;gap:3px"><div style="font:400 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#3E5C7A">Estimado</div><div style="font:600 15px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#3E5C7A">≈+17.927.840</div></div>
+            </div>
+          </div>
+
+          <div style="border:1px solid #E4E8EB;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px"><div><div style="font:600 15px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527">Lote 5 · Zapallo</div><div style="font:400 12px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">6,5 ha · Anco</div></div><div style="font:400 16px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#9FB8A6">›</div></div>
+            <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
+              <div style="display:flex;flex-direction:column;gap:3px"><div style="font:400 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">Costo por bin</div><div style="font:600 19px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">13.693</div></div>
+              <div style="display:flex;flex-direction:column;gap:3px"><div style="font:400 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">Costo por ha</div><div style="font:600 19px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">2.991.382</div></div>
+              <div style="display:flex;flex-direction:column;gap:3px"><div style="font:400 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">Realizado</div><div style="font:600 15px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#B42318">−2.140.870</div></div>
+              <div style="display:flex;flex-direction:column;gap:3px"><div style="font:400 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#3E5C7A">Estimado</div><div style="font:600 15px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#3E5C7A">≈+9.884.120</div></div>
+            </div>
+          </div>
+
+          <div style="border:1px solid #E4E8EB;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px"><div><div style="font:600 15px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527">Lote 7 · Sandía</div><div style="font:400 12px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">3,5 ha · Crimson Sweet</div></div><div style="font:400 16px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#9FB8A6">›</div></div>
+            <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
+              <div style="display:flex;flex-direction:column;gap:3px"><div style="font:400 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">Costo por unidad</div><div style="font:500 15px/1.25 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#5F6A73">Sin cosecha cargada</div></div>
+              <div style="display:flex;flex-direction:column;gap:3px"><div style="font:400 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">Costo por ha</div><div style="font:600 19px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">2.091.114</div></div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:auto;border-top:1px solid #E4E8EB;display:grid;grid-template-columns:repeat(4,minmax(0,1fr))">
+          <div style="min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:#F1F5F1"><div style="width:18px;height:18px;border-radius:4px;background:#3F6B4E"></div><div style="font:600 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527">Tablero</div></div>
+          <div style="min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px"><div style="width:18px;height:18px;border-radius:4px;border:1.5px solid #9AA4AC"></div><div style="font:600 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">Lotes</div></div>
+          <div style="min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px"><div style="width:18px;height:18px;border-radius:999px;border:1.5px solid #9AA4AC"></div><div style="font:600 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">Cargar</div></div>
+          <div style="min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px"><div style="width:18px;height:18px;border-radius:4px;border:1.5px solid #9AA4AC"></div><div style="font:600 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">Ventas</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:12px;max-width:420px">
+      <div style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#6B7780">Decisiones de esta pantalla</div>
+      <div style="background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;gap:10px"><div style="width:22px;height:22px;flex:none;border-radius:999px;background:#DFE9E1;display:flex;align-items:center;justify-content:center;font:600 12px/1 'IBM Plex Mono',monospace;color:#1F3527">1</div><div style="font:400 13px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A;text-wrap:pretty">Cada lote muestra su unidad real (bolsa, bin, jaula). No se fuerza una unidad común ni se inventa un promedio: la fila total dice “unidades distintas”.</div></div>
+        <div style="display:flex;gap:10px"><div style="width:22px;height:22px;flex:none;border-radius:999px;background:#DFE9E1;display:flex;align-items:center;justify-content:center;font:600 12px/1 'IBM Plex Mono',monospace;color:#1F3527">2</div><div style="font:400 13px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A;text-wrap:pretty">El selector $ ARS / US$ es real: cambia los cuatro totales de la campaña con el TC cargado. Las columnas por lote quedan en pesos para poder comparar.</div></div>
+        <div style="display:flex;gap:10px"><div style="width:22px;height:22px;flex:none;border-radius:999px;background:#DFE9E1;display:flex;align-items:center;justify-content:center;font:600 12px/1 'IBM Plex Mono',monospace;color:#1F3527">3</div><div style="font:400 13px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A;text-wrap:pretty">Un lote sin cosecha muestra “—” y el motivo, nunca un cero que se confunda con costo cero.</div></div>
+        <div style="display:flex;gap:10px"><div style="width:22px;height:22px;flex:none;border-radius:999px;background:#DFE9E1;display:flex;align-items:center;justify-content:center;font:600 12px/1 'IBM Plex Mono',monospace;color:#1F3527">4</div><div style="font:400 13px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A;text-wrap:pretty">La fila de totales coincide dígito a dígito con la suma de las filas, incluidos los indirectos ya prorrateados.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:20px">
+  <div style="display:flex;flex-direction:column;gap:4px">
+    <div style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#6B7780">Pantalla 3 ⭐ · móvil 390 · probá las cuatro modalidades</div>
+    <h2 style="margin:0;font:600 24px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Formulario de tarea</h2>
+  </div>
+
+  <div style="display:flex;gap:32px;align-items:flex-start;flex-wrap:wrap">
+    <div style="width:390px;background:#FFFFFF;border:1px solid #D3D9DE;border-radius:22px;overflow:hidden;display:flex;flex-direction:column">
+      <div style="padding:10px 16px 0;display:flex;justify-content:space-between;font:600 12px/1 'IBM Plex Mono',monospace;color:#6B7780"><span>9:41</span><span>▮▮▮ 68%</span></div>
+      <div style="padding:10px 16px 12px;display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid #E4E8EB">
+        <div style="display:flex;align-items:center;gap:10px"><div style="width:32px;height:32px;border-radius:8px;border:1px solid #D3D9DE;display:flex;align-items:center;justify-content:center;font:600 15px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">✕</div><div style="font:600 17px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Nueva tarea</div></div>
+        <div style="padding:5px 9px;border-radius:999px;background:#DFE9E1;font:600 12px/1 'IBM Plex Mono',monospace;color:#1F3527">2025/26</div>
+      </div>
+
+      <div style="padding:16px;display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#6B7780">Lote-campaña</label>
+          <div style="min-height:52px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 14px;border:1px solid #D3D9DE;border-radius:8px;background:#FFFFFF"><div><div style="font:600 16px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Lote 3 · Cebolla</div><div style="font:400 12px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">4,2 ha sembradas</div></div><div style="font:400 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">▼</div></div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:10px">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <label style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#6B7780">Tarea</label>
+            <div style="min-height:52px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 14px;border:1px solid #D3D9DE;border-radius:8px;font:500 16px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Carpida<span style="font:400 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">▼</span></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <label style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#6B7780">Fecha</label>
+            <div style="min-height:52px;display:flex;align-items:center;padding:0 14px;border:1px solid #D3D9DE;border-radius:8px;font:500 16px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">18/11/25</div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <label style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#6B7780">Cómo se paga</label>
+          <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
+            <div style="{{ estiloJornal }}" onClick="{{ modoJornal }}">Jornal</div>
+            <div style="{{ estiloDestajo }}" onClick="{{ modoDestajo }}">Destajo</div>
+            <div style="{{ estiloHa }}" onClick="{{ modoHa }}">Por hectárea</div>
+            <div style="{{ estiloTotal }}" onClick="{{ modoTotal }}">Monto total</div>
+          </div>
+        </div>
+
+        <sc-if value="{{ esJornal }}" hint-placeholder-val="{{ true }}">
+          <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#6B7780">Jornales</label>
+              <input type="text" inputMode="numeric" value="{{ jornales }}" onChange="{{ setJornales }}" style="min-height:52px;padding:0 14px;border:1px solid #D3D9DE;border-radius:8px;font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:18px;font-weight:500;color:#14181B;text-align:right;background:#FFFFFF;outline:none;width:100%;box-sizing:border-box">
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#6B7780">Valor del jornal</label>
+              <div style="display:flex;align-items:center;min-height:52px;border:1px solid #D3D9DE;border-radius:8px;overflow:hidden;background:#FFFFFF">
+                <div style="padding:0 10px;font:500 14px/1 'IBM Plex Mono',monospace;color:#6B7780;border-right:1px solid #E4E8EB;align-self:stretch;display:flex;align-items:center">$</div>
+                <input type="text" inputMode="numeric" value="{{ valorJornal }}" onChange="{{ setValorJornal }}" style="flex:1;min-width:0;padding:0 12px;border:0;font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:18px;font-weight:500;color:#14181B;text-align:right;outline:none;background:transparent">
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ esDestajo }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <label style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#6B7780">Bolsas embolsadas</label>
+                <input type="text" inputMode="numeric" value="{{ unidades }}" onChange="{{ setUnidades }}" style="min-height:52px;padding:0 14px;border:1px solid #D3D9DE;border-radius:8px;font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:18px;font-weight:500;color:#14181B;text-align:right;background:#FFFFFF;outline:none;width:100%;box-sizing:border-box">
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <label style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#6B7780">Valor por bolsa</label>
+                <div style="display:flex;align-items:center;min-height:52px;border:1px solid #D3D9DE;border-radius:8px;overflow:hidden;background:#FFFFFF">
+                  <div style="padding:0 10px;font:500 14px/1 'IBM Plex Mono',monospace;color:#6B7780;border-right:1px solid #E4E8EB;align-self:stretch;display:flex;align-items:center">$</div>
+                  <input type="text" inputMode="numeric" value="{{ valorUnidad }}" onChange="{{ setValorUnidad }}" style="flex:1;min-width:0;padding:0 12px;border:0;font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:18px;font-weight:500;color:#14181B;text-align:right;outline:none;background:transparent">
+                </div>
+              </div>
+            </div>
+            <div style="font:400 12px/1.4 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">El destajo se paga por unidad producida, no por tiempo trabajado.</div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ esPorHa }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#6B7780">Valor por hectárea</label>
+              <div style="display:flex;align-items:center;min-height:52px;border:1px solid #D3D9DE;border-radius:8px;overflow:hidden;background:#FFFFFF">
+                <div style="padding:0 10px;font:500 14px/1 'IBM Plex Mono',monospace;color:#6B7780;border-right:1px solid #E4E8EB;align-self:stretch;display:flex;align-items:center">$</div>
+                <input type="text" inputMode="numeric" value="{{ valorHa }}" onChange="{{ setValorHa }}" style="flex:1;min-width:0;padding:0 12px;border:0;font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:18px;font-weight:500;color:#14181B;text-align:right;outline:none;background:transparent">
+              </div>
+            </div>
+            <div style="padding:10px 12px;border-radius:8px;background:#F7F8F9;border:1px solid #E4E8EB;font:400 13px/1.4 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">Se multiplica por las <span style="font-family:'IBM Plex Mono',monospace;font-weight:500;color:#22303A">4,2 ha</span> sembradas del Lote 3. No hace falta cargar la superficie.</div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ esTotal }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#6B7780">Monto acordado</label>
+              <div style="display:flex;align-items:center;min-height:52px;border:1px solid #D3D9DE;border-radius:8px;overflow:hidden;background:#FFFFFF">
+                <div style="padding:0 10px;font:500 14px/1 'IBM Plex Mono',monospace;color:#6B7780;border-right:1px solid #E4E8EB;align-self:stretch;display:flex;align-items:center">$</div>
+                <input type="text" inputMode="numeric" value="{{ montoTotal }}" onChange="{{ setMontoTotal }}" style="flex:1;min-width:0;padding:0 12px;border:0;font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:18px;font-weight:500;color:#14181B;text-align:right;outline:none;background:transparent">
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#6B7780">Quién lo hizo</label>
+              <div style="min-height:52px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 14px;border:1px solid #D3D9DE;border-radius:8px;font:500 16px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Cuadrilla Ramírez<span style="font:400 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">▼</span></div>
+            </div>
+          </div>
+        </sc-if>
+
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#6B7780">Nota (opcional)</label>
+          <div style="min-height:52px;display:flex;align-items:center;padding:0 14px;border:1px solid #D3D9DE;border-radius:8px;font:400 15px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#5F6A73">Se carpió el sector alto</div>
+        </div>
+      </div>
+
+      <div style="margin-top:auto;border-top:1px solid #E4E8EB;padding:12px 16px 16px;display:flex;flex-direction:column;gap:10px;background:#FFFFFF">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px">
+          <div style="display:flex;flex-direction:column;gap:3px"><div style="font:600 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#6B7780">Total de la tarea</div><div style="font:400 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#5F6A73">{{ detalleTarea }}</div></div>
+          <div style="display:flex;align-items:baseline;gap:5px"><span style="font:400 16px/1 'IBM Plex Mono',monospace;color:#6B7780">$</span><span style="font:600 30px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">{{ totalTarea }}</span></div>
+        </div>
+        <div style="min-height:52px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:#3F6B4E;color:#FFFFFF;font:600 16px/1 'Helvetica Neue',Helvetica,Arial,sans-serif">Guardar tarea</div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:12px;width:520px">
+      <div style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#6B7780">Qué campos pide cada modalidad</div>
+      <div style="background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;overflow:hidden">
+        <div style="display:grid;grid-template-columns:118px minmax(0,1fr);gap:12px;padding:10px 16px;background:#FBFCFC;border-bottom:1px solid #E4E8EB"><div style="font:600 11px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#6B7780">Modalidad</div><div style="font:600 11px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#6B7780">Campos que aparecen</div></div>
+        <div style="display:grid;grid-template-columns:118px minmax(0,1fr);gap:12px;padding:12px 16px;border-bottom:1px solid #F1F3F5"><div style="font:600 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527">Jornal</div><div style="font:400 13px/1.45 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">Cantidad de jornales × valor del jornal</div></div>
+        <div style="display:grid;grid-template-columns:118px minmax(0,1fr);gap:12px;padding:12px 16px;border-bottom:1px solid #F1F3F5"><div style="font:600 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527">Destajo</div><div style="font:400 13px/1.45 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">Unidades producidas × valor por unidad (bolsa, bin)</div></div>
+        <div style="display:grid;grid-template-columns:118px minmax(0,1fr);gap:12px;padding:12px 16px;border-bottom:1px solid #F1F3F5"><div style="font:600 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527">Por hectárea</div><div style="font:400 13px/1.45 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">Solo valor por ha; la superficie viene del lote-campaña</div></div>
+        <div style="display:grid;grid-template-columns:118px minmax(0,1fr);gap:12px;padding:12px 16px"><div style="font:600 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527">Monto total</div><div style="font:400 13px/1.45 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">Un único monto acordado y quién lo hizo (cuadrilla)</div></div>
+      </div>
+      <div style="background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;gap:10px"><div style="width:22px;height:22px;flex:none;border-radius:999px;background:#DFE9E1;display:flex;align-items:center;justify-content:center;font:600 12px/1 'IBM Plex Mono',monospace;color:#1F3527">1</div><div style="font:400 13px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A;text-wrap:pretty">Lo que cambia entre modalidades es un solo bloque de dos campos, siempre en la misma posición. Lo de arriba (lote, tarea, fecha) y lo de abajo (total y guardar) no se mueven: el formulario no “muta”.</div></div>
+        <div style="display:flex;gap:10px"><div style="width:22px;height:22px;flex:none;border-radius:999px;background:#DFE9E1;display:flex;align-items:center;justify-content:center;font:600 12px/1 'IBM Plex Mono',monospace;color:#1F3527">2</div><div style="font:400 13px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A;text-wrap:pretty">El total se recalcula en vivo sobre la barra de guardado, con la cuenta escrita al lado: se ve antes de confirmar.</div></div>
+        <div style="display:flex;gap:10px"><div style="width:22px;height:22px;flex:none;border-radius:999px;background:#DFE9E1;display:flex;align-items:center;justify-content:center;font:600 12px/1 'IBM Plex Mono',monospace;color:#1F3527">3</div><div style="font:400 13px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A;text-wrap:pretty">Campos numéricos con teclado numérico, alineados a la derecha, controles de 52px y la campaña visible arriba en todo momento.</div></div>
+        <div style="display:flex;gap:10px"><div style="width:22px;height:22px;flex:none;border-radius:999px;background:#DFE9E1;display:flex;align-items:center;justify-content:center;font:600 12px/1 'IBM Plex Mono',monospace;color:#1F3527">4</div><div style="font:400 13px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A;text-wrap:pretty">Jornal y destajo van primero porque son el 80 % de las cargas a pie de lote.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <div style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#6B7780">Pantalla 3 ⭐ · escritorio · carga de tandas, modalidad por hectárea</div>
+    <div style="width:1280px;background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;overflow:hidden">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 28px;border-bottom:1px solid #E4E8EB">
+        <div style="display:flex;align-items:center;gap:12px"><div style="font:600 20px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Nueva tarea</div><div style="padding:4px 9px;border-radius:999px;background:#DFE9E1;font:600 12px/1 'IBM Plex Mono',monospace;color:#1F3527">Campaña 2025/26</div></div>
+        <div style="display:flex;gap:8px"><div style="min-height:40px;display:inline-flex;align-items:center;padding:0 14px;border-radius:6px;border:1px solid #D3D9DE;font:600 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A">Cancelar</div><div style="min-height:40px;display:inline-flex;align-items:center;padding:0 14px;border-radius:6px;border:1px solid #D3D9DE;font:600 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A">Guardar y cargar otra</div><div style="min-height:40px;display:inline-flex;align-items:center;padding:0 16px;border-radius:6px;background:#3F6B4E;color:#FFFFFF;font:600 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif">Guardar tarea</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:minmax(0,1fr) 380px">
+        <div style="padding:24px 28px;display:flex;flex-direction:column;gap:18px;border-right:1px solid #E4E8EB">
+          <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px">
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#6B7780">Lote-campaña</label><div style="min-height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;border:1px solid #D3D9DE;border-radius:6px;font:500 15px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Lote 3 · Cebolla<span style="font:400 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">▼</span></div></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#6B7780">Tarea</label><div style="min-height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;border:1px solid #D3D9DE;border-radius:6px;font:500 15px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Laboreo<span style="font:400 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">▼</span></div></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#6B7780">Fecha</label><div style="min-height:44px;display:flex;align-items:center;padding:0 12px;border:1px solid #D3D9DE;border-radius:6px;font:500 15px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">02/03/2025</div></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <label style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#6B7780">Cómo se paga</label>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <div style="min-height:44px;display:inline-flex;align-items:center;padding:0 16px;border-radius:6px;border:1px solid #D3D9DE;font:600 14px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">Jornal</div>
+              <div style="min-height:44px;display:inline-flex;align-items:center;padding:0 16px;border-radius:6px;border:1px solid #D3D9DE;font:600 14px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">Destajo</div>
+              <div style="min-height:44px;display:inline-flex;align-items:center;padding:0 16px;border-radius:6px;border:1px solid #3F6B4E;background:#DFE9E1;font:600 14px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527">Por hectárea</div>
+              <div style="min-height:44px;display:inline-flex;align-items:center;padding:0 16px;border-radius:6px;border:1px solid #D3D9DE;font:600 14px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">Monto total</div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:220px 130px minmax(0,1fr);gap:14px;align-items:end">
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#6B7780">Valor por hectárea</label><div style="display:flex;align-items:center;min-height:44px;border:1px solid #3F6B4E;border-radius:6px;overflow:hidden;box-shadow:0 0 0 3px #DFE9E1"><div style="padding:0 10px;align-self:stretch;display:flex;align-items:center;border-right:1px solid #E4E8EB;font:500 13px/1 'IBM Plex Mono',monospace;color:#6B7780">$</div><div style="flex:1;padding:0 12px;font:500 16px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B;text-align:right">145.000</div></div></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#6B7780">Superficie</label><div style="min-height:44px;display:flex;align-items:center;justify-content:flex-end;padding:0 12px;border:1px solid #E4E8EB;border-radius:6px;background:#F7F8F9;font:500 16px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#6B7780">4,2 ha</div></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#6B7780">Nota</label><div style="min-height:44px;display:flex;align-items:center;padding:0 12px;border:1px solid #D3D9DE;border-radius:6px;font:400 15px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#5F6A73">Rastra y cincel, contratista Bianchi</div></div>
+          </div>
+          <div style="padding:12px 14px;border-radius:8px;background:#F7F8F9;border:1px solid #E4E8EB;font:400 13px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">La superficie no se edita acá: sale de las 4,2 ha sembradas del lote-campaña. Si cambió la superficie real, se corrige en el lote-campaña y todos los costos por hectárea se recalculan.</div>
+        </div>
+        <div style="padding:24px;display:flex;flex-direction:column;gap:16px;background:#FBFCFC">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="font:600 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#6B7780">Total de la tarea</div>
+            <div style="display:flex;align-items:baseline;gap:6px"><span style="font:400 18px/1 'IBM Plex Mono',monospace;color:#6B7780">$</span><span style="font:600 38px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">609.000</span></div>
+            <div style="font:400 13px/1.4 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">145.000 × 4,2 ha</div>
+          </div>
+          <div style="height:1px;background:#E4E8EB"></div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="font:600 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#6B7780">Efecto en el Lote 3</div>
+            <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px"><div style="font:400 13px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">Costo total pasa a</div><div style="font:500 15px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">27.390.160</div></div>
+            <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px"><div style="font:400 13px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">Costo por bolsa pasa a</div><div style="font:600 15px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">5.636</div></div>
+            <div style="font:400 12px/1.45 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#5F6A73">Se muestra antes de guardar para que la carga no sea a ciegas.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:20px">
+  <div style="display:flex;flex-direction:column;gap:4px">
+    <div style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#6B7780">Pantallas 4 y 5</div>
+    <h2 style="margin:0;font:600 24px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Aplicación de insumo · Carga de cosecha</h2>
+  </div>
+
+  <div style="display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap">
+    <div style="width:700px;background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;overflow:hidden">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 22px;border-bottom:1px solid #E4E8EB">
+        <div style="font:600 18px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Nueva aplicación de insumo</div>
+        <div style="padding:4px 9px;border-radius:999px;background:#DFE9E1;font:600 12px/1 'IBM Plex Mono',monospace;color:#1F3527">Lote 3 · 2025/26</div>
+      </div>
+      <div style="padding:22px;display:flex;flex-direction:column;gap:16px">
+        <div style="display:grid;grid-template-columns:minmax(0,2fr) 130px;gap:14px">
+          <div style="display:flex;flex-direction:column;gap:6px"><label style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#6B7780">Insumo</label><div style="min-height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;border:1px solid #D3D9DE;border-radius:6px;font:500 15px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Fosfato diamónico<span style="font:400 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">▼</span></div></div>
+          <div style="display:flex;flex-direction:column;gap:6px"><label style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#6B7780">Fecha</label><div style="min-height:44px;display:flex;align-items:center;padding:0 12px;border:1px solid #D3D9DE;border-radius:6px;font:500 15px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">04/12/25</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:150px minmax(0,1fr) 150px;gap:14px;align-items:end">
+          <div style="display:flex;flex-direction:column;gap:6px"><label style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#6B7780">Cantidad</label><div style="display:flex;align-items:center;min-height:44px;border:1px solid #D3D9DE;border-radius:6px;overflow:hidden"><div style="flex:1;padding:0 10px;font:500 16px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B;text-align:right">350</div><div style="padding:0 10px;align-self:stretch;display:flex;align-items:center;border-left:1px solid #E4E8EB;background:#F7F8F9;font:500 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">kg</div></div></div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <label style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#6B7780">Precio unitario</label>
+            <div style="display:flex;align-items:stretch;min-height:44px;border:1px solid #D3D9DE;border-radius:6px;overflow:hidden">
+              <div style="display:flex;align-items:center;padding:0 10px;background:#F1F5F1;border-right:1px solid #DFE9E1;font:600 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527">US$ ▼</div>
+              <div style="flex:1;display:flex;align-items:center;justify-content:flex-end;padding:0 12px;font:500 16px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">0,92</div>
+              <div style="display:flex;align-items:center;gap:6px;padding:0 10px;border-left:1px solid #E4E8EB;background:#FBFCFC"><span style="font:400 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">TC</span><span style="font:500 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#22303A">1.285</span></div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px"><label style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#6B7780">Total</label><div style="min-height:44px;display:flex;align-items:center;justify-content:flex-end;padding:0 12px;border:1px solid #E4E8EB;border-radius:6px;background:#F7F8F9;font:600 16px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">413.770</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:8px;background:#F1F5F1;border:1px solid #DFE9E1;font:400 13px/1.45 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527"><span style="font-weight:600">Precio traído del catálogo (US$ 0,92 del 14/11/25).</span> Podés editarlo: el precio que quede acá es el que se guarda con esta aplicación y no cambia si después se actualiza el catálogo.</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:4px">
+          <div style="font:400 13px/1.4 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">US$ 322,00 al TC 1.285 = <span style="font-family:'IBM Plex Mono',monospace;font-weight:500;color:#22303A">$ 413.770</span></div>
+          <div style="display:flex;gap:8px"><div style="min-height:44px;display:inline-flex;align-items:center;padding:0 14px;border-radius:6px;border:1px solid #D3D9DE;font:600 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A">Cancelar</div><div style="min-height:44px;display:inline-flex;align-items:center;padding:0 16px;border-radius:6px;background:#3F6B4E;color:#FFFFFF;font:600 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif">Guardar aplicación</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="width:390px;background:#FFFFFF;border:1px solid #D3D9DE;border-radius:22px;overflow:hidden;display:flex;flex-direction:column">
+      <div style="padding:10px 16px 0;display:flex;justify-content:space-between;font:600 12px/1 'IBM Plex Mono',monospace;color:#6B7780"><span>18:07</span><span>▮▮ 41%</span></div>
+      <div style="padding:10px 16px 12px;display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid #E4E8EB"><div style="font:600 17px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Cargar cosecha</div><div style="padding:5px 9px;border-radius:999px;background:#DFE9E1;font:600 12px/1 'IBM Plex Mono',monospace;color:#1F3527">Lote 3</div></div>
+      <div style="padding:16px;display:flex;flex-direction:column;gap:14px">
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) 110px;gap:10px">
+          <div style="display:flex;flex-direction:column;gap:6px"><label style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#6B7780">Fecha</label><div style="min-height:52px;display:flex;align-items:center;padding:0 14px;border:1px solid #D3D9DE;border-radius:8px;font:500 16px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">12/12/25</div></div>
+          <div style="display:flex;flex-direction:column;gap:6px"><label style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#6B7780">Corte</label><div style="min-height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;border:1px solid #D3D9DE;border-radius:8px;font:500 16px/1 'IBM Plex Mono',monospace;color:#14181B">1<span style="font:400 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">▼</span></div></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <label style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#6B7780">Cantidades del corte · en bolsas</label>
+          <div style="display:flex;align-items:center;gap:10px"><div style="width:104px;flex:none;font:500 15px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A">Primera</div><div style="flex:1;min-height:52px;display:flex;align-items:center;justify-content:flex-end;padding:0 14px;border:1px solid #3F6B4E;border-radius:8px;box-shadow:0 0 0 3px #DFE9E1;font:500 18px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">2.180</div></div>
+          <div style="display:flex;align-items:center;gap:10px"><div style="width:104px;flex:none;font:500 15px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A">Segunda</div><div style="flex:1;min-height:52px;display:flex;align-items:center;justify-content:flex-end;padding:0 14px;border:1px solid #D3D9DE;border-radius:8px;font:500 18px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">640</div></div>
+          <div style="display:flex;align-items:center;gap:10px"><div style="width:104px;flex:none;font:500 15px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A">Descarte</div><div style="flex:1;min-height:52px;display:flex;align-items:center;justify-content:flex-end;padding:0 14px;border:1px solid #D3D9DE;border-radius:8px;font:500 18px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">190</div></div>
+          <div style="font:400 12px/1.45 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">Las tres calidades del mismo corte se cargan de una vez. El descarte se registra pero no entra en el costo por bolsa.</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px"><label style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#6B7780">Destino</label><div style="min-height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;border:1px solid #D3D9DE;border-radius:8px;font:500 16px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Galpón (curado)<span style="font:400 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">▼</span></div></div>
+      </div>
+      <div style="margin-top:auto;border-top:1px solid #E4E8EB;padding:12px 16px 16px;display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px"><div style="font:600 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#6B7780">Vendible en este corte</div><div style="display:flex;align-items:baseline;gap:6px"><span style="font:600 26px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">2.820</span><span style="font:400 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">bolsas</span></div></div>
+        <div style="min-height:52px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:#3F6B4E;color:#FFFFFF;font:600 16px/1 'Helvetica Neue',Helvetica,Arial,sans-serif">Guardar corte</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:20px">
+  <div style="display:flex;flex-direction:column;gap:4px">
+    <div style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#6B7780">Pantalla 6 · escritorio</div>
+    <h2 style="margin:0;font:600 24px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Ventas del lote-campaña y liquidación de consignación</h2>
+  </div>
+
+  <div style="display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap">
+    <div style="width:820px;background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;overflow:hidden">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 22px;border-bottom:1px solid #E4E8EB">
+        <div style="display:flex;flex-direction:column;gap:4px"><div style="font:600 18px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Ventas · Lote 3 · Cebolla</div><div style="font:400 13px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">4.860 bolsas vendibles · 580 todavía en galpón</div></div>
+        <div style="min-height:44px;display:inline-flex;align-items:center;padding:0 16px;border-radius:6px;background:#3F6B4E;color:#FFFFFF;font:600 14px/1 'Helvetica Neue',Helvetica,Arial,sans-serif">+ Nueva venta</div>
+      </div>
+      <div style="padding:14px 22px;background:#FDF3E7;border-bottom:1px solid #F1DFC4;display:flex;align-items:center;justify-content:space-between;gap:14px">
+        <div style="font:400 13px/1.45 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#8A5A12"><span style="font-weight:600">Te deben liquidar 980 bolsas.</span> Entregadas el 03/02/26 al Mercado Cooperativo de Productores.</div>
+        <div style="min-height:40px;flex:none;display:inline-flex;align-items:center;padding:0 14px;border-radius:6px;background:#FFFFFF;border:1px solid #E2C99F;font:600 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#8A5A12">Completar liquidación</div>
+      </div>
+      <div style="display:grid;grid-template-columns:82px minmax(0,1fr) 88px 108px 132px 168px;gap:12px;padding:10px 22px;background:#FBFCFC;border-bottom:1px solid #E4E8EB">
+        <div style="font:600 11px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#6B7780">Fecha</div>
+        <div style="font:600 11px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#6B7780">Comprador</div>
+        <div style="font:600 11px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#6B7780;text-align:right">Bolsas</div>
+        <div style="font:600 11px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#6B7780;text-align:right">Precio</div>
+        <div style="font:600 11px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#6B7780;text-align:right">Neto</div>
+        <div style="font:600 11px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#6B7780">Estado</div>
+      </div>
+      <div style="display:grid;grid-template-columns:82px minmax(0,1fr) 88px 108px 132px 168px;gap:12px;padding:13px 22px;border-bottom:1px solid #F1F3F5;align-items:center">
+        <div style="font:400 13px/1 'IBM Plex Mono',monospace;color:#6B7780">14/01/26</div>
+        <div style="font:500 14px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Mercado Cooperativo de Productores</div>
+        <div style="font:400 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#22303A;text-align:right">1.200</div>
+        <div style="font:400 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#22303A;text-align:right">9.200</div>
+        <div style="font:500 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B;text-align:right">11.040.000</div>
+        <div><span style="display:inline-flex;padding:4px 9px;border-radius:999px;background:#DFE9E1;font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527">Liquidada</span></div>
+      </div>
+      <div style="display:grid;grid-template-columns:82px minmax(0,1fr) 88px 108px 132px 168px;gap:12px;padding:13px 22px;border-bottom:1px solid #F1F3F5;align-items:center">
+        <div style="font:400 13px/1 'IBM Plex Mono',monospace;color:#6B7780">22/01/26</div>
+        <div style="font:500 14px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Distribuidora San Jorge</div>
+        <div style="font:400 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#22303A;text-align:right">2.100</div>
+        <div style="font:400 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#22303A;text-align:right">9.050</div>
+        <div style="font:500 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B;text-align:right">19.005.000</div>
+        <div><span style="display:inline-flex;padding:4px 9px;border-radius:999px;background:#DFE9E1;font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527">Liquidada</span></div>
+      </div>
+      <div style="display:grid;grid-template-columns:82px minmax(0,1fr) 88px 108px 132px 168px;gap:12px;padding:13px 22px;border-bottom:1px solid #E4E8EB;align-items:center;background:repeating-linear-gradient(135deg,#F7FAFC 0 8px,#F1F5F9 8px 16px)">
+        <div style="font:400 13px/1 'IBM Plex Mono',monospace;color:#6B7780">03/02/26</div>
+        <div style="font:500 14px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Mercado Cooperativo de Productores</div>
+        <div style="font:400 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#22303A;text-align:right">980</div>
+        <div style="font:400 13px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#5F6A73;text-align:right">sin precio</div>
+        <div style="font:500 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#3E5C7A;text-align:right">≈9.212.000</div>
+        <div style="display:flex;align-items:center;gap:8px"><span style="display:inline-flex;padding:4px 9px;border-radius:999px;background:#FDF3E7;border:1px solid #F1DFC4;font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#8A5A12">Pendiente</span><span style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#35583F">Liquidar</span></div>
+      </div>
+      <div style="display:grid;grid-template-columns:82px minmax(0,1fr) 88px 108px 132px 168px;gap:12px;padding:15px 22px;background:#FBFCFC;align-items:center">
+        <div style="font:600 13px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B;grid-column:span 2">Total entregado</div>
+        <div style="font:600 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B;text-align:right">4.280</div>
+        <div></div>
+        <div style="font:600 15px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B;text-align:right">30.045.000</div>
+        <div style="font:400 12px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">liquidado · ≈9.212.000 pendiente</div>
+      </div>
+    </div>
+
+    <div style="width:400px;background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;overflow:hidden">
+      <div style="padding:16px 20px;border-bottom:1px solid #E4E8EB;display:flex;flex-direction:column;gap:4px"><div style="font:600 17px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Completar liquidación</div><div style="font:400 13px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">Entrega del 03/02/26 · 980 bolsas</div></div>
+      <div style="padding:20px;display:flex;flex-direction:column;gap:14px">
+        <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">
+          <div style="display:flex;flex-direction:column;gap:6px"><label style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#6B7780">Fecha liquidación</label><div style="min-height:44px;display:flex;align-items:center;padding:0 12px;border:1px solid #D3D9DE;border-radius:6px;font:500 15px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">28/02/26</div></div>
+          <div style="display:flex;flex-direction:column;gap:6px"><label style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#6B7780">Precio por bolsa</label><div style="display:flex;align-items:center;min-height:44px;border:1px solid #3F6B4E;border-radius:6px;overflow:hidden;box-shadow:0 0 0 3px #DFE9E1"><div style="padding:0 9px;align-self:stretch;display:flex;align-items:center;border-right:1px solid #E4E8EB;font:500 13px/1 'IBM Plex Mono',monospace;color:#6B7780">$</div><div style="flex:1;padding:0 10px;font:500 16px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B;text-align:right">9.640</div></div></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;padding:14px;border:1px solid #E4E8EB;border-radius:8px">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px"><div style="font:400 13px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">980 bolsas × 9.640</div><div style="font:500 15px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">9.447.200</div></div>
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px"><div style="font:400 13px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">Comisión 8 %</div><div style="font:500 15px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#46515A">−755.776</div></div>
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px"><div style="font:400 13px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">Flete y gastos</div><div style="font:500 15px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#46515A">−284.000</div></div>
+          <div style="height:1px;background:#E4E8EB"></div>
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px"><div style="font:600 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Neto a cobrar</div><div style="font:600 19px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">8.407.424</div></div>
+        </div>
+        <div style="padding:10px 12px;border-radius:8px;background:#F1F5F1;border:1px solid #DFE9E1;font:400 13px/1.45 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527">Al confirmar, estas 980 bolsas pasan de estimado a realizado: el margen realizado del Lote 3 sube a <span style="font-family:'IBM Plex Mono',monospace;font-weight:600">+11.671.264</span>.</div>
+        <div style="display:flex;gap:8px;justify-content:flex-end"><div style="min-height:44px;display:inline-flex;align-items:center;padding:0 14px;border-radius:6px;border:1px solid #D3D9DE;font:600 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A">Cancelar</div><div style="min-height:44px;display:inline-flex;align-items:center;padding:0 16px;border-radius:6px;background:#3F6B4E;color:#FFFFFF;font:600 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif">Confirmar liquidación</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:20px">
+  <div style="display:flex;flex-direction:column;gap:4px">
+    <div style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#6B7780">Pantalla 7 · escritorio</div>
+    <h2 style="margin:0;font:600 24px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Costo indirecto de campaña con vista previa del prorrateo</h2>
+  </div>
+
+  <div style="width:1000px;background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;overflow:hidden">
+    <div style="padding:18px 22px;border-bottom:1px solid #E4E8EB;display:flex;align-items:center;justify-content:space-between;gap:12px"><div style="font:600 18px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Nuevo costo indirecto</div><div style="padding:4px 9px;border-radius:999px;background:#DFE9E1;font:600 12px/1 'IBM Plex Mono',monospace;color:#1F3527">Campaña 2025/26</div></div>
+    <div style="display:grid;grid-template-columns:minmax(0,1fr) 420px">
+      <div style="padding:22px;display:flex;flex-direction:column;gap:16px;border-right:1px solid #E4E8EB">
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) 170px;gap:14px">
+          <div style="display:flex;flex-direction:column;gap:6px"><label style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#6B7780">Concepto</label><div style="min-height:44px;display:flex;align-items:center;padding:0 12px;border:1px solid #D3D9DE;border-radius:6px;font:500 15px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Canon de riego 2025/26</div></div>
+          <div style="display:flex;flex-direction:column;gap:6px"><label style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#6B7780">Importe</label><div style="display:flex;align-items:center;min-height:44px;border:1px solid #D3D9DE;border-radius:6px;overflow:hidden"><div style="padding:0 9px;align-self:stretch;display:flex;align-items:center;border-right:1px solid #E4E8EB;font:500 13px/1 'IBM Plex Mono',monospace;color:#6B7780">$</div><div style="flex:1;padding:0 10px;font:500 16px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B;text-align:right">3.960.000</div></div></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <label style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#6B7780">Cómo se reparte</label>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;align-items:center;gap:10px;min-height:48px;padding:0 14px;border:1px solid #3F6B4E;border-radius:8px;background:#F1F5F1"><div style="width:16px;height:16px;border-radius:999px;border:5px solid #3F6B4E;background:#FFFFFF"></div><div style="display:flex;flex-direction:column;gap:2px"><div style="font:600 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527">Por hectárea sembrada</div><div style="font:400 12px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">$ 180.000 por ha sobre 22,0 ha</div></div></div>
+            <div style="display:flex;align-items:center;gap:10px;min-height:48px;padding:0 14px;border:1px solid #D3D9DE;border-radius:8px"><div style="width:16px;height:16px;border-radius:999px;border:1.5px solid #A2ABB2"></div><div style="font:500 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">En partes iguales entre los lotes</div></div>
+            <div style="display:flex;align-items:center;gap:10px;min-height:48px;padding:0 14px;border:1px solid #D3D9DE;border-radius:8px"><div style="width:16px;height:16px;border-radius:999px;border:1.5px solid #A2ABB2"></div><div style="font:500 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">Proporcional al costo directo de cada lote</div></div>
+            <div style="display:flex;align-items:center;gap:10px;min-height:48px;padding:0 14px;border:1px solid #D3D9DE;border-radius:8px"><div style="width:16px;height:16px;border-radius:999px;border:1.5px solid #A2ABB2"></div><div style="font:500 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">Solo a lotes elegidos a mano</div></div>
+          </div>
+        </div>
+        <div style="padding:12px 14px;border-radius:8px;background:#F7F8F9;border:1px solid #E4E8EB;font:400 13px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">El reparto se calcula con la superficie sembrada de hoy. Si más adelante se siembra otro lote, el sistema avisa y ofrece recalcular; no lo cambia solo.</div>
+      </div>
+      <div style="padding:22px;display:flex;flex-direction:column;gap:14px;background:#FBFCFC">
+        <div style="font:600 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#6B7780">Vista previa del reparto</div>
+        <div style="display:flex;flex-direction:column;background:#FFFFFF;border:1px solid #E4E8EB;border-radius:8px;overflow:hidden">
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) 62px 116px;gap:10px;padding:10px 14px;border-bottom:1px solid #F1F3F5"><div style="font:500 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A">Lote 3 · Cebolla</div><div style="font:400 13px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#6B7780;text-align:right">4,2</div><div style="font:500 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B;text-align:right">756.000</div></div>
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) 62px 116px;gap:10px;padding:10px 14px;border-bottom:1px solid #F1F3F5"><div style="font:500 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A">Lote 5 · Zapallo</div><div style="font:400 13px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#6B7780;text-align:right">6,5</div><div style="font:500 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B;text-align:right">1.170.000</div></div>
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) 62px 116px;gap:10px;padding:10px 14px;border-bottom:1px solid #F1F3F5"><div style="font:500 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A">Lote 1 · Melón</div><div style="font:400 13px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#6B7780;text-align:right">2,8</div><div style="font:500 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B;text-align:right">504.000</div></div>
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) 62px 116px;gap:10px;padding:10px 14px;border-bottom:1px solid #F1F3F5"><div style="font:500 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A">Lote 7 · Sandía</div><div style="font:400 13px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#6B7780;text-align:right">3,5</div><div style="font:500 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B;text-align:right">630.000</div></div>
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) 62px 116px;gap:10px;padding:10px 14px;border-bottom:1px solid #E4E8EB"><div style="font:500 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A">Lote 2 · Maíz</div><div style="font:400 13px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#6B7780;text-align:right">5,0</div><div style="font:500 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B;text-align:right">900.000</div></div>
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) 62px 116px;gap:10px;padding:12px 14px;background:#FBFCFC"><div style="font:600 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Reparto total</div><div style="font:600 13px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B;text-align:right">22,0</div><div style="font:600 15px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B;text-align:right">3.960.000</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;font:400 12px/1.4 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#0E7A46"><span style="font-weight:600">Cierra exacto:</span> la suma de los cinco lotes es igual al importe cargado.</div>
+        <div style="margin-top:auto;display:flex;gap:8px"><div style="flex:1;min-height:44px;display:flex;align-items:center;justify-content:center;border-radius:6px;border:1px solid #D3D9DE;font:600 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A">Cancelar</div><div style="flex:1;min-height:44px;display:flex;align-items:center;justify-content:center;border-radius:6px;background:#3F6B4E;color:#FFFFFF;font:600 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif">Confirmar reparto</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:20px">
+  <div style="display:flex;flex-direction:column;gap:4px">
+    <div style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#6B7780">Pantallas 8 y 9 · patrón de CRUD y acceso</div>
+    <h2 style="margin:0;font:600 24px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Listado de lotes y login</h2>
+  </div>
+
+  <div style="display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap">
+    <div style="width:780px;background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;overflow:hidden">
+      <div style="padding:18px 22px;border-bottom:1px solid #E4E8EB;display:flex;align-items:center;justify-content:space-between;gap:12px">
+        <div style="display:flex;flex-direction:column;gap:4px"><div style="font:600 18px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Lotes</div><div style="font:400 13px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">7 lotes · 24,5 ha totales · el catálogo de insumos usa este mismo patrón</div></div>
+        <div style="display:flex;gap:8px"><div style="min-height:40px;display:flex;align-items:center;padding:0 12px;border:1px solid #D3D9DE;border-radius:6px;font:400 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#5F6A73;min-width:180px">Buscar lote…</div><div style="min-height:40px;display:inline-flex;align-items:center;padding:0 14px;border-radius:6px;background:#3F6B4E;color:#FFFFFF;font:600 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif">+ Nuevo lote</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:110px minmax(0,1fr) 84px 200px 92px;gap:12px;padding:10px 22px;background:#FBFCFC;border-bottom:1px solid #E4E8EB">
+        <div style="font:600 11px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#6B7780">Nombre</div>
+        <div style="font:600 11px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#6B7780">Ubicación</div>
+        <div style="font:600 11px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#6B7780;text-align:right">Sup. ha</div>
+        <div style="font:600 11px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#6B7780">En 2025/26</div>
+        <div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:110px minmax(0,1fr) 84px 200px 92px;gap:12px;padding:13px 22px;border-bottom:1px solid #F1F3F5;align-items:center"><div style="font:600 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527">Lote 1</div><div style="font:400 14px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Frente al canal, sector norte</div><div style="font:400 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#22303A;text-align:right">3,0</div><div style="font:400 13px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A">Melón · 2,8 ha</div><div style="font:600 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#35583F;text-align:right">Editar</div></div>
+      <div style="display:grid;grid-template-columns:110px minmax(0,1fr) 84px 200px 92px;gap:12px;padding:13px 22px;border-bottom:1px solid #F1F3F5;align-items:center"><div style="font:600 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527">Lote 2</div><div style="font:400 14px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Detrás del galpón de embolsado</div><div style="font:400 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#22303A;text-align:right">5,0</div><div style="font:400 13px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A">Maíz · 5,0 ha</div><div style="font:600 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#35583F;text-align:right">Editar</div></div>
+      <div style="display:grid;grid-template-columns:110px minmax(0,1fr) 84px 200px 92px;gap:12px;padding:13px 22px;border-bottom:1px solid #F1F3F5;align-items:center"><div style="font:600 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527">Lote 3</div><div style="font:400 14px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Camino vecinal, junto a la casa</div><div style="font:400 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#22303A;text-align:right">5,0</div><div style="font:400 13px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A">Cebolla · 4,2 ha</div><div style="font:600 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#35583F;text-align:right">Editar</div></div>
+      <div style="display:grid;grid-template-columns:110px minmax(0,1fr) 84px 200px 92px;gap:12px;padding:13px 22px;border-bottom:1px solid #F1F3F5;align-items:center"><div style="font:600 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527">Lote 4</div><div style="font:400 14px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Bajo, se inunda con lluvia fuerte</div><div style="font:400 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#22303A;text-align:right">2,5</div><div style="font:400 13px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#5F6A73">Sin sembrar</div><div style="font:600 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#35583F;text-align:right">Editar</div></div>
+      <div style="display:grid;grid-template-columns:110px minmax(0,1fr) 84px 200px 92px;gap:12px;padding:13px 22px;align-items:center"><div style="font:600 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527">Lote 5</div><div style="font:400 14px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Sobre la ruta, portón de chapa</div><div style="font:400 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#22303A;text-align:right">7,0</div><div style="font:400 13px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A">Zapallo · 6,5 ha</div><div style="font:600 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#35583F;text-align:right">Editar</div></div>
+    </div>
+
+    <div style="width:420px;background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;padding:36px 32px;display:flex;flex-direction:column;gap:22px">
+      <div style="display:flex;align-items:center;gap:10px"><div style="width:28px;height:28px;border-radius:6px;background:#3F6B4E"></div><div style="font:600 16px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527">Planilla de Campo</div></div>
+      <div style="display:flex;flex-direction:column;gap:6px"><div style="font:600 24px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Entrar</div><div style="font:400 14px/1.4 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">Usá el usuario que te dieron. No hay registro público.</div></div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;flex-direction:column;gap:6px"><label style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#6B7780">Usuario</label><div style="min-height:52px;display:flex;align-items:center;padding:0 14px;border:1px solid #D3D9DE;border-radius:8px;font:500 16px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">marcelo</div></div>
+        <div style="display:flex;flex-direction:column;gap:6px"><label style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#6B7780">Contraseña</label><div style="min-height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;border:1px solid #D3D9DE;border-radius:8px;font:500 16px/1 'IBM Plex Mono',monospace;color:#14181B">••••••••<span style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#35583F">Ver</span></div></div>
+        <div style="display:flex;align-items:center;gap:10px"><div style="width:20px;height:20px;border-radius:4px;border:1px solid #3F6B4E;background:#3F6B4E;display:flex;align-items:center;justify-content:center;font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#FFFFFF">✓</div><div style="font:400 14px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A">Mantener la sesión abierta en esta computadora</div></div>
+        <div style="min-height:52px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:#3F6B4E;color:#FFFFFF;font:600 16px/1 'Helvetica Neue',Helvetica,Arial,sans-serif">Entrar</div>
+      </div>
+      <div style="font:400 13px/1.45 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#5F6A73">Si perdiste la contraseña, la cambia el otro usuario desde Configuración.</div>
+    </div>
+  </div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:20px">
+  <div style="display:flex;flex-direction:column;gap:4px">
+    <div style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#6B7780">Pantalla 10</div>
+    <h2 style="margin:0;font:600 24px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Navegación y cambio de campaña activa</h2>
+  </div>
+
+  <div style="display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap">
+    <div style="width:300px;background:#FBFCFC;border:1px solid #E4E8EB;border-radius:10px;padding:20px 14px;display:flex;flex-direction:column;gap:18px">
+      <div style="display:flex;align-items:center;gap:10px;padding:0 6px"><div style="width:26px;height:26px;border-radius:5px;background:#3F6B4E"></div><div style="font:600 15px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527">Planilla de Campo</div></div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div style="font:600 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#5F6A73;padding:0 6px">Campaña activa</div>
+        <div style="min-height:44px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 12px;border-radius:6px;background:#FFFFFF;border:1px solid #3F6B4E;box-shadow:0 0 0 3px #DFE9E1"><div><div style="font:600 15px/1 'IBM Plex Mono',monospace;color:#1F3527">2025/26</div><div style="font:400 11px/1.4 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">abierta · 22,0 ha</div></div><div style="font:400 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">▲</div></div>
+        <div style="background:#FFFFFF;border:1px solid #D3D9DE;border-radius:8px;overflow:hidden">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;background:#F1F5F1;border-bottom:1px solid #E4E8EB"><div><div style="font:600 14px/1.2 'IBM Plex Mono',monospace;color:#1F3527">2025/26</div><div style="font:400 11px/1.4 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">abierta</div></div><div style="font:600 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#3F6B4E">✓</div></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border-bottom:1px solid #F1F3F5"><div><div style="font:600 14px/1.2 'IBM Plex Mono',monospace;color:#22303A">2024/25</div><div style="font:400 11px/1.4 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">cerrada · solo lectura</div></div></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border-bottom:1px solid #F1F3F5"><div><div style="font:600 14px/1.2 'IBM Plex Mono',monospace;color:#22303A">2023/24</div><div style="font:400 11px/1.4 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">cerrada · solo lectura</div></div></div>
+          <div style="padding:10px 12px;font:600 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#35583F">+ Nueva campaña</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <div style="min-height:40px;display:flex;align-items:center;padding:0 12px;border-radius:6px;background:#DFE9E1;font:600 14px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527">Tablero</div>
+        <div style="min-height:40px;display:flex;align-items:center;padding:0 12px;border-radius:6px;font:600 14px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">Lotes de la campaña</div>
+        <div style="min-height:40px;display:flex;align-items:center;padding:0 12px;border-radius:6px;font:600 14px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">Ventas</div>
+        <div style="min-height:40px;display:flex;align-items:center;padding:0 12px;border-radius:6px;font:600 14px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">Costos indirectos</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:2px;padding-top:10px;border-top:1px solid #E4E8EB">
+        <div style="font:600 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#5F6A73;padding:6px">Catálogos</div>
+        <div style="min-height:40px;display:flex;align-items:center;padding:0 12px;border-radius:6px;font:600 14px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">Lotes</div>
+        <div style="min-height:40px;display:flex;align-items:center;padding:0 12px;border-radius:6px;font:600 14px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">Insumos</div>
+        <div style="min-height:40px;display:flex;align-items:center;padding:0 12px;border-radius:6px;font:600 14px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">Trabajadores</div>
+      </div>
+    </div>
+
+    <div style="width:390px;background:#FFFFFF;border:1px solid #D3D9DE;border-radius:22px;overflow:hidden;display:flex;flex-direction:column">
+      <div style="padding:10px 16px 0;display:flex;justify-content:space-between;font:600 12px/1 'IBM Plex Mono',monospace;color:#6B7780"><span>9:41</span><span>▮▮▮ 68%</span></div>
+      <div style="padding:10px 16px 12px;display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid #E4E8EB"><div style="font:600 17px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Cargar</div><div style="min-height:34px;display:flex;align-items:center;gap:6px;padding:0 10px;border-radius:999px;border:1px solid #9FB8A6;background:#FBFDFB"><span style="font:600 13px/1 'IBM Plex Mono',monospace;color:#1F3527">2025/26</span><span style="font:400 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">▼</span></div></div>
+      <div style="flex:1;background:#F7F8F9"></div>
+      <div style="background:#FFFFFF;border-top:1px solid #E4E8EB;border-radius:16px 16px 0 0;padding:18px 16px;display:flex;flex-direction:column;gap:10px;box-shadow:0 -1px 0 #E4E8EB">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><div style="font:600 16px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">¿Qué querés cargar?</div><div style="font:400 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">Lote 3 ▼</div></div>
+        <div style="min-height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;border:1px solid #3F6B4E;border-radius:10px;background:#F1F5F1;font:600 16px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527">Tarea<span style="font:400 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">jornal, destajo, ha</span></div>
+        <div style="min-height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;border:1px solid #D3D9DE;border-radius:10px;font:600 16px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A">Aplicación de insumo<span style="font:400 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">›</span></div>
+        <div style="min-height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;border:1px solid #D3D9DE;border-radius:10px;font:600 16px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A">Cosecha<span style="font:400 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">›</span></div>
+        <div style="min-height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;border:1px solid #D3D9DE;border-radius:10px;font:600 16px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A">Venta<span style="font:400 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">›</span></div>
+      </div>
+      <div style="border-top:1px solid #E4E8EB;display:grid;grid-template-columns:repeat(4,minmax(0,1fr))">
+        <div style="min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px"><div style="width:18px;height:18px;border-radius:4px;border:1.5px solid #9AA4AC"></div><div style="font:600 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">Tablero</div></div>
+        <div style="min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px"><div style="width:18px;height:18px;border-radius:4px;border:1.5px solid #9AA4AC"></div><div style="font:600 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">Lotes</div></div>
+        <div style="min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:#F1F5F1"><div style="width:18px;height:18px;border-radius:999px;background:#3F6B4E"></div><div style="font:600 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527">Cargar</div></div>
+        <div style="min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px"><div style="width:18px;height:18px;border-radius:4px;border:1.5px solid #9AA4AC"></div><div style="font:600 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">Ventas</div></div>
+      </div>
+    </div>
+
+    <div style="width:420px;display:flex;flex-direction:column;gap:12px">
+      <div style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#6B7780">Cómo se estructura</div>
+      <div style="background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;gap:10px"><div style="width:22px;height:22px;flex:none;border-radius:999px;background:#DFE9E1;display:flex;align-items:center;justify-content:center;font:600 12px/1 'IBM Plex Mono',monospace;color:#1F3527">1</div><div style="font:400 13px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A;text-wrap:pretty">Cuatro secciones de campaña arriba y tres catálogos abajo. Si mañana se oculta un grupo entero para un operador, la estructura sigue en pie y no queda un menú de un solo ítem.</div></div>
+        <div style="display:flex;gap:10px"><div style="width:22px;height:22px;flex:none;border-radius:999px;background:#DFE9E1;display:flex;align-items:center;justify-content:center;font:600 12px/1 'IBM Plex Mono',monospace;color:#1F3527">2</div><div style="font:400 13px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A;text-wrap:pretty">La campaña activa vive arriba de la navegación en escritorio y en la barra de título en móvil: está visible en todas las pantallas, incluidos los formularios de carga.</div></div>
+        <div style="display:flex;gap:10px"><div style="width:22px;height:22px;flex:none;border-radius:999px;background:#DFE9E1;display:flex;align-items:center;justify-content:center;font:600 12px/1 'IBM Plex Mono',monospace;color:#1F3527">3</div><div style="font:400 13px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A;text-wrap:pretty">Al cambiar de campaña se pide confirmación y las cerradas se marcan como solo lectura en el propio selector, antes de entrar.</div></div>
+        <div style="display:flex;gap:10px"><div style="width:22px;height:22px;flex:none;border-radius:999px;background:#DFE9E1;display:flex;align-items:center;justify-content:center;font:600 12px/1 'IBM Plex Mono',monospace;color:#1F3527">4</div><div style="font:400 13px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A;text-wrap:pretty">En móvil el centro de la barra inferior es “Cargar”: una hoja con las cuatro cargas y el lote preseleccionado. Dos toques desde cualquier pantalla.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:20px">
+  <div style="display:flex;flex-direction:column;gap:4px">
+    <div style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#6B7780">Estados</div>
+    <h2 style="margin:0;font:600 24px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">Vacíos, sin señal, campaña cerrada y errores</h2>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;width:1280px">
+    <div style="background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;overflow:hidden;display:flex;flex-direction:column">
+      <div style="padding:12px 18px;border-bottom:1px solid #E4E8EB;font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#6B7780">Campaña sin lotes sembrados</div>
+      <div style="padding:32px 24px;display:flex;flex-direction:column;gap:14px;align-items:flex-start">
+        <div style="width:44px;height:44px;border-radius:8px;border:1px dashed #9FB8A6;background:#F1F5F1"></div>
+        <div style="font:600 19px/1.25 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#14181B">La campaña 2025/26 está creada y todavía vacía</div>
+        <div style="font:400 14px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A;text-wrap:pretty">El primer paso es sembrar un lote: elegí el lote, el cultivo, la variedad y cuántas hectáreas sembraste. Después vas a poder cargar tareas y aplicaciones.</div>
+        <div style="min-height:44px;display:inline-flex;align-items:center;padding:0 16px;border-radius:6px;background:#3F6B4E;color:#FFFFFF;font:600 14px/1 'Helvetica Neue',Helvetica,Arial,sans-serif">Sembrar el primer lote</div>
+        <div style="font:400 13px/1.4 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#5F6A73">Tenés 7 lotes cargados en el catálogo.</div>
+      </div>
+    </div>
+
+    <div style="background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;overflow:hidden;display:flex;flex-direction:column">
+      <div style="padding:12px 18px;border-bottom:1px solid #E4E8EB;font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#6B7780">Lote-campaña sin cosecha</div>
+      <div style="padding:24px;display:flex;flex-direction:column;gap:14px">
+        <div style="border:1px dashed #C7CFD6;border-radius:10px;padding:20px;background:#FBFCFC;display:flex;flex-direction:column;gap:8px">
+          <div style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#6B7780">Costo por bolsa</div>
+          <div style="font:600 24px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">Todavía no se puede calcular</div>
+          <div style="font:400 13px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">Hace falta cargar al menos un corte de cosecha. El costo acumulado sí está: son <span style="font-family:'IBM Plex Mono',monospace;font-weight:600;color:#14181B">$ 7.318.900</span>.</div>
+          <div style="min-height:44px;display:inline-flex;align-items:center;align-self:flex-start;padding:0 14px;border-radius:6px;border:1px solid #3F6B4E;font:600 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527">Cargar cosecha</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
+          <div style="border:1px solid #E4E8EB;border-radius:8px;padding:12px"><div style="font:600 10px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#6B7780">Costo total</div><div style="font:600 18px/1.4 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">7.318.900</div></div>
+          <div style="border:1px solid #E4E8EB;border-radius:8px;padding:12px"><div style="font:600 10px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#6B7780">Costo por ha</div><div style="font:600 18px/1.4 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">2.091.114</div></div>
+        </div>
+        <div style="font:400 13px/1.45 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#5F6A73">Nunca se muestra “$ 0” en el costo por bolsa: un cero se leería como “no me costó nada”.</div>
+      </div>
+    </div>
+
+    <div style="background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;overflow:hidden;display:flex;flex-direction:column">
+      <div style="padding:12px 18px;border-bottom:1px solid #E4E8EB;font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#6B7780">Lote-campaña sin ventas</div>
+      <div style="padding:24px;display:flex;flex-direction:column;gap:14px">
+        <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
+          <div style="border:1px solid #E4E8EB;border-radius:8px;padding:14px"><div style="font:600 10px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#6B7780">Margen realizado</div><div style="font:600 20px/1.4 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#B42318">−7.318.900</div></div>
+          <div style="border:1px dashed #A9BACB;border-radius:8px;padding:14px;background:repeating-linear-gradient(135deg,#F5F8FB 0 8px,#EDF2F7 8px 16px)"><div style="font:600 10px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#3E5C7A">Margen estimado</div><div style="font:600 20px/1.4 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#3E5C7A">≈+2.640.300</div></div>
+        </div>
+        <div style="padding:14px;border-radius:8px;background:#F1F5F1;border:1px solid #DFE9E1;display:flex;flex-direction:column;gap:6px">
+          <div style="font:600 14px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527">Esto es normal antes de la primera venta</div>
+          <div style="font:400 13px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527;text-wrap:pretty">Ya gastaste y todavía no cobraste, así que el realizado da negativo por el total invertido. El estimado valoriza la sandía en pie a precio de referencia y es el número que hay que mirar hoy.</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;overflow:hidden;display:flex;flex-direction:column">
+      <div style="padding:12px 18px;border-bottom:1px solid #E4E8EB;font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#6B7780">Sin señal a pie de lote</div>
+      <div style="padding:24px;display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:8px;background:#FDF3E7;border:1px solid #F1DFC4"><div style="width:10px;height:10px;border-radius:999px;background:#C98A1E"></div><div style="font:600 13px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#8A5A12">Sin conexión · se guarda en el teléfono</div></div>
+        <div style="font:400 14px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A;text-wrap:pretty">Podés seguir cargando: la tarea queda guardada acá y se sube sola cuando vuelva la señal. Los totales de campaña pueden estar atrasados hasta que suba.</div>
+        <div style="border:1px solid #E4E8EB;border-radius:8px;padding:12px;display:flex;align-items:center;justify-content:space-between;gap:10px"><div><div style="font:500 14px/1.2 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#22303A">Carpida · 6 jornales</div><div style="font:400 12px/1.3 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#6B7780">Lote 3 · pendiente de subir</div></div><div style="font:500 14px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">171.000</div></div>
+        <div style="min-height:52px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:#3F6B4E;color:#FFFFFF;font:600 15px/1 'Helvetica Neue',Helvetica,Arial,sans-serif">Guardar en el teléfono</div>
+      </div>
+    </div>
+
+    <div style="background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;overflow:hidden;display:flex;flex-direction:column">
+      <div style="padding:12px 18px;border-bottom:1px solid #E4E8EB;font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#6B7780">Campaña cerrada · solo lectura</div>
+      <div style="padding:24px;display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:8px;background:#F1F3F5;border:1px solid #E4E8EB"><div style="padding:4px 9px;border-radius:999px;background:#FFFFFF;border:1px solid #D3D9DE;font:600 11px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#46515A">Cerrada</div><div style="font:400 13px/1.4 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A">Campaña 2024/25 · cerrada el 30/06/25</div></div>
+        <div style="font:400 14px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#46515A;text-wrap:pretty">Los números de una campaña cerrada quedan fijos para poder compararlos con las siguientes. Por eso no se puede cargar ni editar nada acá.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <div style="min-height:44px;display:inline-flex;align-items:center;padding:0 14px;border-radius:6px;background:#F7F8F9;border:1px solid #E4E8EB;font:600 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#909AA2">Cargar tarea</div>
+          <div style="min-height:44px;display:inline-flex;align-items:center;padding:0 14px;border-radius:6px;border:1px solid #3F6B4E;font:600 13px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F3527">Reabrir campaña</div>
+        </div>
+        <div style="font:400 13px/1.45 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#5F6A73">Reabrir queda disponible para los dos usuarios y avisa que los totales históricos van a cambiar.</div>
+      </div>
+    </div>
+
+    <div style="background:#FFFFFF;border:1px solid #E4E8EB;border-radius:10px;overflow:hidden;display:flex;flex-direction:column">
+      <div style="padding:12px 18px;border-bottom:1px solid #E4E8EB;font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#6B7780">Errores de validación</div>
+      <div style="padding:24px;display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <label style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#6B7780">Bolsas vendidas</label>
+          <div style="min-height:48px;display:flex;align-items:center;justify-content:flex-end;padding:0 14px;border:1px solid #B42318;border-radius:8px;background:#FFFBFB;box-shadow:0 0 0 3px #FCEDEC;font:500 18px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">1.400</div>
+          <div style="display:flex;gap:8px;padding:10px 12px;border-radius:8px;background:#FCEDEC;border:1px solid #F3D4D1"><div style="font:400 13px/1.45 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#8E2018"><span style="font-weight:600">Quedan 580 bolsas en galpón.</span> Estás vendiendo 1.400 y no alcanzan. Cargá primero el corte que falta, o bajá la cantidad a 580.</div></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <label style="font:600 12px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#6B7780">Superficie sembrada</label>
+          <div style="min-height:48px;display:flex;align-items:center;justify-content:flex-end;padding:0 14px;border:1px solid #B42318;border-radius:8px;background:#FFFBFB;font:500 18px/1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:#14181B">6,4 ha</div>
+          <div style="display:flex;gap:8px;padding:10px 12px;border-radius:8px;background:#FCEDEC;border:1px solid #F3D4D1"><div style="font:400 13px/1.45 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#8E2018"><span style="font-weight:600">El Lote 3 tiene 5,0 ha.</span> Si sembraste más, corregí la superficie del lote en el catálogo; si no, poné hasta 5,0.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;tcDolar&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:1285,&quot;tsType&quot;:&quot;number&quot;,&quot;unit&quot;:&quot;$/US$&quot;,&quot;section&quot;:&quot;Datos&quot;},&quot;modalidadInicial&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;hectarea&quot;,&quot;total&quot;,&quot;jornal&quot;,&quot;destajo&quot;],&quot;default&quot;:&quot;jornal&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Formulario de tarea&quot;},&quot;monedaInicial&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;ARS&quot;,&quot;USD&quot;],&quot;default&quot;:&quot;ARS&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Datos&quot;}}">
+class Component extends DCLogic {
+  state = {
+    modalidad: 'jornal',
+    jornales: 6,
+    valorJornal: 28500,
+    valorHa: 145000,
+    montoTotal: 380000,
+    unidades: 1180,
+    valorUnidad: 430,
+    moneda: 'ARS'
+  };
+
+  componentDidMount() {
+    if (this.props.modalidadInicial) this.setState({ modalidad: this.props.modalidadInicial });
+    if (this.props.monedaInicial) this.setState({ moneda: this.props.monedaInicial });
+  }
+
+  fmt(n) {
+    const v = Math.round(n);
+    return v.toLocaleString('es-AR');
+  }
+
+  totalTarea() {
+    const s = this.state;
+    if (s.modalidad === 'hectarea') return s.valorHa * 4.2;
+    if (s.modalidad === 'total') return s.montoTotal;
+    if (s.modalidad === 'jornal') return s.jornales * s.valorJornal;
+    return s.unidades * s.valorUnidad;
+  }
+
+  renderVals() {
+    const s = this.state;
+    const tc = this.props.tcDolar ?? 1285;
+    const set = (k) => (e) => {
+      const raw = e && e.target ? e.target.value : e;
+      const n = Number(String(raw).replace(/[^0-9.]/g, ''));
+      this.setState({ [k]: isNaN(n) ? 0 : n });
+    };
+    const modo = (m) => () => this.setState({ modalidad: m });
+    const esc = (m) => ({
+      minHeight: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+      borderRadius: '8px', cursor: 'pointer',
+      fontFamily: "'Helvetica Neue',Helvetica,Arial,sans-serif", fontSize: '14px', fontWeight: 600,
+      border: s.modalidad === m ? '1px solid #3F6B4E' : '1px solid #D3D9DE',
+      background: s.modalidad === m ? '#DFE9E1' : '#FFFFFF',
+      color: s.modalidad === m ? '#1F3527' : '#46515A'
+    });
+    const totales = { costo: 67916790, realizado: -9499590, estimado: 35108520, ha: 22.0 };
+    const conv = (n) => (s.moneda === 'USD' ? n / tc : n);
+    const signo = (n) => (n >= 0 ? '+' : '−');
+
+    return {
+      modalidad: s.modalidad,
+      esPorHa: s.modalidad === 'hectarea',
+      esTotal: s.modalidad === 'total',
+      esJornal: s.modalidad === 'jornal',
+      esDestajo: s.modalidad === 'destajo',
+      jornales: s.jornales, valorJornal: s.valorJornal, valorHa: s.valorHa,
+      montoTotal: s.montoTotal, unidades: s.unidades, valorUnidad: s.valorUnidad,
+      setJornales: set('jornales'), setValorJornal: set('valorJornal'),
+      setValorHa: set('valorHa'), setMontoTotal: set('montoTotal'),
+      setUnidades: set('unidades'), setValorUnidad: set('valorUnidad'),
+      modoHa: modo('hectarea'), modoTotal: modo('total'), modoJornal: modo('jornal'), modoDestajo: modo('destajo'),
+      estiloHa: esc('hectarea'), estiloTotal: esc('total'), estiloJornal: esc('jornal'), estiloDestajo: esc('destajo'),
+      totalTarea: this.fmt(this.totalTarea()),
+      detalleTarea: s.modalidad === 'hectarea' ? this.fmt(s.valorHa) + ' × 4,2 ha'
+        : s.modalidad === 'total' ? 'monto acordado'
+        : s.modalidad === 'jornal' ? s.jornales + ' jornales × ' + this.fmt(s.valorJornal)
+        : this.fmt(s.unidades) + ' bolsas × ' + this.fmt(s.valorUnidad),
+      moneda: s.moneda,
+      simbolo: s.moneda === 'USD' ? 'US$' : '$',
+      verPesos: () => this.setState({ moneda: 'ARS' }),
+      verDolares: () => this.setState({ moneda: 'USD' }),
+      estiloPesos: {
+        minHeight: '34px', display: 'flex', alignItems: 'center', padding: '0 12px', cursor: 'pointer',
+        fontFamily: "'Helvetica Neue',Helvetica,Arial,sans-serif", fontSize: '13px', fontWeight: 600,
+        background: s.moneda === 'ARS' ? '#F1F5F1' : '#FFFFFF', color: s.moneda === 'ARS' ? '#1F3527' : '#6B7780'
+      },
+      estiloDolares: {
+        minHeight: '34px', display: 'flex', alignItems: 'center', padding: '0 12px', cursor: 'pointer',
+        fontFamily: "'Helvetica Neue',Helvetica,Arial,sans-serif", fontSize: '13px', fontWeight: 600,
+        background: s.moneda === 'USD' ? '#F1F5F1' : '#FFFFFF', color: s.moneda === 'USD' ? '#1F3527' : '#6B7780'
+      },
+      tc: this.fmt(tc),
+      campCosto: this.fmt(conv(totales.costo)),
+      campRealizado: signo(totales.realizado) + this.fmt(Math.abs(conv(totales.realizado))),
+      campEstimado: '≈+' + this.fmt(conv(totales.estimado)),
+      campHa: '22,0'
+    };
+  }
+}
+</script>
+</body>
+</html>

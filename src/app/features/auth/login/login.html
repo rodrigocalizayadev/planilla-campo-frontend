@@ -1,0 +1,42 @@
+<div class="login">
+  <form class="login__card" novalidate (submit)="enviar($event)">
+    <div class="marca">
+      <div class="marca__icono"></div>
+      <div class="marca__nombre">Planilla de Campo</div>
+    </div>
+
+    @if (errorServidor(); as mensaje) {
+      <p class="login__error" role="alert">{{ mensaje }}</p>
+    }
+
+    <label class="campo">
+      <span class="campo__etiqueta">Email</span>
+      <input
+        class="campo__input"
+        type="email"
+        autocomplete="email"
+        [formField]="loginForm.email"
+      />
+      @if (loginForm.email().touched() && loginForm.email().invalid()) {
+        <span class="campo__error">{{ loginForm.email().errors()[0]?.message }}</span>
+      }
+    </label>
+
+    <label class="campo">
+      <span class="campo__etiqueta">Contraseña</span>
+      <input
+        class="campo__input"
+        type="password"
+        autocomplete="current-password"
+        [formField]="loginForm.password"
+      />
+      @if (loginForm.password().touched() && loginForm.password().invalid()) {
+        <span class="campo__error">{{ loginForm.password().errors()[0]?.message }}</span>
+      }
+    </label>
+
+    <button type="submit" class="boton-primario" [disabled]="enviando()">
+      {{ enviando() ? 'Ingresando…' : 'Ingresar' }}
+    </button>
+  </form>
+</div>

@@ -1,0 +1,52 @@
+<app-modal
+  [titulo]="esEdicion() ? 'Editar lote' : 'Nuevo lote'"
+  subtitulo="Catálogo de lotes"
+  (cerrar)="cancelado.emit()"
+>
+  <form class="form-catalogo" novalidate (submit)="guardar($event)">
+    <div class="campo-fila">
+      <label class="campo">
+        <span class="campo__etiqueta">Nombre</span>
+        <input class="campo__input" type="text" placeholder="Lote 7" [formField]="loteForm.nombre" />
+        @if (loteForm.nombre().touched() && loteForm.nombre().invalid()) {
+          <span class="campo__error">{{ loteForm.nombre().errors()[0]?.message }}</span>
+        }
+      </label>
+
+      <label class="campo" for="superficieHa">
+        <span class="campo__etiqueta">Superficie en hectáreas</span>
+        <app-campo-cantidad id="superficieHa" [formField]="loteForm.superficieHa" />
+        @if (loteForm.superficieHa().touched() && loteForm.superficieHa().invalid()) {
+          <span class="campo__error">{{ loteForm.superficieHa().errors()[0]?.message }}</span>
+        }
+      </label>
+    </div>
+
+    <label class="campo">
+      <span class="campo__etiqueta">Tipo de suelo</span>
+      <input
+        class="campo__input"
+        type="text"
+        placeholder="Franco arenoso"
+        [formField]="loteForm.tipoSuelo"
+      />
+    </label>
+
+    <label class="campo">
+      <span class="campo__etiqueta">Comentarios (opcional)</span>
+      <input
+        class="campo__input"
+        type="text"
+        placeholder="Frente al canal, sector norte"
+        [formField]="loteForm.comentarios"
+      />
+    </label>
+
+    <div class="form-catalogo__pie">
+      <button type="button" class="boton-secundario" (click)="cancelado.emit()">Cancelar</button>
+      <button type="submit" class="boton-primario" [disabled]="enviando()">
+        {{ esEdicion() ? 'Guardar cambios' : 'Crear lote' }}
+      </button>
+    </div>
+  </form>
+</app-modal>

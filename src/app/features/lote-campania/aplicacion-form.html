@@ -1,0 +1,89 @@
+<app-modal titulo="Cargar aplicación" [subtitulo]="loteCampaniaTitulo()" (cerrar)="cancelado.emit()">
+  <form class="form-catalogo" novalidate (submit)="guardar($event)">
+    <div class="campo-fila">
+      <label class="campo">
+        <span class="campo__etiqueta">Insumo</span>
+        <select class="campo__input" [formField]="aplicacionForm.insumoId" (change)="onCambioInsumo($event)">
+          <option value="" disabled>Elegí un insumo</option>
+          @for (insumo of insumos(); track insumo.id) {
+            <option [value]="insumo.id">{{ insumo.nombre }}</option>
+          }
+        </select>
+        @if (aplicacionForm.insumoId().touched() && aplicacionForm.insumoId().invalid()) {
+          <span class="campo__error">{{ aplicacionForm.insumoId().errors()[0]?.message }}</span>
+        }
+      </label>
+
+      <label class="campo">
+        <span class="campo__etiqueta">Fecha</span>
+        <input class="campo__input" type="date" [formField]="aplicacionForm.fecha" />
+      </label>
+    </div>
+
+    <div class="campo-fila">
+      <label class="campo" for="cantidad">
+        <span class="campo__etiqueta">Cantidad</span>
+        <app-campo-cantidad id="cantidad" [formField]="aplicacionForm.cantidad" />
+        @if (aplicacionForm.cantidad().touched() && aplicacionForm.cantidad().invalid()) {
+          <span class="campo__error">{{ aplicacionForm.cantidad().errors()[0]?.message }}</span>
+        }
+      </label>
+
+      <label class="campo">
+        <span class="campo__etiqueta">Unidad de medida</span>
+        <select class="campo__input" [formField]="aplicacionForm.unidadMedida">
+          <option value="" disabled>Elegí una unidad</option>
+          @for (opcion of enums.opciones('unidadMedida'); track opcion.valor) {
+            <option [value]="opcion.valor">{{ opcion.etiqueta }}</option>
+          }
+        </select>
+        @if (aplicacionForm.unidadMedida().touched() && aplicacionForm.unidadMedida().invalid()) {
+          <span class="campo__error">{{ aplicacionForm.unidadMedida().errors()[0]?.message }}</span>
+        }
+      </label>
+    </div>
+
+    <div class="campo-fila">
+      <div class="campo">
+        <span class="campo__etiqueta">Precio unitario</span>
+        <div class="campo-precio">
+          <select class="campo-precio__moneda" [formField]="aplicacionForm.precioMoneda">
+            <option value="ARS">$</option>
+            <option value="USD">US$</option>
+          </select>
+          <app-campo-importe [formField]="aplicacionForm.precioImporte" />
+        </div>
+        @if (aplicacionForm.precioImporte().touched() && aplicacionForm.precioImporte().invalid()) {
+          <span class="campo__error">{{ aplicacionForm.precioImporte().errors()[0]?.message }}</span>
+        }
+      </div>
+
+      <label class="campo" for="precioTipoCambio">
+        <span class="campo__etiqueta">Tipo de cambio</span>
+        <app-campo-importe
+          id="precioTipoCambio"
+          variante="numerico"
+          tipo="tipoCambio"
+          [formField]="aplicacionForm.precioTipoCambio"
+        />
+        @if (aplicacionForm.precioTipoCambio().touched() && aplicacionForm.precioTipoCambio().invalid()) {
+          <span class="campo__error">{{ aplicacionForm.precioTipoCambio().errors()[0]?.message }}</span>
+        }
+      </label>
+    </div>
+    <span class="campo__ayuda">
+      El precio se autocompleta desde el catálogo y queda editable. Se congela con esta aplicación: si el precio
+      de referencia cambia después, esta carga no se ve afectada.
+    </span>
+
+    <div class="total-en-vivo">
+      <span class="total-en-vivo__etiqueta">Total de esta aplicación</span>
+      <span class="total-en-vivo__valor numero">{{ totalEnVivo() | importe: modelo().precioMoneda }}</span>
+    </div>
+
+    <div class="form-catalogo__pie">
+      <button type="button" class="boton-secundario" (click)="cancelado.emit()">Cancelar</button>
+      <button type="submit" class="boton-primario" [disabled]="enviando()">Cargar aplicación</button>
+    </div>
+  </form>
+</app-modal>

@@ -1,0 +1,15 @@
+@use '../../shared/styles/formularios';
+@use '../../shared/styles/botones';
+
+// Aviso de ciclo (docs/design-reference): mismo tratamiento que el resto de los avisos
+// "atención, no error" de la app — fondo/borde/texto de --color-advertencia-*.
+.aviso-ciclo {
+  margin: 0;
+  padding: var(--espacio-5) var(--espacio-6);
+  border-radius: var(--radio-md);
+  background: var(--color-advertencia-fondo);
+  border: 1px solid var(--color-advertencia-borde);
+  color: var(--color-advertencia-texto);
+  font-size: 13px;
+  line-height: 1.45;
+}

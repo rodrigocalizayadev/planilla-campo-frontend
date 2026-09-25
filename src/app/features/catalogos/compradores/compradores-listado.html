@@ -1,0 +1,89 @@
+<div class="catalogo">
+  <div class="catalogo__header">
+    <div class="catalogo__titulos">
+      <h1 class="catalogo__titulo">Compradores</h1>
+      <div class="catalogo__sub">Los de consignación entregan sin precio y liquidan después.</div>
+    </div>
+    <div class="catalogo__acciones">
+      <app-buscador [(texto)]="textoBusqueda" placeholder="Buscar comprador…" />
+      <app-control-orden [opciones]="opcionesOrden" [(campo)]="ordenCampo" [(direccion)]="ordenDireccion" />
+      <button type="button" class="chip-toggle" [class.chip-toggle--activo]="verBaja()" (click)="alternarVerBaja()">
+        {{ verBaja() ? 'Ocultar dados de baja' : 'Ver dados de baja' }}
+      </button>
+      <button type="button" class="boton-primario catalogo__nuevo" (click)="abrirNuevo()">+ Nuevo comprador</button>
+    </div>
+  </div>
+
+  <div class="catalogo__lista">
+    @for (comprador of compradoresVisibles(); track comprador.id) {
+      <div class="fila-catalogo-fila">
+        <button type="button" class="fila-catalogo fila-catalogo--2col" (click)="editar(comprador)">
+          <div class="fila-catalogo__principal">
+            <div class="fila-catalogo__nombre-linea">
+              <span class="fila-catalogo__nombre">{{ comprador.nombre }}</span>
+              @if (!comprador.activo) {
+                <span class="chip-baja">Dado de baja</span>
+              }
+            </div>
+            <div class="fila-catalogo__detalle">
+              @if (comprador.cuit) {
+                CUIT {{ comprador.cuit }} ·
+              }
+              {{ comprador.contacto || 'Sin contacto' }}
+              @if (comprador.telefono) {
+                · {{ comprador.telefono }}
+              }
+              @if (comprador.localidad) {
+                · {{ comprador.localidad }}
+              }
+            </div>
+          </div>
+          <div class="fila-catalogo__numero">
+            {{ comprador.modalidadHabitual ? enums.etiqueta('modalidadVenta', comprador.modalidadHabitual) : '—' }}
+          </div>
+        </button>
+        @if (comprador.activo) {
+          <button type="button" class="boton-baja fila-catalogo__accion" (click)="pedirBaja(comprador)">
+            Dar de baja
+          </button>
+        } @else {
+          <button type="button" class="boton-reactivar fila-catalogo__accion" (click)="reactivar(comprador)">
+            Reactivar
+          </button>
+        }
+      </div>
+    }
+    @if (!cargando() && compradoresVisibles().length === 0) {
+      <div class="catalogo__vacio">
+        @if (totalElementos() > 0) {
+          Ningún comprador coincide con "{{ textoBusqueda() }}" en esta página.
+        } @else if (verBaja()) {
+          Sin compradores cargados todavía.
+        } @else {
+          Sin compradores activos. Activá "Ver dados de baja" si hay alguno dado de baja.
+        }
+      </div>
+    }
+    <app-paginador
+      [pagina]="paginaSolicitada()"
+      [totalPaginas]="totalPaginas()"
+      [totalElementos]="totalElementos()"
+      etiqueta="compradores"
+      (cambiarPagina)="paginaSolicitada.set($event)"
+    />
+  </div>
+</div>
+
+@if (modalAbierto()) {
+  <app-comprador-form [comprador]="compradorEditando()" (guardado)="onGuardado()" (cancelado)="cerrarModal()" />
+}
+
+@if (confirmandoBaja(); as comprador) {
+  <app-confirmar-accion
+    titulo="¿Dar de baja este comprador?"
+    [mensaje]="comprador.nombre + ': sale de los desplegables, el histórico queda igual.'"
+    textoConfirmar="Dar de baja"
+    (confirmado)="confirmarBaja()"
+    (cancelado)="cancelarBaja()"
+  />
+}

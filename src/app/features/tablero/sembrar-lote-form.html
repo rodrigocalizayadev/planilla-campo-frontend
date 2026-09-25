@@ -1,0 +1,93 @@
+<app-modal titulo="Sembrar un lote" subtitulo="Campaña activa" (cerrar)="cancelado.emit()">
+  <form class="form-catalogo" novalidate (submit)="guardar($event)">
+    <div class="campo-fila">
+      <label class="campo">
+        <span class="campo__etiqueta">Lote</span>
+        <select class="campo__input" [formField]="sembrarForm.loteId">
+          <option value="" disabled>Elegí un lote</option>
+          @for (lote of lotes(); track lote.id) {
+            <option [value]="lote.id">{{ lote.nombre }}</option>
+          }
+        </select>
+        @if (sembrarForm.loteId().touched() && sembrarForm.loteId().invalid()) {
+          <span class="campo__error">{{ sembrarForm.loteId().errors()[0]?.message }}</span>
+        }
+      </label>
+
+      <label class="campo">
+        <span class="campo__etiqueta">Cultivo</span>
+        <select class="campo__input" [formField]="sembrarForm.cultivoId" (change)="onCambioCultivo($event)">
+          <option value="" disabled>Elegí un cultivo</option>
+          @for (cultivo of cultivos(); track cultivo.id) {
+            <option [value]="cultivo.id">{{ cultivo.nombre }}</option>
+          }
+        </select>
+        @if (sembrarForm.cultivoId().touched() && sembrarForm.cultivoId().invalid()) {
+          <span class="campo__error">{{ sembrarForm.cultivoId().errors()[0]?.message }}</span>
+        }
+      </label>
+    </div>
+
+    @if (siembrasPrevias() > 0) {
+      <p class="aviso-ciclo">
+        Este lote ya tiene {{ siembrasPrevias() }} {{ siembrasPrevias() === 1 ? 'siembra' : 'siembras' }} de este
+        cultivo en esta campaña: esta va a quedar como ciclo {{ siembrasPrevias() + 1 }}.
+      </p>
+    }
+
+    <div class="campo-fila">
+      <label class="campo" for="superficieSembradaHa">
+        <span class="campo__etiqueta">Superficie sembrada (ha)</span>
+        <app-campo-cantidad id="superficieSembradaHa" [formField]="sembrarForm.superficieSembradaHa" />
+        @if (sembrarForm.superficieSembradaHa().touched() && sembrarForm.superficieSembradaHa().invalid()) {
+          <span class="campo__error">{{ sembrarForm.superficieSembradaHa().errors()[0]?.message }}</span>
+        }
+      </label>
+
+      <label class="campo">
+        <span class="campo__etiqueta">Unidad de producción</span>
+        <select class="campo__input" [formField]="sembrarForm.unidadProduccion">
+          <option value="" disabled>Elegí una unidad</option>
+          @for (opcion of enums.opciones('unidadProduccion'); track opcion.valor) {
+            <option [value]="opcion.valor">{{ opcion.etiqueta }}</option>
+          }
+        </select>
+        @if (sembrarForm.unidadProduccion().touched() && sembrarForm.unidadProduccion().invalid()) {
+          <span class="campo__error">{{ sembrarForm.unidadProduccion().errors()[0]?.message }}</span>
+        }
+      </label>
+    </div>
+
+    <label class="campo">
+      <span class="campo__etiqueta">Variedad (opcional)</span>
+      <input class="campo__input" type="text" placeholder="Valenciana" [formField]="sembrarForm.variedad" />
+    </label>
+
+    <div class="campo-fila">
+      <label class="campo">
+        <span class="campo__etiqueta">Fecha de siembra (opcional)</span>
+        <input class="campo__input" type="date" [formField]="sembrarForm.fechaSiembra" />
+      </label>
+
+      <label class="campo">
+        <span class="campo__etiqueta">Fecha de trasplante (opcional)</span>
+        <input class="campo__input" type="date" [formField]="sembrarForm.fechaTrasplante" />
+      </label>
+    </div>
+
+    <label class="campo">
+      <span class="campo__etiqueta">Fecha de cosecha esperada (opcional)</span>
+      <input class="campo__input" type="date" [formField]="sembrarForm.fechaCosechaEsperada" />
+    </label>
+
+    <label class="campo">
+      <span class="campo__etiqueta">Comentarios (opcional)</span>
+      <input class="campo__input" type="text" [formField]="sembrarForm.comentarios" />
+    </label>
+
+    <div class="form-catalogo__pie">
+      <button type="button" class="boton-secundario" (click)="cancelado.emit()">Cancelar</button>
+      <button type="submit" class="boton-primario" [disabled]="enviando()">Sembrar lote</button>
+    </div>
+  </form>
+</app-modal>

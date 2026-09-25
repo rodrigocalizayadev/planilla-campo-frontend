@@ -1,0 +1,80 @@
+<app-modal
+  [titulo]="esEdicion() ? 'Editar cultivo' : 'Nuevo cultivo'"
+  subtitulo="Catálogo de cultivos"
+  (cerrar)="cancelado.emit()"
+>
+  <form class="form-catalogo" novalidate (submit)="guardar($event)">
+    <div class="campo-fila">
+      <label class="campo">
+        <span class="campo__etiqueta">Nombre</span>
+        <input class="campo__input" type="text" placeholder="Cebolla" [formField]="cultivoForm.nombre" />
+        @if (cultivoForm.nombre().touched() && cultivoForm.nombre().invalid()) {
+          <span class="campo__error">{{ cultivoForm.nombre().errors()[0]?.message }}</span>
+        }
+      </label>
+
+      <label class="campo">
+        <span class="campo__etiqueta">Unidad de producción</span>
+        <select
+          class="campo__input"
+          [value]="modelo().unidadProduccionDefault"
+          (change)="onCambioUnidadProduccion($event)"
+        >
+          <option value="" disabled>Elegí una unidad</option>
+          @for (opcion of unidadesProduccion(); track opcion.valor) {
+            <option [value]="opcion.valor">{{ opcion.etiqueta }}</option>
+          }
+        </select>
+        @if (cultivoForm.unidadProduccionDefault().touched() && cultivoForm.unidadProduccionDefault().invalid()) {
+          <span class="campo__error">{{ cultivoForm.unidadProduccionDefault().errors()[0]?.message }}</span>
+        }
+      </label>
+    </div>
+
+    <div class="campo-fila">
+      <label class="campo">
+        <span class="campo__etiqueta">Nombre singular</span>
+        <input class="campo__input" type="text" placeholder="bolsa" [formField]="cultivoForm.nombreSingular" />
+        @if (cultivoForm.nombreSingular().touched() && cultivoForm.nombreSingular().invalid()) {
+          <span class="campo__error">{{ cultivoForm.nombreSingular().errors()[0]?.message }}</span>
+        }
+      </label>
+
+      <label class="campo">
+        <span class="campo__etiqueta">Nombre plural</span>
+        <input class="campo__input" type="text" placeholder="bolsas" [formField]="cultivoForm.nombrePlural" />
+        @if (cultivoForm.nombrePlural().touched() && cultivoForm.nombrePlural().invalid()) {
+          <span class="campo__error">{{ cultivoForm.nombrePlural().errors()[0]?.message }}</span>
+        }
+      </label>
+    </div>
+
+    <label class="campo" for="kgPorUnidad">
+      <span class="campo__etiqueta">Kilos por unidad</span>
+      <app-campo-cantidad id="kgPorUnidad" [formField]="cultivoForm.kgPorUnidad" />
+    </label>
+
+    <div class="campo-fila">
+      <label class="campo" for="precioReferenciaPrimera">
+        <span class="campo__etiqueta">Precio de referencia primera</span>
+        <app-campo-importe id="precioReferenciaPrimera" variante="numerico" [formField]="cultivoForm.precioReferenciaPrimera" />
+      </label>
+
+      <label class="campo" for="precioReferenciaSegunda">
+        <span class="campo__etiqueta">Precio de referencia segunda</span>
+        <app-campo-importe id="precioReferenciaSegunda" variante="numerico" [formField]="cultivoForm.precioReferenciaSegunda" />
+      </label>
+    </div>
+    <span class="campo__ayuda">
+      En pesos. Se usan para valorizar stock y entregas sin liquidar al calcular el margen estimado, convertidos
+      con la cotización vigente de la campaña activa.
+    </span>
+
+    <div class="form-catalogo__pie">
+      <button type="button" class="boton-secundario" (click)="cancelado.emit()">Cancelar</button>
+      <button type="submit" class="boton-primario" [disabled]="enviando()">
+        {{ esEdicion() ? 'Guardar cambios' : 'Crear cultivo' }}
+      </button>
+    </div>
+  </form>
+</app-modal>

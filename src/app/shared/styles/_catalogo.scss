@@ -1,0 +1,286 @@
+// Patrón compartido por las cuatro pantallas de listado de catálogo (lotes, cultivos,
+// insumos, compradores — docs/plan-frontend.md slice 2): header con título/subtítulo +
+// acciones, tarjeta blanca con filas clickeables, chip de toggle "ver dados de baja".
+@use 'tokens';
+
+.catalogo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-9);
+
+  // `flex-wrap: wrap` en vez de la negociación implícita de flex-shrink entre título y
+  // acciones en una sola fila sin wrap: esa negociación no era estable (en cultivos y
+  // compradores, que tienen subtítulo largo, el envoltorio de `&__acciones` aparecía o
+  // desaparecía de forma no monótona según el ancho, por cómo el navegador reparte el
+  // shrink entre dos flex-items cuando uno de ellos wrappea internamente). Con
+  // `flex-wrap: wrap` en el header, cuando título+acciones no entran lado a lado,
+  // acciones pasa a su propia fila a ancho completo — ahí sobra espacio de sobra para
+  // sus controles y no vuelve a wrappear internamente.
+  &__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--espacio-7);
+
+    @include tokens.movil {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+
+  &__titulos {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-3);
+  }
+
+  &__titulo {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--color-texto);
+  }
+
+  &__sub {
+    font-size: 14px;
+    color: var(--color-texto-secundario);
+  }
+
+  &__acciones {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--espacio-4);
+    flex-wrap: wrap;
+    // Toma todo el ancho que sobre en su línea del header: en pantalla ancha es el
+    // mismo espacio que antes dejaba el `space-between` del header (visualmente
+    // idéntico, `justify-content: flex-end` empuja los controles al mismo lugar); en
+    // el caso apilado (título+subtítulo arriba, esta fila abajo) hace que ocupe todo
+    // el ancho disponible en vez de quedar pegada a la izquierda con espacio vacío.
+    flex: 1 1 auto;
+
+    // A este ancho el header ya es columna (`&__header` en `tokens.movil`) y cada
+    // línea de controles ocupa el ancho completo por su cuenta: `flex-end` dejaría
+    // "+ Nuevo X" solo, pegado a la derecha, mientras las líneas de arriba quedan
+    // pegadas a la izquierda — inconsistente. Alineación normal (izquierda) acá.
+    @include tokens.movil {
+      justify-content: flex-start;
+      flex-grow: 0;
+    }
+  }
+
+  &__nuevo {
+    padding: 0 var(--espacio-8);
+    white-space: nowrap;
+  }
+
+  &__lista {
+    background: var(--color-superficie);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-lg);
+    overflow: hidden;
+  }
+
+  &__vacio {
+    padding: var(--espacio-10) var(--espacio-9);
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--color-texto-secundario);
+  }
+
+  // Fondo `--color-sidebar-fondo` (gris) a propósito, ni blanco ni `--color-fondo`: son
+  // controles de filtro, tienen que distinguirse de un vistazo tanto de la tarjeta
+  // blanca del listado como del fondo de página (casi blanco, muy poco contraste).
+  &__filtro {
+    min-height: 38px;
+    padding: 0 var(--espacio-5);
+    border-radius: var(--radio-sm);
+    border: 1px solid var(--color-borde-input);
+    background: var(--color-sidebar-fondo);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-texto-secundario);
+  }
+}
+
+// Chip "Dado de baja" en filas de listado (docs/design-brief.md, estados semánticos).
+.chip-baja {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: var(--radio-pill);
+  background: var(--color-baja-fondo);
+  border: 1px solid var(--color-baja-borde);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-baja-texto);
+}
+
+// Badge chico para una categoría/tipo (ej. tipo de insumo, o Insumo/Tarea en el feed
+// de movimientos de lote-campania-detalle) — identificable de un vistazo, sin competir
+// en peso visual con el nombre de la fila.
+.chip-tipo {
+  padding: 2px 7px;
+  border-radius: var(--radio-pill);
+  background: var(--color-verde-50);
+  border: 1px solid var(--color-verde-100);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-verde-900);
+
+  &--insumo {
+    background: var(--color-estimado-fondo-a);
+    border-color: var(--color-estimado-borde);
+    color: var(--color-estimado-texto);
+  }
+}
+
+.chip-toggle {
+  min-height: 38px;
+  // Ancho fijo (no min-width) para "Ver dados de baja" / "Ocultar dados de baja": el
+  // texto cambia de largo al togglear, y con ancho automático empujaba al botón "+
+  // Nuevo X" de al lado, incluso a veces a la línea siguiente.
+  width: 172px;
+  padding: 0 var(--espacio-6);
+  border-radius: var(--radio-sm);
+  border: 1px solid var(--color-borde-input);
+  background: var(--color-sidebar-fondo);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-texto-secundario);
+  cursor: pointer;
+  white-space: nowrap;
+  text-align: center;
+
+  &--activo {
+    border-color: var(--color-verde-300);
+    background: var(--color-verde-50);
+    color: var(--color-verde-900);
+  }
+}
+
+.fila-catalogo {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) 120px 220px;
+  align-items: center;
+  gap: var(--espacio-6);
+  width: 100%;
+  padding: var(--espacio-7) var(--espacio-9);
+  border: none;
+  border-bottom: 1px solid var(--color-borde-fila);
+  background: transparent;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background: var(--color-superficie-secundaria);
+  }
+
+  @include tokens.angosto {
+    grid-template-columns: minmax(0, 1fr) 90px;
+  }
+
+  // Lote y comprador no tienen 3ª columna en este slice (dependen de LoteCampania/Venta,
+  // slices 3 y 5 — ver plan de slice 2). 2 columnas siempre, no solo en angosto.
+  &--2col {
+    grid-template-columns: minmax(0, 1fr) 120px;
+
+    @include tokens.angosto {
+      grid-template-columns: minmax(0, 1fr) 90px;
+    }
+  }
+
+  &__principal {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__nombre-linea {
+    display: flex;
+    align-items: center;
+    gap: var(--espacio-4);
+    flex-wrap: wrap;
+  }
+
+  &__nombre {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-verde-900);
+  }
+
+  &__detalle {
+    font-size: 12px;
+    line-height: 1.35;
+    color: var(--color-texto-terciario);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  // Columna a ancho fijo (120px / 90px en angosto, ver grid-template-columns arriba):
+  // sin `min-width: 0` + `overflow-wrap`, un importe de 18 dígitos desborda la columna
+  // y se superpone con el botón de acción de al lado en vez de partirse de línea.
+  &__numero {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    font-family: var(--font-numerica);
+    font-variant-numeric: tabular-nums;
+    font-size: 14px;
+    text-align: right;
+  }
+
+  &__extra {
+    font-size: 13px;
+    color: var(--color-texto-sobre-superficie);
+    text-align: right;
+
+    @include tokens.angosto {
+      display: none;
+    }
+  }
+}
+
+// Botón de acción (Eliminar / Dar de baja / Reactivar) a la derecha de una fila de
+// listado, chico porque va al lado de la fila, no dentro de ella.
+.fila-catalogo__accion {
+  min-height: 32px;
+  padding: 0 var(--espacio-5);
+  font-size: 12px;
+  justify-self: end;
+}
+
+// Fila de catálogo (lote, cultivo, insumo, comprador) con acción de baja/reactivación
+// aparte del click de edición: `.fila-catalogo` sigue siendo un <button> que abre el
+// modal de edición, y esta acción va afuera para no anidar un <button> dentro de otro.
+.fila-catalogo-fila {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1px solid var(--color-borde-fila);
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .fila-catalogo {
+    flex: 1;
+    min-width: 0;
+    border-bottom: none;
+  }
+
+  .fila-catalogo__accion {
+    align-self: center;
+    margin-right: var(--espacio-9);
+  }
+}

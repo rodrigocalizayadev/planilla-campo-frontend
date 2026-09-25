@@ -1,0 +1,72 @@
+<app-modal
+  [titulo]="editando() ? 'Editar corte ' + modelo().numeroCorte : 'Cargar cosecha'"
+  [subtitulo]="loteCampaniaTitulo()"
+  (cerrar)="cancelado.emit()"
+>
+  <form class="form-catalogo" novalidate (submit)="guardar($event)">
+    <div class="campo-fila">
+      <label class="campo">
+        <span class="campo__etiqueta">Fecha</span>
+        <input class="campo__input" type="date" [formField]="cosechaForm.fecha" />
+      </label>
+
+      <label class="campo" for="numeroCorte">
+        <span class="campo__etiqueta">Número de corte</span>
+        <app-campo-cantidad id="numeroCorte" [enteros]="true" [formField]="cosechaForm.numeroCorte" />
+        @if (cosechaForm.numeroCorte().touched() && cosechaForm.numeroCorte().invalid()) {
+          <span class="campo__error">{{ cosechaForm.numeroCorte().errors()[0]?.message }}</span>
+        }
+      </label>
+    </div>
+
+    <div class="campo">
+      <span class="campo__etiqueta">Cantidad por calidad</span>
+      <span class="campo__ayuda">
+        Cargá la cantidad de las calidades que corresponda; dejá en blanco las que no aplican a este corte.
+      </span>
+    </div>
+
+    <div class="campo-fila-cosecha">
+      <label class="campo" for="primera">
+        <span class="campo__etiqueta">Primera ({{ etiquetaUnidadPlural() }})</span>
+        <app-campo-cantidad id="primera" placeholder="0" [formField]="cosechaForm.primera" />
+        @if (cosechaForm.primera().touched() && cosechaForm.primera().invalid()) {
+          <span class="campo__error">{{ cosechaForm.primera().errors()[0]?.message }}</span>
+        }
+      </label>
+
+      <label class="campo" for="segunda">
+        <span class="campo__etiqueta">Segunda ({{ etiquetaUnidadPlural() }})</span>
+        <app-campo-cantidad id="segunda" placeholder="0" [formField]="cosechaForm.segunda" />
+        @if (cosechaForm.segunda().touched() && cosechaForm.segunda().invalid()) {
+          <span class="campo__error">{{ cosechaForm.segunda().errors()[0]?.message }}</span>
+        }
+      </label>
+
+      <label class="campo" for="descarte">
+        <span class="campo__etiqueta">Descarte ({{ etiquetaUnidadPlural() }})</span>
+        <app-campo-cantidad id="descarte" placeholder="0" [formField]="cosechaForm.descarte" />
+        @if (cosechaForm.descarte().touched() && cosechaForm.descarte().invalid()) {
+          <span class="campo__error">{{ cosechaForm.descarte().errors()[0]?.message }}</span>
+        }
+      </label>
+    </div>
+
+    @if (errorCalidades(); as mensaje) {
+      <p class="campo__error">{{ mensaje }}</p>
+    }
+
+    <div class="form-catalogo__pie">
+      <button type="button" class="boton-secundario" (click)="cancelado.emit()">Cancelar</button>
+      <button type="submit" class="boton-primario" [disabled]="enviando()">
+        {{
+          editando()
+            ? 'Guardar cambios'
+            : totalCortesCargados() > 1
+              ? 'Cargar ' + totalCortesCargados() + ' calidades'
+              : 'Cargar cosecha'
+        }}
+      </button>
+    </div>
+  </form>
+</app-modal>

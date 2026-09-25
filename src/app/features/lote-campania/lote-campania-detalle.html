@@ -1,0 +1,499 @@
+@if (!loteCampania() && !cargando()) {
+  <div class="detalle-vacio">
+    <h1 class="detalle-vacio__titulo">No encontramos este lote-campaña</h1>
+    <p class="detalle-vacio__texto">
+      Puede que sea de otra campaña o que ya no exista. Volvé al tablero de la campaña activa.
+    </p>
+    <a class="boton-primario detalle-vacio__boton" [routerLink]="rutas.tablero">Volver al tablero</a>
+  </div>
+} @else if (loteCampania(); as lc) {
+  <div class="detalle">
+    <header class="detalle__header">
+      <div class="detalle__titulos">
+        <a class="detalle__volver" [routerLink]="rutas.tablero">‹ Volver al tablero</a>
+        <h1 class="detalle__titulo">{{ lc.loteNombre }} · {{ lc.cultivoNombre }}</h1>
+        <p class="detalle__sub">
+          @if (lc.variedad) {
+            {{ lc.variedad }} ·
+          }
+          {{ lc.superficieSembradaHa | number: '1.0-2' }} ha sembradas
+          @if (lc.ciclo > 1) {
+            · ciclo {{ lc.ciclo }}
+          }
+          @if (lc.fechaSiembra) {
+            · sembrado el {{ lc.fechaSiembra | fecha }}
+          }
+        </p>
+      </div>
+      @if (!esCerrada()) {
+        <div class="detalle__acciones">
+          <button type="button" class="boton-primario" (click)="abrirTarea()">+ Cargar tarea</button>
+          <button type="button" class="boton-secundario" (click)="abrirAplicacion()">Aplicación</button>
+        </div>
+      }
+    </header>
+
+    @if (esCerrada()) {
+      <p class="detalle__aviso-cerrada">
+        Esta campaña está cerrada: no se pueden cargar nuevos movimientos. Los datos quedan de solo lectura.
+      </p>
+    }
+
+    <div class="detalle__moneda">
+      <div class="selector-moneda">
+        <button
+          type="button"
+          class="selector-moneda__opcion"
+          [class.selector-moneda__opcion--activa]="monedaVista() === 'ARS'"
+          (click)="monedaVistaService.establecer('ARS')"
+        >
+          $ ARS
+        </button>
+        <button
+          type="button"
+          class="selector-moneda__opcion"
+          [class.selector-moneda__opcion--activa]="monedaVista() === 'USD'"
+          (click)="monedaVistaService.establecer('USD')"
+        >
+          US$
+        </button>
+      </div>
+    </div>
+
+    <div class="detalle__hero-fila">
+      @if (hayCosecha()) {
+        <div class="hero-costo">
+          <span class="hero-costo__etiqueta">Costo por {{ etiquetaUnidad() }}</span>
+          <div class="hero-costo__numero">
+            <span class="numero">{{ vista().costoPorUnidad | importe: monedaVista() }}</span>
+          </div>
+          <p class="hero-costo__nota">Por debajo de este precio, vender da pérdida: es el precio de indiferencia.</p>
+
+          <div class="hero-costo__oferta">
+            <label class="campo__etiqueta" for="precioOfrecido">
+              Me ofrecen por {{ etiquetaUnidad() }}
+            </label>
+            <app-campo-importe
+              id="precioOfrecido"
+              variante="numerico"
+              claseExtra="hero-costo__input"
+              [value]="precioOfrecido()"
+              (valueChange)="precioOfrecido.set($event)"
+            />
+            @if (resultadoOferta(); as r) {
+              <p [class]="r.ganancia ? 'hero-costo__resultado valor-positivo' : 'hero-costo__resultado valor-negativo'">
+                {{ r.ganancia ? 'Ganás' : 'Perdés' }} {{ r.diferencia | importe: monedaVista() }} por
+                {{ etiquetaUnidad() }}
+                @if (stockDisponible() > 0) {
+                  · {{ r.total | importe: monedaVista() }} sobre las {{ stockDisponible() }} unidades en stock
+                }
+              </p>
+            }
+          </div>
+        </div>
+      } @else {
+        <div class="hero-costo hero-costo--vacio">
+          <span class="hero-costo__etiqueta">Costo por unidad</span>
+          <p class="hero-costo__titulo-vacio">Todavía no se puede calcular</p>
+          <p class="hero-costo__nota">
+            Hace falta cargar al menos un corte de cosecha para conocer cuánto cuesta cada
+            {{ etiquetaUnidad() }} vendible.
+          </p>
+        </div>
+      }
+
+      <div class="detalle__kpi-grid">
+        <div class="indicador">
+          <span class="indicador__etiqueta">Costo total</span>
+          <span class="indicador__valor numero">{{ vista().costoTotal | importe: monedaVista() }}</span>
+        </div>
+        <div class="indicador">
+          <span class="indicador__etiqueta">Costo por hectárea</span>
+          <span class="indicador__valor numero">{{ vista().costoPorHa | importe: monedaVista() }}</span>
+          <span class="indicador__sub">sobre {{ lc.superficieSembradaHa | number: '1.0-2' }} ha sembradas</span>
+        </div>
+        <div class="indicador">
+          <span class="indicador__etiqueta">Margen realizado</span>
+          <span
+            class="indicador__valor numero"
+            [class.valor-positivo]="margenRealizadoNumero() > 0"
+            [class.valor-negativo]="margenRealizadoNumero() < 0"
+          >
+            {{ vistaMargen().margenRealizado | importe: monedaVista() }}
+          </span>
+          <span class="indicador__sub">solo lo ya liquidado</span>
+        </div>
+        <div class="indicador indicador--estimado">
+          <span class="indicador__etiqueta">Margen estimado</span>
+          <span class="indicador__valor numero">{{ vistaMargen().margenEstimado | importe: monedaVista() }}</span>
+          <span class="indicador__sub">con consignaciones y stock valorizados</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="detalle__col2">
+      <div class="detalle__col-izq">
+        <div class="panel">
+          <div class="panel__header">
+            <h2 class="panel__titulo">Costos por rubro</h2>
+          </div>
+          @for (rubro of rubros(); track rubro.nombre) {
+            <div class="fila-rubro">
+              <div class="fila-rubro__nombre">
+                <span>{{ rubro.nombre }}</span>
+                <div class="fila-rubro__barra">
+                  <div class="fila-rubro__barra-relleno" [style.width.%]="rubro.pct"></div>
+                </div>
+              </div>
+              <span class="fila-rubro__pct numero">{{ rubro.pct | number: '1.0-1' }} %</span>
+              <span class="fila-rubro__importe numero">{{ rubro.importe | importe: monedaVista() }}</span>
+            </div>
+          }
+          <div class="fila-rubro fila-rubro--total">
+            <span class="fila-rubro__nombre">Costo total</span>
+            <span class="fila-rubro__pct numero">100 %</span>
+            <span class="fila-rubro__importe numero">{{ vista().costoTotal | importe: monedaVista() }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="detalle__col-der">
+        <div class="panel">
+          <div class="panel__header">
+            <h2 class="panel__titulo">De dónde sale cada margen</h2>
+          </div>
+          <div class="fila-desglose">
+            <div class="fila-desglose__concepto"><span>Liquidado</span></div>
+            <span class="fila-desglose__importe numero">{{ vistaMargen().ingresoRealizado | importe: monedaVista() }}</span>
+          </div>
+          <div class="fila-desglose">
+            <div class="fila-desglose__concepto">
+              <span>Entregado sin liquidar</span>
+              <span class="badge-estimado">Estimado</span>
+            </div>
+            <span class="fila-desglose__importe numero valor-estimado">
+              {{ vistaMargen().valorPendienteLiq | importe: monedaVista() }}
+            </span>
+          </div>
+          <div class="fila-desglose">
+            <div class="fila-desglose__concepto">
+              <span>Stock en galpón</span>
+              <span class="badge-estimado">Estimado</span>
+            </div>
+            <span class="fila-desglose__importe numero valor-estimado">
+              {{ vistaMargen().valorStock | importe: monedaVista() }}
+            </span>
+          </div>
+        </div>
+
+        @if (hayCosecha()) {
+          <div class="detalle__kpi-grid detalle__kpi-grid--2">
+            <div class="indicador">
+              <span class="indicador__etiqueta">Rendimiento por hectárea</span>
+              <span class="indicador__valor numero">{{ costos()?.rendimientoPorHa | number: '1.0-0' }} kg/ha</span>
+              <span class="indicador__sub">incluye descarte: mide productividad, no lo comercial</span>
+            </div>
+            <div class="indicador">
+              <span class="indicador__etiqueta">Tasa de descarte</span>
+              <span class="indicador__valor numero">
+                {{ tasaDescartePct() | number: '1.0-1' }} %
+              </span>
+              <span class="indicador__sub">proporción de kilos que no se pueden vender</span>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="detalle__col2">
+      <div class="panel">
+        <div class="panel__header">
+          <h2 class="panel__titulo">Cosecha</h2>
+          <div class="panel__header-acciones">
+            @if (cosechasPorCorte().length > 1) {
+              <app-control-orden
+                [opciones]="opcionesOrdenCosecha"
+                [(campo)]="cosechaOrdenCampo"
+                [(direccion)]="cosechaOrdenDireccion"
+              />
+            }
+            @if (!esCerrada()) {
+              <button type="button" class="boton-primario panel__header-boton" (click)="abrirCosecha()">
+                + Cargar corte
+              </button>
+            }
+          </div>
+        </div>
+        @if (errorEliminar(); as mensaje) {
+          <p class="form-catalogo__error" role="alert">{{ mensaje }}</p>
+        }
+        @for (corte of cortesVisibles(); track corte.corte) {
+          <div class="fila-catalogo-fila">
+            <button
+              type="button"
+              class="fila-cosecha"
+              [disabled]="esCerrada()"
+              (click)="editarCorte(corte.corte)"
+            >
+              <div>
+                <div class="fila-cosecha__titulo">Corte {{ corte.corte }}</div>
+                <div class="fila-cosecha__fecha numero">{{ corte.fecha | fecha }}</div>
+              </div>
+              <div class="fila-cosecha__cantidad">
+                <span class="fila-cosecha__etiqueta">Primera</span>
+                <span class="numero">{{ corte.primera | number: '1.0-0' }}</span>
+              </div>
+              <div class="fila-cosecha__cantidad">
+                <span class="fila-cosecha__etiqueta">Segunda</span>
+                <span class="numero">{{ corte.segunda | number: '1.0-0' }}</span>
+              </div>
+              <div class="fila-cosecha__cantidad">
+                <span class="fila-cosecha__etiqueta">Descarte</span>
+                <span class="numero">{{ corte.descarteKg | number: '1.0-0' }} kg</span>
+              </div>
+            </button>
+            @if (!esCerrada()) {
+              <button
+                type="button"
+                class="boton-baja fila-catalogo__accion"
+                [disabled]="eliminandoCorte()"
+                (click)="pedirEliminarCorte(corte.corte)"
+              >
+                Eliminar
+              </button>
+            }
+          </div>
+        }
+        @if (cosechasPorCorte().length === 0) {
+          <p class="panel__vacio">
+            Sin cortes cargados todavía.
+            @if (lc.fechaSiembra) {
+              Este lote se sembró el {{ lc.fechaSiembra | fecha }}: puede que todavía sea pronto para cosechar.
+            }
+          </p>
+        }
+        <app-paginador
+          [pagina]="cosechaPagina()"
+          [totalPaginas]="cortesTotalPaginas()"
+          [totalElementos]="cosechasPorCorte().length"
+          etiqueta="cortes"
+          (cambiarPagina)="cosechaPagina.set($event)"
+        />
+      </div>
+
+      <div class="panel">
+        <div class="panel__header">
+          <h2 class="panel__titulo">Ventas del lote</h2>
+          <div class="panel__header-acciones">
+            @if (ventas().length > 1) {
+              <app-control-orden
+                [opciones]="opcionesOrdenVenta"
+                [(campo)]="ventaOrdenCampo"
+                [(direccion)]="ventaOrdenDireccion"
+              />
+            }
+            @if (!esCerrada()) {
+              <button type="button" class="boton-primario panel__header-boton" (click)="abrirVenta()">
+                + Nueva venta
+              </button>
+            }
+          </div>
+        </div>
+        @if (errorEliminar(); as mensaje) {
+          <p class="form-catalogo__error" role="alert">{{ mensaje }}</p>
+        }
+        @for (venta of ventasVisibles(); track venta.id) {
+          <div class="fila-venta">
+            <div class="fila-venta__principal">
+              <span class="fila-venta__comprador">{{ venta.compradorNombre }}</span>
+              <span class="fila-venta__detalle numero">
+                {{ venta.fechaEntrega | fecha }} · {{ venta.cantidad | number: '1.0-2' }}
+              </span>
+            </div>
+            <span class="fila-venta__importe numero">{{ importeVenta(venta) | importe: monedaVista() }}</span>
+            <span class="chip-estado" [class.chip-estado--liquidada]="venta.estado === 'LIQUIDADA'">
+              {{ etiquetaEstadoVenta(venta.estado) }}
+            </span>
+            @if (!esCerrada()) {
+              <div class="fila-venta__acciones">
+                @if (venta.estado === 'ENTREGADA') {
+                  <button type="button" class="boton-primario fila-venta__accion" (click)="abrirLiquidacion(venta)">
+                    Completar liquidación
+                  </button>
+                  <button type="button" class="boton-secundario fila-venta__accion" (click)="editarVenta(venta)">
+                    Editar
+                  </button>
+                }
+                <button
+                  type="button"
+                  class="boton-baja fila-venta__accion"
+                  [disabled]="eliminandoVenta()"
+                  (click)="pedirEliminarVenta(venta)"
+                >
+                  Eliminar
+                </button>
+              </div>
+            }
+          </div>
+        }
+        @if (ventas().length === 0) {
+          <div class="panel__vacio">
+            <p class="panel__vacio-titulo">Todavía no vendiste nada de este lote</p>
+            <p>
+              Por eso el margen realizado da negativo por todo lo invertido: ya gastaste y no cobraste. Es normal en
+              esta etapa.
+            </p>
+          </div>
+        }
+        <app-paginador
+          [pagina]="ventaPagina()"
+          [totalPaginas]="ventasTotalPaginas()"
+          [totalElementos]="ventas().length"
+          etiqueta="ventas"
+          (cambiarPagina)="ventaPagina.set($event)"
+        />
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel__header">
+        <h2 class="panel__titulo">Movimientos cargados</h2>
+      </div>
+      <div class="panel__toolbar">
+        <select
+          class="panel__toolbar-filtro"
+          aria-label="Filtrar por tipo"
+          [value]="movimientoTipoFiltro()"
+          (change)="onTipoMovimientoChange($event)"
+        >
+          @for (opcion of opcionesTipoMovimiento; track opcion.valor) {
+            <option [value]="opcion.valor">{{ opcion.etiqueta }}</option>
+          }
+        </select>
+        <input
+          class="panel__toolbar-filtro"
+          type="date"
+          aria-label="Desde"
+          [value]="movimientoFechaDesde()"
+          (change)="onFechaDesdeMovimientoChange($event)"
+        />
+        <span class="panel__toolbar-separador">–</span>
+        <input
+          class="panel__toolbar-filtro"
+          type="date"
+          aria-label="Hasta"
+          [value]="movimientoFechaHasta()"
+          (change)="onFechaHastaMovimientoChange($event)"
+        />
+        <app-control-orden
+          [opciones]="opcionesOrdenMovimiento"
+          [(campo)]="movimientoOrdenCampo"
+          [(direccion)]="movimientoOrdenDireccion"
+        />
+      </div>
+      @for (mv of movimientosVisibles(); track mv.tipo + '-' + mv.id) {
+        <div class="fila-movimiento">
+          <span class="fila-movimiento__fecha numero">{{ mv.fecha | fecha }}</span>
+          <div class="fila-movimiento__detalle">
+            <div class="fila-movimiento__titulo-linea">
+              <span class="fila-movimiento__titulo">{{ etiquetaMovimiento(mv) }}</span>
+              <span class="chip-tipo" [class.chip-tipo--insumo]="mv.tipo === 'INSUMO'">
+                {{ mv.tipo === 'INSUMO' ? 'Insumo' : 'Tarea' }}
+              </span>
+            </div>
+            <span class="fila-movimiento__calculo numero">{{ mv.detalleCalculo }}</span>
+          </div>
+          <span class="fila-movimiento__importe numero">{{ importeMovimiento(mv) | importe: monedaVista() }}</span>
+        </div>
+      }
+      @if (!movimientosCargando() && movimientosVisibles().length === 0) {
+        <p class="panel__vacio">
+          @if (movimientosCompletos().length > 0) {
+            Ningún movimiento coincide con el filtro elegido.
+          } @else {
+            Todavía no cargaste ninguna tarea ni aplicación en este lote-campaña.
+          }
+        </p>
+      }
+      <app-paginador
+        [pagina]="movimientoPagina()"
+        [totalPaginas]="movimientosTotalPaginas()"
+        [totalElementos]="movimientosFiltrados().length"
+        etiqueta="movimientos"
+        (cambiarPagina)="movimientoPagina.set($event)"
+      />
+    </div>
+  </div>
+
+  @if (modalTareaAbierto()) {
+    <app-tarea-form
+      [loteCampaniaId]="lc.id"
+      [loteCampaniaTitulo]="lc.loteNombre + ' · ' + lc.cultivoNombre"
+      [superficieSembradaHa]="lc.superficieSembradaHa"
+      (guardado)="onMovimientoCargado()"
+      (cancelado)="modalTareaAbierto.set(false)"
+    />
+  }
+
+  @if (modalAplicacionAbierto()) {
+    <app-aplicacion-form
+      [loteCampaniaId]="lc.id"
+      [loteCampaniaTitulo]="lc.loteNombre + ' · ' + lc.cultivoNombre"
+      (guardado)="onMovimientoCargado()"
+      (cancelado)="modalAplicacionAbierto.set(false)"
+    />
+  }
+
+  @if (cosechaFormCorte(); as corte) {
+    <app-cosecha-form
+      [loteCampaniaId]="lc.id"
+      [loteCampaniaTitulo]="lc.loteNombre + ' · ' + lc.cultivoNombre"
+      [etiquetaUnidadPlural]="etiquetaUnidadPlural()"
+      [proximoCorte]="proximoCorte()"
+      [cosechasExistentes]="corte === 'nuevo' ? [] : (cosechasPorNumeroCorte().get(corte) ?? [])"
+      (guardado)="onCosechaCargada()"
+      (cancelado)="cosechaFormCorte.set(null)"
+    />
+  }
+
+  @if (modalVentaAbierto()) {
+    <app-venta-form
+      [loteCampaniaId]="lc.id"
+      [loteCampaniaTitulo]="lc.loteNombre + ' · ' + lc.cultivoNombre"
+      [etiquetaUnidadPlural]="etiquetaUnidadPlural()"
+      [disponiblePorCalidad]="disponiblePorCalidad()"
+      [venta]="ventaAEditar()"
+      (guardado)="onVentaCargada()"
+      (cancelado)="modalVentaAbierto.set(false); ventaAEditar.set(null)"
+    />
+  }
+
+  @if (ventaALiquidar(); as venta) {
+    <app-liquidar-venta-form
+      [venta]="venta"
+      [loteCampaniaTitulo]="lc.loteNombre + ' · ' + lc.cultivoNombre"
+      (guardado)="onVentaCargada()"
+      (cancelado)="ventaALiquidar.set(null)"
+    />
+  }
+
+  @if (corteAEliminar(); as corte) {
+    <app-confirmar-accion
+      [titulo]="'¿Eliminar el corte ' + corte + '?'"
+      mensaje="Se borran todas las calidades cargadas de este corte. No se puede deshacer."
+      textoConfirmar="Eliminar"
+      (confirmado)="confirmarEliminarCorte()"
+      (cancelado)="cancelarEliminarCorte()"
+    />
+  }
+
+  @if (ventaAEliminar(); as venta) {
+    <app-confirmar-accion
+      titulo="¿Eliminar esta venta?"
+      [mensaje]="venta.compradorNombre + ' · ' + (venta.fechaEntrega | fecha) + '. No se puede deshacer.'"
+      textoConfirmar="Eliminar"
+      (confirmado)="confirmarEliminarVenta()"
+      (cancelado)="cancelarEliminarVenta()"
+    />
+  }
+}

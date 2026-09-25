@@ -1,0 +1,91 @@
+<div class="catalogo">
+  <div class="catalogo__header">
+    <div class="catalogo__titulos">
+      <h1 class="catalogo__titulo">Insumos</h1>
+      <div class="catalogo__sub">Precio de referencia: se copia al cargar una aplicación y queda editable.</div>
+    </div>
+    <div class="catalogo__acciones">
+      <app-buscador [(texto)]="textoBusqueda" placeholder="Buscar insumo…" />
+      <app-control-orden [opciones]="opcionesOrden" [(campo)]="ordenCampo" [(direccion)]="ordenDireccion" />
+      <select class="catalogo__filtro" [value]="tipoFiltro()" (change)="setTipoFiltro($event)">
+        <option value="todos">Todos los tipos</option>
+        @for (opcion of enums.opciones('tipoInsumo'); track opcion.valor) {
+          <option [value]="opcion.valor">{{ opcion.etiqueta }}</option>
+        }
+      </select>
+      <button type="button" class="chip-toggle" [class.chip-toggle--activo]="verBaja()" (click)="alternarVerBaja()">
+        {{ verBaja() ? 'Ocultar dados de baja' : 'Ver dados de baja' }}
+      </button>
+      <button type="button" class="boton-primario catalogo__nuevo" (click)="abrirNuevo()">+ Nuevo insumo</button>
+    </div>
+  </div>
+
+  <div class="catalogo__lista">
+    @for (insumo of insumosVisibles(); track insumo.id) {
+      <div class="fila-catalogo-fila">
+        <button type="button" class="fila-catalogo" (click)="editar(insumo)">
+          <div class="fila-catalogo__principal">
+            <div class="fila-catalogo__nombre-linea">
+              <span class="fila-catalogo__nombre">{{ insumo.nombre }}</span>
+              @if (!insumo.activo) {
+                <span class="chip-baja">Dado de baja</span>
+              }
+            </div>
+            <div class="fila-catalogo__detalle">
+              por {{ enums.etiqueta('unidadMedida', insumo.unidadMedida) }}
+            </div>
+          </div>
+          <div class="fila-catalogo__numero">
+            {{ insumo.precioReferencia?.importe | importe: insumo.precioReferencia?.moneda }}
+          </div>
+          <div class="fila-catalogo__extra">
+            <span class="chip-tipo">{{ etiquetaTipo(insumo.tipo) }}</span>
+          </div>
+        </button>
+        @if (insumo.activo) {
+          <button type="button" class="boton-baja fila-catalogo__accion" (click)="pedirBaja(insumo)">
+            Dar de baja
+          </button>
+        } @else {
+          <button type="button" class="boton-reactivar fila-catalogo__accion" (click)="reactivar(insumo)">
+            Reactivar
+          </button>
+        }
+      </div>
+    }
+    @if (!cargando() && insumosVisibles().length === 0) {
+      <div class="catalogo__vacio">
+        @if (totalElementos() > 0) {
+          Ningún insumo coincide con "{{ textoBusqueda() }}" en esta página.
+        } @else if (tipoFiltro() !== 'todos') {
+          No hay insumos de tipo {{ etiquetaTipo(tipoFiltro()) }}.
+        } @else if (verBaja()) {
+          Sin insumos cargados todavía.
+        } @else {
+          Sin insumos activos. Activá "Ver dados de baja" si hay alguno dado de baja.
+        }
+      </div>
+    }
+    <app-paginador
+      [pagina]="paginaSolicitada()"
+      [totalPaginas]="totalPaginas()"
+      [totalElementos]="totalElementos()"
+      etiqueta="insumos"
+      (cambiarPagina)="paginaSolicitada.set($event)"
+    />
+  </div>
+</div>
+
+@if (modalAbierto()) {
+  <app-insumo-form [insumo]="insumoEditando()" (guardado)="onGuardado()" (cancelado)="cerrarModal()" />
+}
+
+@if (confirmandoBaja(); as insumo) {
+  <app-confirmar-accion
+    titulo="¿Dar de baja este insumo?"
+    [mensaje]="insumo.nombre + ': sale de los desplegables, el histórico queda igual.'"
+    textoConfirmar="Dar de baja"
+    (confirmado)="confirmarBaja()"
+    (cancelado)="cancelarBaja()"
+  />
+}

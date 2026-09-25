@@ -1,0 +1,58 @@
+@use '../../../shared/styles/tokens';
+@use '../../../shared/styles/formularios';
+@use '../../../shared/styles/botones';
+
+.login {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--espacio-8);
+  background: var(--color-fondo);
+  box-sizing: border-box;
+
+  &__card {
+    width: 100%;
+    max-width: 360px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-9);
+    padding: var(--espacio-14);
+    background: var(--color-superficie);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-xl);
+    box-sizing: border-box;
+  }
+
+  &__error {
+    padding: var(--espacio-5) var(--espacio-6);
+    border-radius: var(--radio-sm);
+    background: var(--color-baja-fondo);
+    border: 1px solid var(--color-baja-borde);
+    color: var(--color-baja-texto);
+    font-size: 13px;
+  }
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-5);
+
+  &__icono {
+    width: 32px;
+    height: 32px;
+    flex: none;
+    border-radius: var(--radio-sm);
+    background: var(--color-verde-600);
+  }
+
+  &__nombre {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-verde-900);
+  }
+}
+
+// .campo vive en shared/styles/_formularios.scss y .boton-primario en
+// shared/styles/_botones.scss (se reusan en los formularios de catálogo).
