@@ -58,7 +58,7 @@ describe('LotesListado', () => {
     http.expectOne(URL_ACTIVOS).flush(paginaDe([LOTE_ACTIVO]));
     await fixture.whenStable();
 
-    const filas = fixture.nativeElement.querySelectorAll('.fila-catalogo');
+    const filas = fixture.nativeElement.querySelectorAll('button.fila-catalogo');
     expect(filas.length).toBe(1);
     expect(filas[0].textContent).toContain('Lote 1');
   });
@@ -85,7 +85,7 @@ describe('LotesListado', () => {
     http.expectOne(URL_ACTIVOS).flush(paginaDe([LOTE_ACTIVO]));
     await fixture.whenStable();
 
-    const fila: HTMLButtonElement = fixture.nativeElement.querySelector('.fila-catalogo');
+    const fila: HTMLButtonElement = fixture.nativeElement.querySelector('button.fila-catalogo');
     fila.click();
     await fixture.whenStable();
 

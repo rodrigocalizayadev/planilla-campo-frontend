@@ -70,7 +70,7 @@ describe('InsumosListado', () => {
       .flush(paginaDe([UREA]));
     await fixture.whenStable();
 
-    const filas = fixture.nativeElement.querySelectorAll('.fila-catalogo');
+    const filas = fixture.nativeElement.querySelectorAll('button.fila-catalogo');
     expect(filas.length).toBe(1);
   });
 

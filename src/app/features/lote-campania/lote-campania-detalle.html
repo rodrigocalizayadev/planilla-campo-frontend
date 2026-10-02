@@ -227,6 +227,12 @@
         @if (errorEliminar(); as mensaje) {
           <p class="form-catalogo__error" role="alert">{{ mensaje }}</p>
         }
+        <div class="fila-cosecha fila-cosecha--header">
+          <div class="fila-cosecha__titulo--header">Corte</div>
+          <div class="fila-cosecha__cantidad fila-cosecha__cantidad--header">Primera</div>
+          <div class="fila-cosecha__cantidad fila-cosecha__cantidad--header">Segunda</div>
+          <div class="fila-cosecha__cantidad fila-cosecha__cantidad--header">Descarte</div>
+        </div>
         @for (corte of cortesVisibles(); track corte.corte) {
           <div class="fila-catalogo-fila">
             <button
@@ -302,6 +308,11 @@
         @if (errorEliminar(); as mensaje) {
           <p class="form-catalogo__error" role="alert">{{ mensaje }}</p>
         }
+        <div class="fila-venta fila-venta--header">
+          <div class="fila-venta__principal fila-venta__principal--header">Venta</div>
+          <span class="fila-venta__importe fila-venta__importe--header">Importe</span>
+          <span class="fila-venta__estado--header">Estado</span>
+        </div>
         @for (venta of ventasVisibles(); track venta.id) {
           <div class="fila-venta">
             <div class="fila-venta__principal">
@@ -390,6 +401,11 @@
           [(campo)]="movimientoOrdenCampo"
           [(direccion)]="movimientoOrdenDireccion"
         />
+      </div>
+      <div class="fila-movimiento fila-movimiento--header">
+        <span class="fila-movimiento__fecha fila-movimiento__fecha--header">Fecha</span>
+        <div class="fila-movimiento__detalle fila-movimiento__detalle--header">Movimiento</div>
+        <span class="fila-movimiento__importe fila-movimiento__importe--header">Importe</span>
       </div>
       @for (mv of movimientosVisibles(); track mv.tipo + '-' + mv.id) {
         <div class="fila-movimiento">

@@ -298,6 +298,31 @@
   min-width: 0;
 }
 
+.fila-cosecha--header {
+  padding-block: var(--espacio-4);
+  cursor: default;
+  pointer-events: none;
+
+  &:hover {
+    background: transparent;
+  }
+
+  .fila-cosecha__titulo--header,
+  .fila-cosecha__cantidad--header {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-texto-terciario);
+    font-family: inherit;
+    font-variant-numeric: normal;
+  }
+
+  .fila-cosecha__cantidad--header {
+    align-items: flex-end;
+  }
+}
+
 .fila-venta {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 120px 100px;
@@ -352,6 +377,37 @@
     min-height: 32px;
     padding: 0 var(--espacio-6);
     font-size: 12px;
+  }
+}
+
+.fila-venta--header {
+  padding-block: var(--espacio-4);
+  cursor: default;
+  pointer-events: none;
+  border-bottom: 1px solid var(--color-borde-fila);
+
+  &:hover {
+    background: transparent;
+  }
+
+  .fila-venta__principal--header,
+  .fila-venta__importe--header,
+  .fila-venta__estado--header {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-texto-terciario);
+    font-family: inherit;
+    font-variant-numeric: normal;
+  }
+
+  .fila-venta__importe--header {
+    text-align: right;
+  }
+
+  .fila-venta__estado--header {
+    justify-self: end;
   }
 }
 
@@ -469,6 +525,33 @@
       grid-row: 1;
       grid-column: 1 / -1;
     }
+  }
+}
+
+.fila-movimiento--header {
+  padding-block: var(--espacio-4);
+  cursor: default;
+  pointer-events: none;
+  border-bottom: 1px solid var(--color-borde-fila);
+
+  &:hover {
+    background: transparent;
+  }
+
+  .fila-movimiento__fecha--header,
+  .fila-movimiento__detalle--header,
+  .fila-movimiento__importe--header {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-texto-terciario);
+    font-family: inherit;
+    font-variant-numeric: normal;
+  }
+
+  .fila-movimiento__importe--header {
+    text-align: right;
   }
 }
 

@@ -56,7 +56,7 @@ describe('CultivosListado', () => {
     http.expectOne(URL_ACTIVOS).flush(paginaDe([CULTIVO]));
     await fixture.whenStable();
 
-    const fila = fixture.nativeElement.querySelector('.fila-catalogo');
+    const fila = fixture.nativeElement.querySelector('button.fila-catalogo');
     expect(fila.textContent).toContain('Cebolla');
     expect(fila.textContent).toContain('Se mide en bolsas');
   });
@@ -66,7 +66,7 @@ describe('CultivosListado', () => {
     http.expectOne(URL_ACTIVOS).flush(paginaDe([CULTIVO]));
     await fixture.whenStable();
 
-    const fila: HTMLButtonElement = fixture.nativeElement.querySelector('.fila-catalogo');
+    const fila: HTMLButtonElement = fixture.nativeElement.querySelector('button.fila-catalogo');
     fila.click();
     await fixture.whenStable();
 

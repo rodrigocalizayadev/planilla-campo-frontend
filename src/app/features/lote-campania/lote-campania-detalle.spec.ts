@@ -277,7 +277,7 @@ describe('LoteCampaniaDetalle', () => {
     flushBase({ costos: COSTOS_CON_COSECHA, cosechas });
     await fixture.whenStable();
 
-    const fila = fixture.nativeElement.querySelector('.fila-cosecha');
+    const fila = fixture.nativeElement.querySelector('button.fila-cosecha');
     expect(fila.textContent).toContain('Corte 1');
     const cantidades = fila.querySelectorAll('.fila-cosecha__cantidad');
     expect(cantidades[0].textContent).toContain('100');
@@ -307,7 +307,7 @@ describe('LoteCampaniaDetalle', () => {
     flushBase({ movimientos });
     await fixture.whenStable();
 
-    const fila = fixture.nativeElement.querySelector('.fila-movimiento');
+    const fila = fixture.nativeElement.querySelector('.fila-movimiento:not(.fila-movimiento--header)');
     expect(fila.textContent).toContain('Carpida');
     expect(fila.textContent).toContain('$ 2.800.000 (total)');
     // Por defecto la vista está en USD.
@@ -365,7 +365,7 @@ describe('LoteCampaniaDetalle', () => {
     flushBase({ costos: COSTOS_CON_COSECHA, cosechas });
     await fixture.whenStable();
 
-    const fila: HTMLButtonElement = fixture.nativeElement.querySelector('.fila-cosecha');
+    const fila: HTMLButtonElement = fixture.nativeElement.querySelector('button.fila-cosecha');
     fila.click();
     await fixture.whenStable();
 
@@ -466,7 +466,7 @@ describe('LoteCampaniaDetalle', () => {
     flushBase({ ventas: [ventaPendiente] });
     await fixture.whenStable();
 
-    const fila = fixture.nativeElement.querySelector('.fila-venta');
+    const fila = fixture.nativeElement.querySelector('.fila-venta:not(.fila-venta--header)');
     expect(fila.querySelector('.fila-venta__importe').textContent).toContain('—');
     const botones: HTMLButtonElement[] = Array.from(fila.querySelectorAll('.fila-venta__accion'));
     const boton = botones.find((b) => b.textContent?.includes('Completar liquidación'))!;
@@ -501,7 +501,7 @@ describe('LoteCampaniaDetalle', () => {
     await fixture.whenStable();
 
     const botones: HTMLButtonElement[] = Array.from(
-      fixture.nativeElement.querySelector('.fila-venta').querySelectorAll('button'),
+      fixture.nativeElement.querySelector('.fila-venta:not(.fila-venta--header)').querySelectorAll('button'),
     );
     botones.find((b) => b.textContent?.trim() === 'Editar')!.click();
 
@@ -539,7 +539,7 @@ describe('LoteCampaniaDetalle', () => {
     await fixture.whenStable();
 
     const botones: HTMLButtonElement[] = Array.from(
-      fixture.nativeElement.querySelector('.fila-venta').querySelectorAll('button'),
+      fixture.nativeElement.querySelector('.fila-venta:not(.fila-venta--header)').querySelectorAll('button'),
     );
     expect(botones.some((b) => b.textContent?.trim() === 'Editar')).toBe(false);
     expect(botones.some((b) => b.textContent?.trim() === 'Eliminar')).toBe(true);
@@ -569,7 +569,7 @@ describe('LoteCampaniaDetalle', () => {
     await fixture.whenStable();
 
     const botones: HTMLButtonElement[] = Array.from(
-      fixture.nativeElement.querySelector('.fila-venta').querySelectorAll('button'),
+      fixture.nativeElement.querySelector('.fila-venta:not(.fila-venta--header)').querySelectorAll('button'),
     );
     botones.find((b) => b.textContent?.trim() === 'Eliminar')!.click();
     await fixture.whenStable();
@@ -627,7 +627,7 @@ describe('LoteCampaniaDetalle', () => {
     expect(fixture.nativeElement.textContent).not.toContain('+ Cargar corte');
     expect(fixture.nativeElement.textContent).not.toContain('+ Nueva venta');
     expect(fixture.nativeElement.querySelector('.fila-venta__accion')).toBeNull();
-    const filaCosecha: HTMLButtonElement = fixture.nativeElement.querySelector('.fila-cosecha');
+    const filaCosecha: HTMLButtonElement = fixture.nativeElement.querySelector('button.fila-cosecha');
     expect(filaCosecha.disabled).toBe(true);
     expect(fixture.nativeElement.textContent).not.toContain('Eliminar');
   });

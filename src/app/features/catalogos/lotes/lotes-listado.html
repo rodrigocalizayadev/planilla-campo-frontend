@@ -14,6 +14,10 @@
   </div>
 
   <div class="catalogo__lista">
+    <div class="fila-catalogo fila-catalogo--2col fila-catalogo--header">
+      <div class="fila-catalogo__principal fila-catalogo__principal--header">Lote</div>
+      <div class="fila-catalogo__numero fila-catalogo__numero--header">Superficie</div>
+    </div>
     @for (lote of lotesVisibles(); track lote.id) {
       <div class="fila-catalogo-fila">
         <button type="button" class="fila-catalogo fila-catalogo--2col" (click)="editar(lote)">

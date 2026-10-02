@@ -34,6 +34,46 @@
   }
 }
 
+.campo-password {
+  position: relative;
+  display: flex;
+
+  &__input {
+    width: 100%;
+    padding-right: var(--espacio-14);
+  }
+
+  &__boton {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: var(--objetivo-tactil-min);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    color: var(--color-texto-terciario);
+    cursor: pointer;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    &:hover {
+      color: var(--color-texto-sobre-superficie);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-verde-300);
+      outline-offset: -2px;
+      border-radius: var(--radio-sm);
+    }
+  }
+}
+
 .marca {
   display: flex;
   align-items: center;

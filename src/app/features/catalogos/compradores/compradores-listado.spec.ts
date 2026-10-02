@@ -54,7 +54,7 @@ describe('CompradoresListado', () => {
     http.expectOne(URL_ACTIVOS).flush(paginaDe([COMPRADOR]));
     await fixture.whenStable();
 
-    const fila = fixture.nativeElement.querySelector('.fila-catalogo');
+    const fila = fixture.nativeElement.querySelector('button.fila-catalogo');
     expect(fila.textContent).toContain('Distribuidora San Jorge');
     expect(fila.textContent).toContain('CUIT 30-52341180-4');
   });
@@ -64,7 +64,7 @@ describe('CompradoresListado', () => {
     http.expectOne(URL_ACTIVOS).flush(paginaDe([COMPRADOR]));
     await fixture.whenStable();
 
-    const fila: HTMLButtonElement = fixture.nativeElement.querySelector('.fila-catalogo');
+    const fila: HTMLButtonElement = fixture.nativeElement.querySelector('button.fila-catalogo');
     fila.click();
     await fixture.whenStable();
 

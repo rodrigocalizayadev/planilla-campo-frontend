@@ -178,6 +178,22 @@
 // .indicador y .selector-moneda viven en shared/styles/_indicadores.scss: los
 // comparte el detalle de lote-campaña (slice 4).
 
+// Encabezado de columnas para la lista de lotes sembrados.
+// Los estilos base (cursor, pointer-events, hover, tipografía) vienen de
+// .fila-catalogo--header en shared/styles/_catalogo.scss; acá solo se
+// sobreescribe el grid específico del tablero.
+.fila-catalogo--header {
+  grid-template-columns: minmax(0, 1.6fr) 140px 140px;
+
+  @include tokens.angosto {
+    grid-template-columns: minmax(0, 1fr) 100px;
+
+    .fila-catalogo__numero--header:last-child {
+      display: none;
+    }
+  }
+}
+
 // Fila de lote-campaña, ahora clickeable hacia el detalle (docs/plan-frontend.md
 // slice 4 — cierra el pendiente que dejó slice 3, cuando la ruta todavía no existía).
 .fila-catalogo--tablero {

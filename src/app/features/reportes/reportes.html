@@ -163,50 +163,47 @@
         </div>
       </div>
 
-      <div class="panel">
-        <div class="panel__header">
-          <h2 class="panel__titulo">Costo total y margen realizado por cultivo</h2>
-        </div>
-        <div class="tabla-comparativa">
-          <div class="tabla-comparativa__fila tabla-comparativa__fila--header">
-            <span>Cultivo</span>
-            @for (campania of campaniasComparativa(); track campania.campaniaId) {
-              <span>{{ campania.nombreCampania }}</span>
-            }
-          </div>
-          @for (cultivo of cultivosComparativa(); track cultivo) {
-            <div class="tabla-comparativa__fila">
-              <span class="tabla-comparativa__cultivo">{{ cultivo }}</span>
-              @for (campania of campaniasComparativa(); track campania.campaniaId) {
-                @if (celda(cultivo, campania.campaniaId); as c) {
-                  <span class="tabla-comparativa__celda">
-                    <span class="tabla-comparativa__campania">{{ campania.nombreCampania }}</span>
-                    <span class="numero">
-                      {{ (monedaVista() === 'ARS' ? c.costoTotalArs : c.costoTotalUsd) | importe: monedaVista() }}
+      <div class="comparativa-cultivos">
+        @for (grupo of gruposComparativa(); track grupo.cultivo) {
+          <div class="cultivo-card">
+            <div class="cultivo-card__header">
+              <span class="cultivo-card__nombre">{{ grupo.cultivo }}</span>
+              <span class="cultivo-card__cantidad">{{ campaniasComparativa().length }} campaña{{ campaniasComparativa().length !== 1 ? 's' : '' }}</span>
+            </div>
+            @for (campania of campaniasComparativa(); track campania.campaniaId; let i = $index) {
+              @if (grupo.campanias[i]; as fila) {
+                <div class="cultivo-card__fila">
+                  <div class="cultivo-card__campania-nombre">{{ campania.nombreCampania }}</div>
+                  <div class="cultivo-card__barra-wrap">
+                    <div
+                      class="cultivo-card__barra"
+                      [style.width.%]="barraAncho(fila, grupo, monedaVista())"
+                    ></div>
+                  </div>
+                  <div class="cultivo-card__metricas">
+                    <span class="cultivo-card__costo-ha numero">
+                      {{ (monedaVista() === 'ARS' ? fila.costoPorHaArs : fila.costoPorHaUsd) | importe: monedaVista() }}/ha
                     </span>
-                    <span class="tabla-comparativa__sub numero">
-                      {{ (monedaVista() === 'ARS' ? c.costoPorHaArs : c.costoPorHaUsd) | importe: monedaVista() }}/ha
+                    <span class="cultivo-card__costo-total numero">
+                      Total: {{ (monedaVista() === 'ARS' ? fila.costoTotalArs : fila.costoTotalUsd) | importe: monedaVista() }}
                     </span>
                     <span
-                      class="tabla-comparativa__sub numero"
-                      [class.valor-negativo]="(monedaVista() === 'ARS' ? c.margenRealizadoArs : c.margenRealizadoUsd) < 0"
+                      class="cultivo-card__margen numero"
+                      [class.valor-negativo]="(monedaVista() === 'ARS' ? fila.margenRealizadoArs : fila.margenRealizadoUsd) < 0"
                     >
-                      Margen realizado:
-                      {{
-                        (monedaVista() === 'ARS' ? c.margenRealizadoArs : c.margenRealizadoUsd) | importe: monedaVista()
-                      }}
+                      Margen realizado: {{ (monedaVista() === 'ARS' ? fila.margenRealizadoArs : fila.margenRealizadoUsd) | importe: monedaVista() }}
                     </span>
-                  </span>
-                } @else {
-                  <span class="tabla-comparativa__celda tabla-comparativa__celda--vacia">
-                    <span class="tabla-comparativa__campania">{{ campania.nombreCampania }}</span>
-                    —
-                  </span>
-                }
+                  </div>
+                </div>
+              } @else {
+                <div class="cultivo-card__fila cultivo-card__fila--vacia">
+                  <div class="cultivo-card__campania-nombre">{{ campania.nombreCampania }}</div>
+                  <span class="cultivo-card__sin-datos">Sin lotes de este cultivo</span>
+                </div>
               }
-            </div>
-          }
-        </div>
+            }
+          </div>
+        }
       </div>
     }
   }

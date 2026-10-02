@@ -21,6 +21,11 @@
   </div>
 
   <div class="catalogo__lista">
+    <div class="fila-catalogo fila-catalogo--header">
+      <div class="fila-catalogo__principal fila-catalogo__principal--header">Insumo</div>
+      <div class="fila-catalogo__numero fila-catalogo__numero--header">Precio ref.</div>
+      <div class="fila-catalogo__extra fila-catalogo__extra--header">Tipo</div>
+    </div>
     @for (insumo of insumosVisibles(); track insumo.id) {
       <div class="fila-catalogo-fila">
         <button type="button" class="fila-catalogo" (click)="editar(insumo)">

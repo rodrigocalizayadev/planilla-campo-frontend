@@ -30,6 +30,11 @@ export class Login {
 
   protected readonly enviando = signal(false);
   protected readonly errorServidor = signal<string | null>(null);
+  protected readonly mostrarPassword = signal(false);
+
+  alternarMostrarPassword(): void {
+    this.mostrarPassword.update((valor) => !valor);
+  }
 
   enviar(evento: Event): void {
     evento.preventDefault();
