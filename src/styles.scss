@@ -4,6 +4,7 @@ html,
 body {
   margin: 0;
   min-height: 100vh;
+  min-height: 100dvh;
   background: var(--color-fondo);
   color: var(--color-texto);
   font-family: var(--font-ui);

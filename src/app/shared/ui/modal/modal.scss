@@ -28,8 +28,13 @@
   @include tokens.movil {
     max-width: none;
     height: 100vh;
+    height: 100dvh;
     max-height: 100vh;
+    max-height: 100dvh;
     border-radius: 0;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
   }
 
   &__header {
@@ -76,6 +81,11 @@
     font-size: 15px;
     color: var(--color-texto-secundario);
     cursor: pointer;
+
+    @include tokens.movil {
+      width: var(--objetivo-tactil-min);
+      height: var(--objetivo-tactil-min);
+    }
   }
 
   &__cuerpo {
