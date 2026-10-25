@@ -21,6 +21,8 @@ const VENTA_PENDIENTE: Venta = {
   flete: null,
   otrosGastos: null,
   importeNeto: null,
+  cobradoArs: '0',
+  cantidadLiquidada: '0',
   estado: 'ENTREGADA',
   fechaEntrega: '2026-07-27',
   fechaLiquidacion: null,
@@ -31,6 +33,8 @@ const VENTA_LIQUIDADA: Venta = {
   estado: 'LIQUIDADA',
   precioUnitario: { importe: '4500', moneda: 'ARS', tipoCambio: '1' },
   importeNeto: { importe: '44900', moneda: 'ARS', tipoCambio: '1' },
+  cobradoArs: '0',
+  cantidadLiquidada: '0',
   fechaLiquidacion: '2026-08-01',
 };
 

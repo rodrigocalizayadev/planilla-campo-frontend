@@ -17,6 +17,7 @@ const ENUMS: MetadataEnums = {
   unidadProduccion: [],
   modalidadVenta: [],
   estadoVenta: [],
+  estadoCobro: [],
   estadoCampania: [],
   criterioProrrateo: [],
   moneda: [],
