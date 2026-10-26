@@ -1,6 +1,6 @@
 # ventas-cobros-liquidaciones
 
-Objetivo: adaptar el front a los cobros (precio cerrado) y las liquidaciones por tramos (consignación) del backend. Rama: a crear desde `dev` (`feat/ventas-cobros-liquidaciones`). Estrategia de entrega: `ask-on-risk` (pendiente elegir cadena, ver Log). Test runner: Vitest (`npm test`), lint `npm run lint`. Estado: PLAN, sin implementar.
+Objetivo: adaptar el front a los cobros (precio cerrado) y las liquidaciones por tramos (consignación) del backend. Rama: `feat/ventas-cobros-liquidaciones`, desde `dev`; nunca a `main` (L3). Estrategia de entrega: una sola rama de feature, sin cadena de PRs; push y PR quedan a decisión del usuario. Test runner: Vitest (`npm test`), lint `npm run lint`. Estado: IMPLEMENTADO y verificado (ver Log).
 
 ## Specs
 
@@ -27,21 +27,21 @@ Fuente: reporte del backend (L1, citado textual) + decisión del usuario (L2). L
 
 Ruta de todas: inline. Evidencia (sin Writer trigger): unidades secuenciales que comparten el modelo `Venta` y el modal; ninguna es independiente con >100 líneas en paralelo. Forecast: ~1.200–1.600 líneas autoradas → supera ~400, requiere estrategia de cadena antes del segundo commit.
 
-- [ ] **T1** Modelos, servicio y enums — S2, S3, S5, S6, S7 — inline — commit: pendiente
+- [x] **T1** Modelos, servicio y enums — S2, S3, S5, S6, S7 — inline — commit: 9d5c8f5
   - `venta.model.ts` (campos nuevos), nuevos `cobro.model.ts`, `liquidacion-tramo.model.ts`, `comprador-saldo.model.ts`; `MetadataEnums.estadoCobro`; `LoteCampaniaService`: crear/listar/eliminar cobros y tramos (delete devuelve `Venta`).
   - Tests: servicio con `HttpTestingController` (URLs, body con strings, delete devuelve venta); `enums.service.spec`.
-- [ ] **T2** Modal "Detalle de venta" + cobros — S1, S8, S9, S10, S11, S12, S13, S16 — inline — commit: pendiente
+- [x] **T2** Modal "Detalle de venta" + cobros — S1, S8, S9, S10, S11, S12, S13, S16 — inline — commit: 16cb33f
   - Fila clickeable en [lote-campania-detalle.html](src/app/features/lote-campania/lote-campania-detalle.html); nuevo `venta-detalle` (modal) que ramifica por `modalidad`; formulario de cobro (fecha, importe ARS, TC del día vía `TipoCambioMemoriaService`, comentarios) con Signal Forms; lista de cobros paginada con baja.
   - Fila: chip `PARCIAL`/estado de cobro; Eliminar/Editar deshabilitados con pagos (S11); acciones de pago visibles con campaña `CERRADA` (S10).
   - Tests: formulario (monto válido, string intacto, ARS fijo), modal por modalidad, bloqueo de botones, `COBRO_EXCEDE_SALDO` refresca la venta, fecha ISO en UTC−3 en la lista de cobros.
-- [ ] **T3** Tramos de liquidación — S6, S7, S8, S12, S13 — inline — commit: pendiente
+- [x] **T3** Tramos de liquidación — S6, S7, S8, S12, S13 — inline — commit: 16cb33f (junto con T2, comparten el modal)
   - Formulario de tramo (cantidad precargada con `cantidadPendiente`, precio, gastos opcionales) y lista de tramos con baja dentro del modal; "Liquidar todo lo pendiente" reusa el PATCH.
   - Corregir [liquidar-venta-form.ts:62-66](src/app/features/lote-campania/liquidar-venta-form.ts#L62-L66) para que el bruto en vivo use `cantidadPendiente`.
   - Tests: cantidad inválida/excede pendiente, total en vivo con pendiente, `LIQUIDACION_EXCEDE_PENDIENTE` refresca, venta `PARCIAL` sin precio de venta.
-- [ ] **T4** Saldo del comprador — S14 — inline — commit: pendiente
+- [x] **T4** Saldo del comprador — S14 — inline — commit: ba40952
   - Ubicación a definir al implementar (propuesta: bloque de solo lectura dentro de [comprador-form](src/app/features/catalogos/compradores/comprador-form.ts) al editar, ya que el listado no tiene pantalla de detalle). Dos bloques separados, sin sumar ni valuar.
   - Tests: servicio + render de ambos bloques, sin pendientes, error `COMPRADOR_NO_ENCONTRADO`.
-- [ ] **T5** Textos del margen, docs y verificación visual — S15, S3 — inline — commit: pendiente
+- [x] **T5** Textos del margen, docs y verificación visual — S15, S3 — inline — commit: ba40952 (textos y docs) + fix de padding del modal en el commit final
   - Etiquetas/tooltips de "Liquidado" y "Entregado sin liquidar" ([html:166-171](src/app/features/lote-campania/lote-campania-detalle.html#L166-L171)); `importeNeto` parcial señalado como tal en `PARCIAL`.
   - Docs: `docs/resumen-slices.md`, `docs/dominio.md` (cobros/tramos), CLAUDE.md ("trece enums" → catorce).
   - Verificación en navegador real con Playwright (ADMIN, desktop y móvil 360–430px) y `npm test` + `npm run lint` + `npm run build`.
@@ -51,5 +51,7 @@ Ruta de todas: inline. Evidencia (sin Writer trigger): unidades secuenciales que
 - **L1 (2026-10-25, pedido original del usuario, textual).** "Desde el lado backend se hicieron unos cambios sobre las ventas sobre cobros y liquidaciones. Debes revisar que cambios hay que aplicar en el front. Te paso lo reportado por el agente backend de lo nuevo implementado:" — seguido del reporte del backend (secciones 1 a 4: concepto clave, cambios en endpoints existentes, endpoints nuevos y qué revisar en la UI), resumido en S1–S16 con sus frases textuales.
 - **L2 (2026-10-25, decisión del usuario).** Ante la pregunta de dónde mostrar cobros y tramos: "Si, mejor como modal. Genera el plan pero no lo implementes aun".
 - **Análisis.** El panel "Ventas del lote" no tiene vista de detalle; `design-reference/` no cubre cobros, saldo ni tramos (sin coincidencias en docs/ ni src/), por lo que el diseño es nuestro y debe respetar tokens y vocabulario existentes. `esCerrada()` oculta hoy todas las acciones de venta: hay que separar las de pago de las de edición.
-- **Pendiente.** (1) Estrategia de cadena para el delivery (`stacked-to-main` o `feature-branch-chain`) antes del segundo commit. (2) Confirmar contra el backend real que los campos nuevos viajan como string. (3) Ubicación definitiva del saldo del comprador (T4).
-- **Próximo paso.** Esperar la orden de implementar; empezar por T1 en una rama nueva desde `dev`.
+- **L3 (2026-10-25, decisión del usuario).** "Nunca a main, saca una nueva rama de feature a partir de DEV e implementa los cambios ahi". Se cierra la pregunta de la estrategia de cadena: rama única `feat/ventas-cobros-liquidaciones` desde `dev`, sin cadena de PRs.
+- **Cambios respecto del plan.** (a) T2 y T3 se hicieron juntas: comparten el modal. (b) El listado de cobros y de tramos se pide con `httpResource` dentro del modal; el servicio solo tiene alta y baja. (c) T3 evolucionó `LiquidarVentaForm` con `modo` (`todo` = atajo PATCH, `tramo` = POST) en vez de crear un formulario nuevo. (d) Saldo del comprador: panel `CompradorSaldoPanel` dentro del formulario de edición del comprador. (e) Reglas de bloqueo (S11): se mira `cobradoArs`/`cantidadLiquidada` > 0 y no el estado, porque una venta a precio cerrado nace `LIQUIDADA` sin cobros. (f) Utilidad nueva `hoyIso()` (fecha local, no UTC) para los formularios nuevos; los formularios viejos conservan `new Date().toISOString().slice(0, 10)`, que entre las 21:00 y las 24:00 en UTC−3 devuelve el día siguiente.
+- **Verificación (2026-10-25).** `npm test` 312/312, `npm run lint` y `tsc -p tsconfig.spec.json` en verde, `ng build` compila. Verificado con Playwright contra el backend real (ADMIN, 1280px y 390px): cobro parcial, tope por exceso de saldo, cobrada, quitar cobros, tramo parcial, "Liquidar todo lo pendiente", quitar tramos, bloqueo de editar/eliminar con pagos y saldo del comprador; sin errores de consola. Los datos de prueba se borraron; las ventas preexistentes 10 y 12 del lote-campaña 4 no se tocaron.
+- **Pendiente.** (1) `docs/api-endpoints-v2.md` no documenta los endpoints nuevos (cobros, liquidaciones, saldo): lo mantiene el backend. (2) El warning de presupuesto de `lote-campania-detalle.scss` (22,80 kB sobre 22 kB) ya existía antes de este trabajo. (3) Falta validar a mano en el navegador el caso de carrera (`COBRO_EXCEDE_SALDO` desde el servidor): está cubierto solo por tests. (4) Push y PR.
