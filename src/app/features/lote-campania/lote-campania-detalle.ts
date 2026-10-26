@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, signal } from '@angular/core';
+import { Component, computed, inject, input, linkedSignal, signal } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { httpResource } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
@@ -18,6 +18,7 @@ import { AplicacionForm } from './aplicacion-form';
 import { CosechaForm } from './cosecha-form';
 import { VentaForm } from './venta-form';
 import { LiquidarVentaForm } from './liquidar-venta-form';
+import { VentaDetalle } from './venta-detalle';
 import { LoteCampaniaService } from './lote-campania.service';
 import { pluralizar } from '../../shared/utils/pluralizar';
 import { ControlOrden, type OpcionOrden } from '../../shared/ui/control-orden/control-orden';
@@ -85,8 +86,13 @@ function redondearCantidad(valor: number): number {
  * pendiente documentado): clickear una fila de cosecha reabre `CosechaForm`
  * precargado con ese corte; "Eliminar" en cosecha o venta pide confirmación con
  * `ConfirmarAccion` (a diferencia de la baja de catálogo, acá es un borrado físico sin
- * reactivar posible). Venta solo ofrece "Editar" en estado `ENTREGADA` — el backend no
- * permite editar una `LIQUIDADA`, para eso está "Completar liquidación".
+ * reactivar posible). Venta solo ofrece "Editar" en estado `ENTREGADA` y sin pagos — el
+ * backend no permite editar una `LIQUIDADA` (para eso está "Completar liquidación") ni
+ * una venta con cobros o tramos (`VENTA_CON_PAGOS`), y por lo mismo "Eliminar" queda
+ * deshabilitado hasta quitar esos pagos desde "Ver detalle" (`VentaDetalle`), que es
+ * donde se registran cobros (precio cerrado) y tramos de liquidación (consignación).
+ * Con la campaña `CERRADA`, ver el detalle y liquidar siguen disponibles (los pagos
+ * llegan después del cierre); editar y eliminar no.
  */
 @Component({
   selector: 'app-lote-campania-detalle',
@@ -101,6 +107,7 @@ function redondearCantidad(valor: number): number {
     CosechaForm,
     VentaForm,
     LiquidarVentaForm,
+    VentaDetalle,
     ConfirmarAccion,
     ControlOrden,
     Paginador,
@@ -215,7 +222,17 @@ export class LoteCampaniaDetalle {
     () => `${environment.apiBaseUrl}/lote-campanias/${this.loteCampaniaId()}/ventas?size=200`,
   );
   private readonly ultimaPaginaVentas = mantenerUltimoValor(this.ventasRecurso.value);
-  protected readonly ventas = computed(() => this.ultimaPaginaVentas()?.content ?? []);
+  // Cobros y tramos devuelven la venta ya actualizada: se aplica acá en vez de volver a
+  // pedir la lista. Se descarta sola cuando llega una página nueva del servidor.
+  private readonly ventasActualizadas = linkedSignal<PaginaResponse<Venta> | undefined, Map<number, Venta>>({
+    source: this.ultimaPaginaVentas,
+    computation: () => new Map(),
+  });
+  protected readonly ventas = computed(() => {
+    const ventas = this.ultimaPaginaVentas()?.content ?? [];
+    const actualizadas = this.ventasActualizadas();
+    return actualizadas.size > 0 ? ventas.map((v) => actualizadas.get(v.id) ?? v) : ventas;
+  });
 
   protected readonly opcionesOrdenCosecha = OPCIONES_ORDEN_COSECHA;
   protected readonly cosechaOrdenCampo = signal<string | null>(null);
@@ -441,6 +458,13 @@ export class LoteCampaniaDetalle {
   protected readonly modalVentaAbierto = signal(false);
   protected readonly ventaAEditar = signal<Venta | null>(null);
   protected readonly ventaALiquidar = signal<Venta | null>(null);
+  // Se guarda el id y no la venta: el modal de detalle tiene que ver siempre la versión
+  // más nueva de `ventas()` (la que devuelve cada cobro o tramo, o la que trae un refresco).
+  private readonly ventaDetalleId = signal<number | null>(null);
+  protected readonly ventaDetalle = computed(() => {
+    const id = this.ventaDetalleId();
+    return id === null ? null : (this.ventas().find((venta) => venta.id === id) ?? null);
+  });
 
   protected readonly corteAEliminar = signal<number | null>(null);
   protected readonly eliminandoCorte = signal(false);
@@ -473,6 +497,30 @@ export class LoteCampaniaDetalle {
 
   etiquetaEstadoVenta(estado: string): string {
     return this.enums.etiqueta('estadoVenta', estado);
+  }
+
+  // La fila cuenta cómo viene el pago según la modalidad (nunca el cultivo): una venta a
+  // precio cerrado se cobra (`estadoCobro`), una consignación se liquida (`estado`).
+  etiquetaEstadoFila(venta: Venta): string {
+    return venta.modalidad === 'PRECIO_CERRADO'
+      ? this.enums.etiqueta('estadoCobro', venta.estadoCobro ?? 'PENDIENTE')
+      : this.etiquetaEstadoVenta(venta.estado);
+  }
+
+  estadoFilaCerrado(venta: Venta): boolean {
+    return venta.modalidad === 'PRECIO_CERRADO' ? venta.estadoCobro === 'COBRADA' : venta.estado === 'LIQUIDADA';
+  }
+
+  // Con cobros o tramos el backend rechaza editar y eliminar (`VENTA_CON_PAGOS`): hay que
+  // quitar primero esos pagos, lo que reabre la venta. Las ventas históricas también
+  // los tienen (la migración les creó un cobro o un tramo). Se mira el acumulado y no el
+  // estado: una venta a precio cerrado nace `LIQUIDADA` sin tener ningún cobro.
+  tienePagos(venta: Venta): boolean {
+    return Number(venta.cobradoArs) > 0 || Number(venta.cantidadLiquidada) > 0;
+  }
+
+  puedeLiquidar(venta: Venta): boolean {
+    return venta.modalidad === 'CONSIGNACION' && venta.estado !== 'LIQUIDADA';
   }
 
   // `importeNeto` es `null` mientras la venta está en consignación sin liquidar
@@ -514,6 +562,14 @@ export class LoteCampaniaDetalle {
 
   abrirLiquidacion(venta: Venta): void {
     this.ventaALiquidar.set(venta);
+  }
+
+  abrirDetalle(venta: Venta): void {
+    this.ventaDetalleId.set(venta.id);
+  }
+
+  cerrarDetalle(): void {
+    this.ventaDetalleId.set(null);
   }
 
   pedirEliminarCorte(corte: number): void {
@@ -610,5 +666,22 @@ export class LoteCampaniaDetalle {
     this.margenRecurso.reload();
     this.ventasRecurso.reload();
     this.ventaPagina.set(0);
+  }
+
+  // Un cobro o un tramo (alta o baja) devuelve la venta actualizada: se usa tal cual en
+  // vez de volver a pedir la lista. Los tramos mueven el margen (lo liquidado y lo
+  // pendiente de liquidar); los cobros no, el margen se mide sobre lo devengado.
+  onVentaPagada(venta: Venta): void {
+    this.ventaALiquidar.set(null);
+    this.ventasActualizadas.update((actuales) => new Map(actuales).set(venta.id, venta));
+    if (venta.modalidad === 'CONSIGNACION') {
+      this.margenRecurso.reload();
+    }
+  }
+
+  // El servidor rechazó un pago por una carrera entre usuarios: la lista que se ve quedó vieja.
+  refrescarVentas(): void {
+    this.ventasRecurso.reload();
+    this.margenRecurso.reload();
   }
 }

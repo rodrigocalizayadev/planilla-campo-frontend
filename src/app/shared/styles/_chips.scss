@@ -1,0 +1,21 @@
+// Chip de estado de una venta (ENTREGADA/PARCIAL/LIQUIDADA) o de su cobro
+// (PENDIENTE/PARCIAL/COBRADA): ámbar mientras hay algo abierto, verde cuando se cerró.
+// Lo comparten el panel de ventas y el modal de detalle de venta.
+.chip-estado {
+  justify-self: end;
+  padding: 2px 8px;
+  border-radius: var(--radio-pill);
+  background: var(--color-advertencia-fondo);
+  border: 1px solid var(--color-advertencia-borde);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-advertencia-texto);
+
+  &--liquidada {
+    background: var(--color-verde-100);
+    border-color: var(--color-verde-300);
+    color: var(--color-verde-900);
+  }
+}

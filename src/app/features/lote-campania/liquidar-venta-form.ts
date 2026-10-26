@@ -1,15 +1,24 @@
-import { Component, computed, inject, input, output, signal, untracked } from '@angular/core';
+import { Component, computed, inject, input, linkedSignal, output, signal, untracked } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { FormField, form, validate } from '@angular/forms/signals';
 import { Modal } from '../../shared/ui/modal/modal';
+import { CampoCantidad } from '../../shared/ui/campo-cantidad/campo-cantidad';
 import { CampoImporte } from '../../shared/ui/campo-importe/campo-importe';
 import { ImportePipe } from '../../shared/pipes/importe.pipe';
 import { AvisoService } from '../../shared/ui/aviso/aviso.service';
 import { TipoCambioMemoriaService } from '../../shared/data/tipo-cambio-memoria.service';
+import { hoyIso } from '../../shared/utils/fecha-local';
 import { LoteCampaniaService } from './lote-campania.service';
-import type { ErrorResponse, LiquidacionRequest, Venta } from '../../models';
+import type {
+  ErrorResponse,
+  LiquidacionRequest,
+  LiquidacionTramoRequest,
+  MontoRequest,
+  Venta,
+} from '../../models';
 
 interface ModeloLiquidacionForm {
+  cantidad: string;
   precioImporte: string;
   precioMoneda: 'ARS' | 'USD';
   precioTipoCambio: string;
@@ -20,22 +29,29 @@ interface ModeloLiquidacionForm {
 }
 
 /**
- * Completa la liquidación de una venta en consignación pendiente
- * (docs/design-brief.md §6.5 y §10.2: "el productor tiene que poder ver de un vistazo
- * qué le deben liquidar y completar esa liquidación cuando llega el papel").
+ * Liquida una venta en consignación (docs/design-brief.md §6.5 y §10.2: "el productor
+ * tiene que poder ver de un vistazo qué le deben liquidar y completar esa liquidación
+ * cuando llega el papel"). Tiene dos modos:
  *
- * `PATCH /api/ventas/{id}/liquidacion` (docs/plan-frontend.md slice 5, shape
- * confirmado por bisección): `precioUnitario` y `fechaLiquidacion` son obligatorios;
- * `comision`/`flete`/`otrosGastos` son opcionales, cada uno un `Monto` completo. Para
- * no pedirle al productor una moneda y un tipo de cambio distintos por cada gasto (la
- * comisión y el flete casi siempre se descuentan en la misma moneda que el precio),
- * el formulario usa **una sola moneda/TC compartida** para los cuatro importes — una
- * simplificación deliberada, no una limitación del backend (que sí acepta un `Monto`
- * independiente por campo).
+ * - **`todo`** (default, "Completar liquidación"): liquida de una vez todo lo que falta
+ *   con `PATCH /api/ventas/{id}/liquidacion` (docs/plan-frontend.md slice 5, shape
+ *   confirmado por bisección). No pide cantidad: el backend crea un tramo por la
+ *   cantidad pendiente.
+ * - **`tramo`** ("Registrar liquidación"): liquida una parte con
+ *   `POST /api/ventas/{id}/liquidaciones`; la cantidad arranca precargada con lo
+ *   pendiente y no puede superarlo (`LIQUIDACION_EXCEDE_PENDIENTE` es la fuente de
+ *   verdad final).
+ *
+ * `precioUnitario` y la fecha son obligatorios; `comision`/`flete`/`otrosGastos` son
+ * opcionales, cada uno un `Monto` completo. Para no pedirle al productor una moneda y un
+ * tipo de cambio distintos por cada gasto (la comisión y el flete casi siempre se
+ * descuentan en la misma moneda que el precio), el formulario usa **una sola
+ * moneda/TC compartida** para los cuatro importes — una simplificación deliberada, no
+ * una limitación del backend (que sí acepta un `Monto` independiente por campo).
  */
 @Component({
   selector: 'app-liquidar-venta-form',
-  imports: [Modal, FormField, CampoImporte, ImportePipe, DecimalPipe],
+  imports: [Modal, FormField, CampoCantidad, CampoImporte, ImportePipe, DecimalPipe],
   templateUrl: './liquidar-venta-form.html',
   styleUrl: './liquidar-venta-form.scss',
 })
@@ -45,24 +61,47 @@ export class LiquidarVentaForm {
   private readonly tipoCambioMemoria = inject(TipoCambioMemoriaService);
 
   readonly venta = input.required<Venta>();
+  readonly modo = input<'todo' | 'tramo'>('todo');
   readonly loteCampaniaTitulo = input<string>('');
-  readonly guardado = output<void>();
+  readonly guardado = output<Venta>();
   readonly cancelado = output<void>();
+  /** El servidor rechazó la liquidación porque la venta cambió (carrera entre usuarios,
+   * `LIQUIDACION_EXCEDE_PENDIENTE` o `VENTA_YA_LIQUIDADA`): hay que refrescarla. */
+  readonly desactualizada = output<void>();
 
-  protected readonly modelo = signal<ModeloLiquidacionForm>({
-    precioImporte: '',
-    precioMoneda: 'ARS',
-    precioTipoCambio: untracked(this.tipoCambioMemoria.ultimo),
-    fechaLiquidacion: new Date().toISOString().slice(0, 10),
-    comisionImporte: '',
-    fleteImporte: '',
-    otrosGastosImporte: '',
+  protected readonly esTramo = computed(() => this.modo() === 'tramo');
+
+  /** Unidades que faltan liquidar. Una venta anterior a los tramos no trae el campo. */
+  protected readonly pendiente = computed(() => this.venta().cantidadPendiente ?? this.venta().cantidad);
+  protected readonly liquidadaEnParte = computed(() => Number(this.venta().cantidadLiquidada) > 0);
+
+  // Se reinicia solo al cambiar de venta (no cuando la misma venta se refresca tras una
+  // carrera), para no perder lo que el usuario ya tipeó.
+  protected readonly modelo = linkedSignal<number, ModeloLiquidacionForm>({
+    source: () => this.venta().id,
+    computation: () => ({
+      cantidad: untracked(this.pendiente),
+      precioImporte: '',
+      precioMoneda: 'ARS',
+      precioTipoCambio: untracked(this.tipoCambioMemoria.ultimo),
+      fechaLiquidacion: hoyIso(),
+      comisionImporte: '',
+      fleteImporte: '',
+      otrosGastosImporte: '',
+    }),
   });
+
+  protected readonly cantidadALiquidar = computed(() =>
+    this.esTramo() ? Number(this.modelo().cantidad) : Number(this.pendiente()),
+  );
 
   protected readonly importeBruto = computed(() => {
     const m = this.modelo();
     const precio = Number(m.precioImporte);
-    return Number.isFinite(precio) && precio > 0 ? precio * Number(this.venta().cantidad) : 0;
+    const cantidad = this.cantidadALiquidar();
+    return Number.isFinite(precio) && precio > 0 && Number.isFinite(cantidad) && cantidad > 0
+      ? precio * cantidad
+      : 0;
   });
 
   protected readonly importeNetoEnVivo = computed(() => {
@@ -83,6 +122,22 @@ export class LiquidarVentaForm {
   }
 
   protected readonly liquidacionForm = form(this.modelo, (path) => {
+    validate(path.cantidad, ({ value }) => {
+      if (!this.esTramo()) {
+        return undefined;
+      }
+      const numero = Number(value());
+      if (!Number.isFinite(numero) || numero <= 0) {
+        return { kind: 'cantidadInvalida', message: 'Ingresá una cantidad mayor que cero' };
+      }
+      const pendiente = Number(this.pendiente());
+      return numero > pendiente
+        ? {
+            kind: 'excedePendiente',
+            message: `No hay tanto pendiente: quedan ${pendiente} ${this.venta().unidad} sin liquidar`,
+          }
+        : undefined;
+    });
     validate(path.precioImporte, ({ value }) => {
       const numero = Number(value());
       return Number.isFinite(numero) && numero > 0
@@ -124,35 +179,48 @@ export class LiquidarVentaForm {
     }
 
     const valores = this.modelo();
-    const monto = (importe: string) => {
+    const monto = (importe: string): MontoRequest | undefined => {
       const numero = Number(importe);
       return importe.trim() !== '' && Number.isFinite(numero) && numero > 0
         ? { importe, moneda: valores.precioMoneda, tipoCambio: valores.precioTipoCambio }
         : undefined;
     };
-
-    const payload: LiquidacionRequest = {
-      precioUnitario: {
-        importe: valores.precioImporte,
-        moneda: valores.precioMoneda,
-        tipoCambio: valores.precioTipoCambio,
-      },
-      fechaLiquidacion: valores.fechaLiquidacion,
-      comision: monto(valores.comisionImporte),
-      flete: monto(valores.fleteImporte),
-      otrosGastos: monto(valores.otrosGastosImporte),
+    const precioUnitario: MontoRequest = {
+      importe: valores.precioImporte,
+      moneda: valores.precioMoneda,
+      tipoCambio: valores.precioTipoCambio,
     };
 
+    const solicitud = this.esTramo()
+      ? this.loteCampaniaService.registrarTramo(this.venta().id, {
+          fecha: valores.fechaLiquidacion,
+          cantidad: valores.cantidad,
+          precioUnitario,
+          comision: monto(valores.comisionImporte),
+          flete: monto(valores.fleteImporte),
+          otrosGastos: monto(valores.otrosGastosImporte),
+        } satisfies LiquidacionTramoRequest)
+      : this.loteCampaniaService.liquidarVenta(this.venta().id, {
+          precioUnitario,
+          fechaLiquidacion: valores.fechaLiquidacion,
+          comision: monto(valores.comisionImporte),
+          flete: monto(valores.fleteImporte),
+          otrosGastos: monto(valores.otrosGastosImporte),
+        } satisfies LiquidacionRequest);
+
     this.enviando.set(true);
-    this.loteCampaniaService.liquidarVenta(this.venta().id, payload).subscribe({
-      next: () => {
+    solicitud.subscribe({
+      next: (ventaActualizada) => {
         this.tipoCambioMemoria.guardar(valores.precioTipoCambio);
         this.aviso.mostrar('Liquidación cargada');
-        this.guardado.emit();
+        this.guardado.emit(ventaActualizada);
       },
       error: (error: ErrorResponse) => {
         this.enviando.set(false);
         this.aviso.mostrar(error.message || 'No se pudo cargar la liquidación. Probá de nuevo.', 'error');
+        if (error.code === 'LIQUIDACION_EXCEDE_PENDIENTE' || error.code === 'VENTA_YA_LIQUIDADA') {
+          this.desactualizada.emit();
+        }
       },
     });
   }

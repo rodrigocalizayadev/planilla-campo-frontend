@@ -322,15 +322,21 @@
               </span>
             </div>
             <span class="fila-venta__importe numero">{{ importeVenta(venta) | importe: monedaVista() }}</span>
-            <span class="chip-estado" [class.chip-estado--liquidada]="venta.estado === 'LIQUIDADA'">
-              {{ etiquetaEstadoVenta(venta.estado) }}
+            <span class="chip-estado" [class.chip-estado--liquidada]="estadoFilaCerrado(venta)">
+              {{ etiquetaEstadoFila(venta) }}
             </span>
-            @if (!esCerrada()) {
-              <div class="fila-venta__acciones">
-                @if (venta.estado === 'ENTREGADA') {
-                  <button type="button" class="boton-primario fila-venta__accion" (click)="abrirLiquidacion(venta)">
-                    Completar liquidación
-                  </button>
+            <div class="fila-venta__acciones">
+              <button type="button" class="boton-secundario fila-venta__accion" (click)="abrirDetalle(venta)">
+                Ver detalle
+              </button>
+              <!-- Los pagos llegan después del cierre: liquidar sigue habilitado con la campaña cerrada. -->
+              @if (puedeLiquidar(venta)) {
+                <button type="button" class="boton-primario fila-venta__accion" (click)="abrirLiquidacion(venta)">
+                  Completar liquidación
+                </button>
+              }
+              @if (!esCerrada()) {
+                @if (venta.estado === 'ENTREGADA' && !tienePagos(venta)) {
                   <button type="button" class="boton-secundario fila-venta__accion" (click)="editarVenta(venta)">
                     Editar
                   </button>
@@ -338,13 +344,14 @@
                 <button
                   type="button"
                   class="boton-baja fila-venta__accion"
-                  [disabled]="eliminandoVenta()"
+                  [disabled]="eliminandoVenta() || tienePagos(venta)"
+                  [attr.title]="tienePagos(venta) ? 'Quitá primero sus cobros o liquidaciones desde el detalle' : null"
                   (click)="pedirEliminarVenta(venta)"
                 >
                   Eliminar
                 </button>
-              </div>
-            }
+              }
+            </div>
           </div>
         }
         @if (ventas().length === 0) {
@@ -488,8 +495,19 @@
     <app-liquidar-venta-form
       [venta]="venta"
       [loteCampaniaTitulo]="lc.loteNombre + ' · ' + lc.cultivoNombre"
-      (guardado)="onVentaCargada()"
+      (guardado)="onVentaPagada($event)"
+      (desactualizada)="refrescarVentas()"
       (cancelado)="ventaALiquidar.set(null)"
+    />
+  }
+
+  @if (ventaDetalle(); as venta) {
+    <app-venta-detalle
+      [venta]="venta"
+      [loteCampaniaTitulo]="lc.loteNombre + ' · ' + lc.cultivoNombre"
+      (ventaActualizada)="onVentaPagada($event)"
+      (refrescar)="refrescarVentas()"
+      (cerrado)="cerrarDetalle()"
     />
   }
 
