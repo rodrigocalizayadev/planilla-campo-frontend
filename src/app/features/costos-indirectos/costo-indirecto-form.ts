@@ -8,6 +8,7 @@ import { AvisoService } from '../../shared/ui/aviso/aviso.service';
 import { TipoCambioMemoriaService } from '../../shared/data/tipo-cambio-memoria.service';
 import { calcularRepartoPorHa } from '../../shared/utils/prorrateo';
 import { CostosIndirectosService } from './costos-indirectos.service';
+import { hoyIso } from '../../shared/utils/fecha-local';
 import type { CostoIndirectoRequest, ErrorResponse, LoteCampania, MontoRequest } from '../../models';
 
 type Imputacion = 'PRORRATEAR' | 'DIRECTA';
@@ -61,7 +62,7 @@ export class CostoIndirectoForm {
 
   protected readonly modelo = signal<ModeloCostoIndirectoForm>({
     concepto: '',
-    fecha: new Date().toISOString().slice(0, 10),
+    fecha: hoyIso(),
     importe: '',
     moneda: 'ARS',
     tipoCambio: untracked(this.tipoCambioMemoria.ultimo),
