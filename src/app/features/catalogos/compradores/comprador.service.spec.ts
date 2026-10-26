@@ -4,7 +4,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { environment } from '../../../../environments/environment';
 import { CompradorService } from './comprador.service';
-import type { Comprador, CompradorRequest, CompradorSaldo } from '../../../models';
+import type { Comprador, CompradorRequest } from '../../../models';
 
 const COMPRADOR: Comprador = {
   id: 1,
@@ -79,23 +79,5 @@ describe('CompradorService', () => {
     const solicitud = http.expectOne(`${environment.apiBaseUrl}/compradores/1/reactivar`);
     expect(solicitud.request.method).toBe('PATCH');
     solicitud.flush(COMPRADOR);
-  });
-
-  it('pide el saldo con GET /api/compradores/{id}/saldo', () => {
-    const saldo: CompradorSaldo = {
-      compradorId: 1,
-      compradorNombre: 'Distribuidora San Jorge',
-      saldoCobrarArs: '700000.00',
-      pendientesLiquidar: [
-        { cultivoId: 1, cultivoNombre: 'Cebolla', calidad: 'PRIMERA', unidad: 'BOLSA', cantidadPendiente: '50.00' },
-      ],
-    };
-    let recibido: CompradorSaldo | undefined;
-    service.saldo(1).subscribe((s) => (recibido = s));
-
-    const solicitud = http.expectOne(`${environment.apiBaseUrl}/compradores/1/saldo`);
-    expect(solicitud.request.method).toBe('GET');
-    solicitud.flush(saldo);
-    expect(recibido).toEqual(saldo);
   });
 });

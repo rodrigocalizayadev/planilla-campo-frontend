@@ -53,6 +53,10 @@
       </label>
     </div>
 
+    @if (comprador(); as compradorActual) {
+      <app-comprador-saldo [compradorId]="compradorActual.id" />
+    }
+
     <div class="form-catalogo__pie">
       <button type="button" class="boton-secundario" (click)="cancelado.emit()">Cancelar</button>
       <button type="submit" class="boton-primario" [disabled]="enviando()">

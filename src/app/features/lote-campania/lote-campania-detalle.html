@@ -163,11 +163,19 @@
             <h2 class="panel__titulo">De dónde sale cada margen</h2>
           </div>
           <div class="fila-desglose">
-            <div class="fila-desglose__concepto"><span>Liquidado</span></div>
+            <div
+              class="fila-desglose__concepto"
+              title="Incluye lo ya liquidado de las entregas parciales. Los cobros no mueven el margen: se mide sobre lo liquidado, no sobre lo cobrado."
+            >
+              <span>Liquidado</span>
+            </div>
             <span class="fila-desglose__importe numero">{{ vistaMargen().ingresoRealizado | importe: monedaVista() }}</span>
           </div>
           <div class="fila-desglose">
-            <div class="fila-desglose__concepto">
+            <div
+              class="fila-desglose__concepto"
+              title="Solo las unidades entregadas que todavía faltan liquidar; en una entrega parcial no cuenta lo ya liquidado."
+            >
               <span>Entregado sin liquidar</span>
               <span class="badge-estimado">Estimado</span>
             </div>

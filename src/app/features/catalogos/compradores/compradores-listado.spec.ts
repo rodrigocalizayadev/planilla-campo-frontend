@@ -66,6 +66,11 @@ describe('CompradoresListado', () => {
 
     const fila: HTMLButtonElement = fixture.nativeElement.querySelector('button.fila-catalogo');
     fila.click();
+    // Al editar, el formulario también pide el saldo del comprador.
+    TestBed.flushEffects();
+    http
+      .expectOne(`${environment.apiBaseUrl}/compradores/1/saldo`)
+      .flush({ compradorId: 1, compradorNombre: 'Distribuidora San Jorge', saldoCobrarArs: '0.00', pendientesLiquidar: [] });
     await fixture.whenStable();
 
     expect(fixture.nativeElement.querySelector('.modal-caja__titulo')?.textContent).toContain(

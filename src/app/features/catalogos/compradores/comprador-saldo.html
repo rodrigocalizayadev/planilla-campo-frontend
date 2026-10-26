@@ -1,0 +1,33 @@
+<section class="saldo-comprador" aria-label="Saldo del comprador">
+  <h3 class="saldo-comprador__titulo">Saldo del comprador</h3>
+
+  <!-- Con el recurso en error, leer `value()` lanza: el error se mira primero. -->
+  @if (saldo.error()) {
+    <p class="saldo-comprador__estado" role="alert">No se pudo cargar el saldo de este comprador.</p>
+  } @else if (saldo.value(); as datos) {
+    <div class="saldo-comprador__bloques">
+      <div class="saldo-comprador__bloque">
+        <span class="saldo-comprador__etiqueta">A cobrar (ARS)</span>
+        <span class="saldo-comprador__valor numero">{{ datos.saldoCobrarArs | importe: 'ARS' }}</span>
+        <span class="saldo-comprador__sub">Ventas a precio cerrado, descontando lo ya cobrado.</span>
+      </div>
+
+      <div class="saldo-comprador__bloque">
+        <span class="saldo-comprador__etiqueta">Unidades sin liquidar</span>
+        @for (pendiente of datos.pendientesLiquidar; track $index) {
+          <div class="saldo-comprador__pendiente">
+            <span>{{ pendiente.cultivoNombre }} · {{ enums.etiqueta('calidad', pendiente.calidad) }}</span>
+            <span class="numero">
+              {{ pendiente.cantidadPendiente | number: '1.0-2' }} {{ enums.etiqueta('unidadProduccion', pendiente.unidad) }}
+            </span>
+          </div>
+        } @empty {
+          <span class="saldo-comprador__valor">Nada pendiente</span>
+        }
+        <span class="saldo-comprador__sub">Consignaciones sin precio todavía: no se valúan hasta liquidarlas.</span>
+      </div>
+    </div>
+  } @else {
+    <p class="saldo-comprador__estado">Cargando saldo…</p>
+  }
+</section>
