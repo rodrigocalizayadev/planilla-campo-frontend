@@ -7,10 +7,12 @@ import { LoteCampaniaService } from './lote-campania.service';
 import type {
   AplicacionInsumo,
   AplicacionInsumoRequest,
+  CobroRequest,
   Cosecha,
   CosechaRequest,
   DesgloseCostos,
   LiquidacionRequest,
+  LiquidacionTramoRequest,
   LoteCampania,
   LoteCampaniaRequest,
   Margen,
@@ -231,6 +233,8 @@ describe('LoteCampaniaService', () => {
       flete: null,
       otrosGastos: null,
       importeNeto: { importe: '450000', moneda: 'ARS', tipoCambio: '1' },
+      cobradoArs: '0',
+      cantidadLiquidada: '0',
       estado: 'LIQUIDADA',
       fechaEntrega: '2026-07-25',
       fechaLiquidacion: '2026-07-25',
@@ -293,6 +297,8 @@ describe('LoteCampaniaService', () => {
       flete: null,
       otrosGastos: null,
       importeNeto: null,
+      cobradoArs: '0',
+      cantidadLiquidada: '0',
       estado: 'ENTREGADA',
       fechaEntrega: '2026-07-25',
       fechaLiquidacion: null,
@@ -333,6 +339,8 @@ describe('LoteCampaniaService', () => {
       flete: null,
       otrosGastos: null,
       importeNeto: { importe: '44900', moneda: 'ARS', tipoCambio: '1' },
+      cobradoArs: '0',
+      cantidadLiquidada: '0',
       estado: 'LIQUIDADA',
       fechaEntrega: '2026-07-25',
       fechaLiquidacion: '2026-08-01',
@@ -343,5 +351,94 @@ describe('LoteCampaniaService', () => {
     expect(solicitud.request.method).toBe('PATCH');
     expect(solicitud.request.body).toEqual(payload);
     solicitud.flush(respuesta);
+  });
+
+  describe('cobros y tramos', () => {
+    const VENTA_COBRADA_EN_PARTE: Venta = {
+      id: 3,
+      loteCampaniaId: 4,
+      compradorId: 6,
+      compradorNombre: 'Clismar',
+      calidad: 'PRIMERA',
+      modalidad: 'PRECIO_CERRADO',
+      cantidad: '50',
+      unidad: 'BOLSA',
+      precioUnitario: { importe: '9000', moneda: 'ARS', tipoCambio: '1' },
+      comision: null,
+      flete: null,
+      otrosGastos: null,
+      importeNeto: { importe: '450000', moneda: 'ARS', tipoCambio: '1' },
+      estado: 'LIQUIDADA',
+      fechaEntrega: '2026-07-25',
+      fechaLiquidacion: '2026-07-25',
+      estadoCobro: 'PARCIAL',
+      cobradoArs: '200000.00',
+      saldoArs: '250000.00',
+      cantidadLiquidada: '50',
+    };
+
+    it('registra un cobro con POST /api/ventas/{id}/cobros y devuelve la venta actualizada', () => {
+      const payload: CobroRequest = {
+        fecha: '2026-01-15',
+        monto: { importe: '200000.50', moneda: 'ARS', tipoCambio: '1050' },
+        comentarios: 'Primera cuota',
+      };
+      let recibida: Venta | undefined;
+      service.registrarCobro(3, payload).subscribe((v) => (recibida = v));
+
+      const solicitud = http.expectOne(`${environment.apiBaseUrl}/ventas/3/cobros`);
+      expect(solicitud.request.method).toBe('POST');
+      expect(solicitud.request.body).toEqual(payload);
+      expect(typeof solicitud.request.body.monto.importe).toBe('string');
+      solicitud.flush(VENTA_COBRADA_EN_PARTE);
+      expect(recibida).toEqual(VENTA_COBRADA_EN_PARTE);
+    });
+
+    it('elimina un cobro con DELETE /api/cobros/{id} y devuelve la venta (200, no 204)', () => {
+      let recibida: Venta | undefined;
+      service.eliminarCobro(7).subscribe((v) => (recibida = v));
+
+      const solicitud = http.expectOne(`${environment.apiBaseUrl}/cobros/7`);
+      expect(solicitud.request.method).toBe('DELETE');
+      solicitud.flush(VENTA_COBRADA_EN_PARTE);
+      expect(recibida).toEqual(VENTA_COBRADA_EN_PARTE);
+    });
+
+    it('registra un tramo con POST /api/ventas/{id}/liquidaciones y devuelve la venta actualizada', () => {
+      const payload: LiquidacionTramoRequest = {
+        fecha: '2026-02-10',
+        cantidad: '30',
+        precioUnitario: { importe: '5500', moneda: 'ARS', tipoCambio: '1050' },
+        flete: { importe: '1200', moneda: 'ARS', tipoCambio: '1050' },
+      };
+      const respuesta: Venta = {
+        ...VENTA_COBRADA_EN_PARTE,
+        modalidad: 'CONSIGNACION',
+        estado: 'PARCIAL',
+        cantidadLiquidada: '30',
+        cantidadPendiente: '20',
+        estadoCobro: null,
+        saldoArs: null,
+        fechaLiquidacion: null,
+      };
+      let recibida: Venta | undefined;
+      service.registrarTramo(3, payload).subscribe((v) => (recibida = v));
+
+      const solicitud = http.expectOne(`${environment.apiBaseUrl}/ventas/3/liquidaciones`);
+      expect(solicitud.request.method).toBe('POST');
+      expect(solicitud.request.body).toEqual(payload);
+      solicitud.flush(respuesta);
+      expect(recibida).toEqual(respuesta);
+    });
+
+    it('elimina un tramo con DELETE /api/liquidaciones/{id} y devuelve la venta recalculada', () => {
+      let recibida: Venta | undefined;
+      service.eliminarTramo(5).subscribe((v) => (recibida = v));
+
+      const solicitud = http.expectOne(`${environment.apiBaseUrl}/liquidaciones/5`);
+      expect(solicitud.request.method).toBe('DELETE');
+      solicitud.flush(VENTA_COBRADA_EN_PARTE);
+      expect(recibida).toEqual(VENTA_COBRADA_EN_PARTE);
+    });
   });
 });

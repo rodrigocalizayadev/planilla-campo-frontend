@@ -3,6 +3,7 @@
 @use '../../shared/styles/formularios';
 @use '../../shared/styles/indicadores';
 @use '../../shared/styles/catalogo';
+@use '../../shared/styles/chips';
 
 .detalle-vacio {
   display: flex;
@@ -449,25 +450,6 @@
 .panel__toolbar-separador {
   color: var(--color-texto-terciario);
   font-size: 12px;
-}
-
-.chip-estado {
-  justify-self: end;
-  padding: 2px 8px;
-  border-radius: var(--radio-pill);
-  background: var(--color-advertencia-fondo);
-  border: 1px solid var(--color-advertencia-borde);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--color-advertencia-texto);
-
-  &--liquidada {
-    background: var(--color-verde-100);
-    border-color: var(--color-verde-300);
-    color: var(--color-verde-900);
-  }
 }
 
 .fila-movimiento {

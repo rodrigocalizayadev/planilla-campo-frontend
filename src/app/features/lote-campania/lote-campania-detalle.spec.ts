@@ -12,6 +12,7 @@ import type { Cosecha, DesgloseCostos, LoteCampania, Margen, Movimiento, PaginaR
 const TIPOS_TAREA: ValorEnum[] = [{ valor: 'CARPIDA', etiqueta: 'Carpida' }];
 const ESTADOS_VENTA: ValorEnum[] = [
   { valor: 'ENTREGADA', etiqueta: 'Entregada' },
+  { valor: 'PARCIAL', etiqueta: 'Parcial' },
   { valor: 'LIQUIDADA', etiqueta: 'Liquidada' },
 ];
 
@@ -230,6 +231,8 @@ describe('LoteCampaniaDetalle', () => {
         flete: null,
         otrosGastos: null,
         importeNeto: { importe: '270000', moneda: 'ARS', tipoCambio: '1', importeArs: '270000', importeUsd: '270000' },
+        cobradoArs: '0',
+        cantidadLiquidada: '0',
         estado: 'LIQUIDADA',
         fechaEntrega: '2026-06-05',
         fechaLiquidacion: '2026-06-05',
@@ -458,6 +461,8 @@ describe('LoteCampaniaDetalle', () => {
       flete: null,
       otrosGastos: null,
       importeNeto: null,
+      cobradoArs: '0',
+      cantidadLiquidada: '0',
       estado: 'ENTREGADA',
       fechaEntrega: '2026-06-05',
       fechaLiquidacion: null,
@@ -492,6 +497,8 @@ describe('LoteCampaniaDetalle', () => {
       flete: null,
       otrosGastos: null,
       importeNeto: null,
+      cobradoArs: '0',
+      cantidadLiquidada: '0',
       estado: 'ENTREGADA',
       fechaEntrega: '2026-06-05',
       fechaLiquidacion: null,
@@ -530,6 +537,8 @@ describe('LoteCampaniaDetalle', () => {
           flete: null,
           otrosGastos: null,
           importeNeto: { importe: '270000', moneda: 'ARS', tipoCambio: '1', importeArs: '270000', importeUsd: '270000' },
+          cobradoArs: '0',
+          cantidadLiquidada: '0',
           estado: 'LIQUIDADA',
           fechaEntrega: '2026-06-05',
           fechaLiquidacion: '2026-06-05',
@@ -560,6 +569,8 @@ describe('LoteCampaniaDetalle', () => {
       flete: null,
       otrosGastos: null,
       importeNeto: null,
+      cobradoArs: '0',
+      cantidadLiquidada: '0',
       estado: 'ENTREGADA',
       fechaEntrega: '2026-06-05',
       fechaLiquidacion: null,
@@ -588,7 +599,7 @@ describe('LoteCampaniaDetalle', () => {
     expect(fixture.nativeElement.querySelector('app-confirmar-accion')).toBeNull();
   });
 
-  it('con campaña cerrada, no ofrece cargar cosecha, venta ni completar liquidación', async () => {
+  it('con campaña cerrada, no ofrece cargar cosecha, venta, editar ni eliminar, pero sí ver el detalle y liquidar', async () => {
     const ventaPendiente: Venta = {
       id: 2,
       loteCampaniaId: 4,
@@ -603,6 +614,8 @@ describe('LoteCampaniaDetalle', () => {
       flete: null,
       otrosGastos: null,
       importeNeto: null,
+      cobradoArs: '0',
+      cantidadLiquidada: '0',
       estado: 'ENTREGADA',
       fechaEntrega: '2026-06-05',
       fechaLiquidacion: null,
@@ -626,10 +639,198 @@ describe('LoteCampaniaDetalle', () => {
 
     expect(fixture.nativeElement.textContent).not.toContain('+ Cargar corte');
     expect(fixture.nativeElement.textContent).not.toContain('+ Nueva venta');
-    expect(fixture.nativeElement.querySelector('.fila-venta__accion')).toBeNull();
+    // Los pagos llegan después del cierre: ver el detalle y liquidar siguen disponibles.
+    const botonesVenta: string[] = Array.from(
+      fixture.nativeElement.querySelectorAll('.fila-venta__accion') as NodeListOf<HTMLButtonElement>,
+    ).map((b) => b.textContent!.trim());
+    expect(botonesVenta).toEqual(['Ver detalle', 'Completar liquidación']);
     const filaCosecha: HTMLButtonElement = fixture.nativeElement.querySelector('button.fila-cosecha');
     expect(filaCosecha.disabled).toBe(true);
     expect(fixture.nativeElement.textContent).not.toContain('Eliminar');
+  });
+
+  describe('cobros y liquidaciones por tramos', () => {
+    const VENTA_COBRADA_EN_PARTE: Venta = {
+      id: 1,
+      loteCampaniaId: 4,
+      compradorId: 1,
+      compradorNombre: 'Comprador X',
+      calidad: 'PRIMERA',
+      modalidad: 'PRECIO_CERRADO',
+      cantidad: '30',
+      unidad: 'BOLSA',
+      precioUnitario: { importe: '9000', moneda: 'ARS', tipoCambio: '1', importeArs: '9000', importeUsd: '9000' },
+      comision: null,
+      flete: null,
+      otrosGastos: null,
+      importeNeto: { importe: '270000', moneda: 'ARS', tipoCambio: '1', importeArs: '270000', importeUsd: '270000' },
+      estado: 'LIQUIDADA',
+      fechaEntrega: '2026-06-05',
+      fechaLiquidacion: '2026-06-05',
+      estadoCobro: 'PARCIAL',
+      cobradoArs: '100000.00',
+      saldoArs: '170000.00',
+      cantidadLiquidada: '0',
+    };
+
+    const VENTA_PARCIAL: Venta = {
+      ...VENTA_COBRADA_EN_PARTE,
+      id: 2,
+      compradorNombre: 'Comprador Y',
+      modalidad: 'CONSIGNACION',
+      precioUnitario: null,
+      estado: 'PARCIAL',
+      fechaLiquidacion: null,
+      estadoCobro: null,
+      cobradoArs: '0',
+      saldoArs: null,
+      cantidadLiquidada: '6',
+      cantidadPendiente: '24',
+    };
+
+    function botonesDeLaFila(): string[] {
+      return Array.from(
+        fixture.nativeElement
+          .querySelector('.fila-venta:not(.fila-venta--header)')
+          .querySelectorAll('button') as NodeListOf<HTMLButtonElement>,
+      ).map((b) => b.textContent!.trim());
+    }
+
+    it('una venta a precio cerrado muestra su estado de cobro en el chip, no "Liquidada"', async () => {
+      fixture.autoDetectChanges();
+      flushBase({ ventas: [VENTA_COBRADA_EN_PARTE] });
+      await fixture.whenStable();
+
+      const chip = fixture.nativeElement.querySelector('.chip-estado');
+      expect(chip.textContent.trim()).toBe('PARCIAL');
+      expect(chip.classList.contains('chip-estado--liquidada')).toBe(false);
+    });
+
+    it('una venta a precio cerrado COBRADA lleva el chip de cerrado', async () => {
+      fixture.autoDetectChanges();
+      flushBase({ ventas: [{ ...VENTA_COBRADA_EN_PARTE, estadoCobro: 'COBRADA', cobradoArs: '270000.00', saldoArs: '0.00' }] });
+      await fixture.whenStable();
+
+      expect(fixture.nativeElement.querySelector('.chip-estado').classList.contains('chip-estado--liquidada')).toBe(true);
+    });
+
+    it('con cobros no se puede editar ni eliminar la venta: "Eliminar" queda deshabilitado con su porqué', async () => {
+      fixture.autoDetectChanges();
+      flushBase({ ventas: [VENTA_COBRADA_EN_PARTE] });
+      await fixture.whenStable();
+
+      expect(botonesDeLaFila()).toEqual(['Ver detalle', 'Eliminar']);
+      const eliminar: HTMLButtonElement = fixture.nativeElement.querySelector('.boton-baja.fila-venta__accion');
+      expect(eliminar.disabled).toBe(true);
+      expect(eliminar.title).toContain('cobros o liquidaciones');
+    });
+
+    it('una venta a precio cerrado sin cobros sigue pudiéndose eliminar', async () => {
+      fixture.autoDetectChanges();
+      flushBase({
+        ventas: [{ ...VENTA_COBRADA_EN_PARTE, estadoCobro: 'PENDIENTE', cobradoArs: '0', saldoArs: '270000.00' }],
+      });
+      await fixture.whenStable();
+
+      const eliminar: HTMLButtonElement = fixture.nativeElement.querySelector('.boton-baja.fila-venta__accion');
+      expect(eliminar.disabled).toBe(false);
+    });
+
+    it('una consignación PARCIAL ofrece completar la liquidación pero no editar, y no se puede eliminar', async () => {
+      fixture.autoDetectChanges();
+      flushBase({ ventas: [VENTA_PARCIAL] });
+      await fixture.whenStable();
+
+      expect(botonesDeLaFila()).toEqual(['Ver detalle', 'Completar liquidación', 'Eliminar']);
+      expect((fixture.nativeElement.querySelector('.boton-baja.fila-venta__accion') as HTMLButtonElement).disabled).toBe(true);
+      expect(fixture.nativeElement.querySelector('.chip-estado').textContent.trim()).toBe('Parcial');
+    });
+
+    it('"Ver detalle" abre el modal de la venta y pide sus cobros', async () => {
+      fixture.autoDetectChanges();
+      flushBase({ ventas: [VENTA_COBRADA_EN_PARTE] });
+      await fixture.whenStable();
+
+      (fixture.nativeElement.querySelector('.fila-venta__accion') as HTMLButtonElement).click();
+      TestBed.flushEffects();
+      http.expectOne(`${environment.apiBaseUrl}/ventas/1/cobros?size=200`).flush(pagina([]));
+      await fixture.whenStable();
+
+      expect(fixture.nativeElement.querySelector('app-venta-detalle')).toBeTruthy();
+    });
+
+    async function abrirDetalle(venta: Venta, urlLista: string): Promise<void> {
+      fixture.autoDetectChanges();
+      flushBase({ ventas: [venta] });
+      await fixture.whenStable();
+      (fixture.nativeElement.querySelector('.fila-venta__accion') as HTMLButtonElement).click();
+      TestBed.flushEffects();
+      http.expectOne(urlLista).flush(pagina([]));
+      await fixture.whenStable();
+    }
+
+    function detalle() {
+      return fixture.debugElement.query((d) => d.name === 'app-venta-detalle').componentInstance;
+    }
+
+    it('un cobro devuelve la venta actualizada: la fila cambia sin volver a pedir ventas ni el margen', async () => {
+      await abrirDetalle(VENTA_COBRADA_EN_PARTE, `${environment.apiBaseUrl}/ventas/1/cobros?size=200`);
+
+      detalle().ventaActualizada.emit({
+        ...VENTA_COBRADA_EN_PARTE,
+        estadoCobro: 'COBRADA',
+        cobradoArs: '270000.00',
+        saldoArs: '0.00',
+      });
+      TestBed.flushEffects();
+      await fixture.whenStable();
+
+      // `afterEach(http.verify)` falla si hubiera pedido ventas o margen de nuevo.
+      expect(fixture.nativeElement.querySelector('.fila-venta .chip-estado').textContent.trim()).toBe('COBRADA');
+      expect(fixture.nativeElement.querySelector('app-venta-detalle .chip-estado').textContent.trim()).toBe('COBRADA');
+    });
+
+    it('un tramo devuelve la venta actualizada: la fila cambia y se vuelve a pedir el margen', async () => {
+      await abrirDetalle(VENTA_PARCIAL, `${environment.apiBaseUrl}/ventas/2/liquidaciones?size=200`);
+
+      detalle().ventaActualizada.emit({ ...VENTA_PARCIAL, estado: 'LIQUIDADA', cantidadLiquidada: '30', cantidadPendiente: '0' });
+      TestBed.flushEffects();
+      http.expectOne(`${environment.apiBaseUrl}/lote-campanias/4/margen`).flush(MARGEN);
+      await fixture.whenStable();
+
+      expect(fixture.nativeElement.querySelector('.fila-venta .chip-estado').textContent.trim()).toBe('Liquidada');
+    });
+
+    it('si el servidor avisa que la venta cambió, vuelve a pedir las ventas', async () => {
+      await abrirDetalle(VENTA_COBRADA_EN_PARTE, `${environment.apiBaseUrl}/ventas/1/cobros?size=200`);
+
+      detalle().refrescar.emit();
+      TestBed.flushEffects();
+      http.expectOne(`${environment.apiBaseUrl}/lote-campanias/4/ventas?size=200`).flush(pagina([VENTA_COBRADA_EN_PARTE]));
+      http.expectOne(`${environment.apiBaseUrl}/lote-campanias/4/margen`).flush(MARGEN);
+      await fixture.whenStable();
+
+      expect(fixture.nativeElement.querySelector('app-venta-detalle')).toBeTruthy();
+    });
+
+    it('con campaña cerrada, el detalle sigue dejando registrar cobros', async () => {
+      campaniaActiva.establecer({ id: 1, nombre: '2025/26', estado: 'CERRADA' });
+      await abrirDetalle(VENTA_COBRADA_EN_PARTE, `${environment.apiBaseUrl}/ventas/1/cobros?size=200`);
+
+      const registrar: HTMLButtonElement = Array.from(
+        fixture.nativeElement.querySelectorAll('app-venta-detalle button') as NodeListOf<HTMLButtonElement>,
+      ).find((b) => b.textContent?.trim() === 'Registrar cobro')!;
+      expect(registrar.disabled).toBe(false);
+    });
+
+    it('cerrar el detalle quita el modal', async () => {
+      await abrirDetalle(VENTA_COBRADA_EN_PARTE, `${environment.apiBaseUrl}/ventas/1/cobros?size=200`);
+
+      detalle().cerrado.emit();
+      await fixture.whenStable();
+
+      expect(fixture.nativeElement.querySelector('app-venta-detalle')).toBeNull();
+    });
   });
 
   it('no encuentra el lote-campaña, muestra el estado vacío con link al tablero', async () => {

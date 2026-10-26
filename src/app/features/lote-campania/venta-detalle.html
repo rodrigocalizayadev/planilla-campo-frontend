@@ -1,0 +1,172 @@
+<app-modal
+  titulo="Detalle de venta"
+  [subtitulo]="venta().compradorNombre + ' · ' + (venta().fechaEntrega | fecha)"
+  (cerrar)="cerrado.emit()"
+>
+  <div class="venta-detalle">
+    @if (esPrecioCerrado()) {
+      <div class="venta-detalle__estado">
+        <span class="venta-detalle__estado-etiqueta">Estado del cobro</span>
+        <span class="chip-estado" [class.chip-estado--liquidada]="cobrada()">
+          {{ etiquetaEstadoCobro(venta().estadoCobro ?? 'PENDIENTE') }}
+        </span>
+      </div>
+
+      <dl class="venta-detalle__resumen">
+        <div class="venta-detalle__dato">
+          <dt>Importe de la venta</dt>
+          <dd class="numero">{{ venta().importeNeto?.importeArs | importe: 'ARS' }}</dd>
+        </div>
+        <div class="venta-detalle__dato">
+          <dt>Cobrado</dt>
+          <dd class="numero">{{ venta().cobradoArs | importe: 'ARS' }}</dd>
+        </div>
+        <div class="venta-detalle__dato">
+          <dt>Saldo</dt>
+          <dd class="numero venta-detalle__saldo">{{ venta().saldoArs | importe: 'ARS' }}</dd>
+        </div>
+      </dl>
+
+      <div class="venta-detalle__seccion">
+        <h3 class="venta-detalle__titulo">Cobros</h3>
+        <button type="button" class="boton-primario venta-detalle__accion" [disabled]="cobrada()" (click)="abrirFormulario('cobro')">
+          Registrar cobro
+        </button>
+      </div>
+
+      @for (cobro of cobros(); track cobro.id) {
+        <div class="fila-pago">
+          <div class="fila-pago__principal">
+            <span class="fila-pago__fecha numero">{{ cobro.fecha | fecha }}</span>
+            @if (cobro.comentarios) {
+              <span class="fila-pago__detalle">{{ cobro.comentarios }}</span>
+            }
+          </div>
+          <span class="fila-pago__importe numero">{{ cobro.monto.importeArs ?? cobro.monto.importe | importe: 'ARS' }}</span>
+          <button type="button" class="boton-baja fila-pago__quitar" [disabled]="quitando()" (click)="pedirQuitarCobro(cobro)">
+            Quitar
+          </button>
+        </div>
+      } @empty {
+        <p class="venta-detalle__vacio">Todavía no se registró ningún cobro de esta venta.</p>
+      }
+    } @else {
+      <div class="venta-detalle__estado">
+        <span class="venta-detalle__estado-etiqueta">Estado</span>
+        <span class="chip-estado" [class.chip-estado--liquidada]="liquidada()">
+          {{ etiquetaEstadoVenta(venta().estado) }}
+        </span>
+      </div>
+
+      <dl class="venta-detalle__resumen">
+        <div class="venta-detalle__dato">
+          <dt>Entregado</dt>
+          <dd class="numero">{{ venta().cantidad | number: '1.0-2' }} {{ venta().unidad }}</dd>
+        </div>
+        <div class="venta-detalle__dato">
+          <dt>Liquidado</dt>
+          <dd class="numero">{{ venta().cantidadLiquidada | number: '1.0-2' }} {{ venta().unidad }}</dd>
+        </div>
+        <div class="venta-detalle__dato">
+          <dt>Pendiente</dt>
+          <dd class="numero venta-detalle__saldo">{{ pendiente() | number: '1.0-2' }} {{ venta().unidad }}</dd>
+        </div>
+      </dl>
+
+      @if (venta().importeNeto; as neto) {
+        <p class="venta-detalle__nota">
+          <span class="numero">{{ (monedaVista() === 'ARS' ? neto.importeArs : neto.importeUsd) | importe: monedaVista() }}</span>
+          {{ liquidada() ? 'liquidados en total' : 'liquidados hasta ahora, sin contar lo pendiente' }}
+        </p>
+      }
+
+      <div class="venta-detalle__seccion">
+        <h3 class="venta-detalle__titulo">Liquidaciones</h3>
+        <div class="venta-detalle__acciones">
+          <button type="button" class="boton-secundario venta-detalle__accion" [disabled]="liquidada()" (click)="abrirFormulario('todo')">
+            Liquidar todo lo pendiente
+          </button>
+          <button type="button" class="boton-primario venta-detalle__accion" [disabled]="liquidada()" (click)="abrirFormulario('tramo')">
+            Registrar liquidación
+          </button>
+        </div>
+      </div>
+
+      @for (tramo of tramos(); track tramo.id) {
+        <div class="fila-pago">
+          <div class="fila-pago__principal">
+            <span class="fila-pago__fecha numero">{{ tramo.fecha | fecha }}</span>
+            <span class="fila-pago__detalle numero">
+              {{ tramo.cantidad | number: '1.0-2' }} {{ venta().unidad }} a
+              {{ (monedaVista() === 'ARS' ? tramo.precioUnitario.importeArs : tramo.precioUnitario.importeUsd) | importe: monedaVista() }}
+            </span>
+          </div>
+          <span class="fila-pago__importe numero">{{ importeTramo(tramo) | importe: monedaVista() }}</span>
+          <button type="button" class="boton-baja fila-pago__quitar" [disabled]="quitando()" (click)="pedirQuitarTramo(tramo)">
+            Quitar
+          </button>
+        </div>
+      } @empty {
+        <p class="venta-detalle__vacio">Todavía no se liquidó ninguna unidad de esta entrega.</p>
+      }
+    }
+
+    @if (tienePagos()) {
+      <p class="venta-detalle__nota">
+        Para editar o eliminar esta venta, primero quitá
+        {{ esPrecioCerrado() ? 'sus cobros' : 'sus liquidaciones' }}: la venta se reabre.
+      </p>
+    }
+  </div>
+</app-modal>
+
+@switch (formulario()) {
+  @case ('cobro') {
+    <app-cobro-form
+      [venta]="venta()"
+      (guardado)="onPagoGuardado($event)"
+      (desactualizada)="onDesactualizada()"
+      (cancelado)="cerrarFormulario()"
+    />
+  }
+  @case ('tramo') {
+    <app-liquidar-venta-form
+      modo="tramo"
+      [venta]="venta()"
+      [loteCampaniaTitulo]="loteCampaniaTitulo()"
+      (guardado)="onPagoGuardado($event)"
+      (desactualizada)="onDesactualizada()"
+      (cancelado)="cerrarFormulario()"
+    />
+  }
+  @case ('todo') {
+    <app-liquidar-venta-form
+      modo="todo"
+      [venta]="venta()"
+      [loteCampaniaTitulo]="loteCampaniaTitulo()"
+      (guardado)="onPagoGuardado($event)"
+      (desactualizada)="onDesactualizada()"
+      (cancelado)="cerrarFormulario()"
+    />
+  }
+}
+
+@if (cobroAQuitar(); as cobro) {
+  <app-confirmar-accion
+    titulo="¿Quitar este cobro?"
+    [mensaje]="(cobro.fecha | fecha) + ' · ' + (cobro.monto.importeArs ?? cobro.monto.importe | importe: 'ARS') + '. La venta vuelve a tener ese saldo.'"
+    textoConfirmar="Quitar"
+    (confirmado)="confirmarQuitarCobro()"
+    (cancelado)="cancelarQuitar()"
+  />
+}
+
+@if (tramoAQuitar(); as tramo) {
+  <app-confirmar-accion
+    titulo="¿Quitar esta liquidación?"
+    [mensaje]="(tramo.fecha | fecha) + ' · ' + (tramo.cantidad | number: '1.0-2') + ' ' + venta().unidad + '. Esas unidades vuelven a quedar pendientes.'"
+    textoConfirmar="Quitar"
+    (confirmado)="confirmarQuitarTramo()"
+    (cancelado)="cancelarQuitar()"
+  />
+}

@@ -24,6 +24,19 @@ import type { Monto, MontoRequest } from './monto.model';
  *   fuente de verdad final.
  * - `importeNeto` (`docs/reglas-calculo.md` §6.1) lo calcula el backend
  *   (`importeBruto − comision − flete − otrosGastos`); el front nunca lo recalcula.
+ *
+ * **Cobros y tramos** (`docs/api-endpoints-v2.md`, sumado cuando el backend agregó
+ * `POST /api/ventas/{id}/cobros` y `/liquidaciones`): el mecanismo de pago lo define
+ * `modalidad`, nunca el cultivo.
+ * - `PRECIO_CERRADO` se paga con **cobros**: `estadoCobro` (`PENDIENTE`/`PARCIAL`/
+ *   `COBRADA`) y `saldoArs` (`importeNeto.importeArs − cobradoArs`). Ambos vienen
+ *   ausentes o `null` en consignación.
+ * - `CONSIGNACION` se paga con **tramos de liquidación**: `cantidadPendiente`
+ *   (`cantidad − cantidadLiquidada`), ausente en precio cerrado. `estado` suma `PARCIAL`
+ *   (liquidada en parte); ahí `importeNeto` es un **acumulado parcial**, no un valor
+ *   final, y `precioUnitario`/`comision`/`flete`/`otrosGastos` vienen ausentes cuando
+ *   los liquidaron varios tramos (el precio vive en cada tramo).
+ * - `cobradoArs` y `cantidadLiquidada` vienen siempre. Los cobros no mueven el margen.
  */
 export interface Venta {
   id: number;
@@ -42,6 +55,11 @@ export interface Venta {
   flete: Monto | null;
   otrosGastos: Monto | null;
   importeNeto: Monto | null;
+  estadoCobro?: string | null;
+  cobradoArs: string;
+  saldoArs?: string | null;
+  cantidadLiquidada: string;
+  cantidadPendiente?: string | null;
 }
 
 /**

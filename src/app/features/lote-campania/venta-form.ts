@@ -10,6 +10,7 @@ import { AvisoService } from '../../shared/ui/aviso/aviso.service';
 import { EnumsService } from '../../core/enums/enums.service';
 import { TipoCambioMemoriaService } from '../../shared/data/tipo-cambio-memoria.service';
 import { LoteCampaniaService } from './lote-campania.service';
+import { hoyIso } from '../../shared/utils/fecha-local';
 import type { Comprador, ErrorResponse, PaginaResponse, Venta, VentaRequest } from '../../models';
 
 type Modalidad = 'PRECIO_CERRADO' | 'CONSIGNACION';
@@ -104,7 +105,7 @@ export class VentaForm {
     }
     return {
       compradorId: '',
-      fechaEntrega: new Date().toISOString().slice(0, 10),
+      fechaEntrega: hoyIso(),
       calidad: '',
       cantidad: '',
       modalidad: 'PRECIO_CERRADO',

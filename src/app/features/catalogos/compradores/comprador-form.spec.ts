@@ -1,11 +1,14 @@
 import { provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { of } from 'rxjs';
 import { vi } from 'vitest';
 import { CompradorForm } from './comprador-form';
 import { CompradorService } from './comprador.service';
 import { EnumsService } from '../../../core/enums/enums.service';
-import type { Comprador, ValorEnum } from '../../../models';
+import { environment } from '../../../../environments/environment';
+import type { Comprador, CompradorSaldo, ValorEnum } from '../../../models';
 
 const MODALIDADES: ValorEnum[] = [
   { valor: 'PRECIO_CERRADO', etiqueta: 'Precio cerrado' },
@@ -28,8 +31,17 @@ const COMPRADOR: Comprador = {
   activo: true,
 };
 
+const URL_SALDO = `${environment.apiBaseUrl}/compradores/1/saldo`;
+const SALDO: CompradorSaldo = {
+  compradorId: 1,
+  compradorNombre: 'Distribuidora San Jorge',
+  saldoCobrarArs: '0.00',
+  pendientesLiquidar: [],
+};
+
 describe('CompradorForm', () => {
   let fixture: ComponentFixture<CompradorForm>;
+  let http: HttpTestingController;
   let compradorService: { crear: ReturnType<typeof vi.fn>; actualizar: ReturnType<typeof vi.fn> };
 
   beforeEach(async () => {
@@ -39,13 +51,18 @@ describe('CompradorForm', () => {
       imports: [CompradorForm],
       providers: [
         provideZonelessChangeDetection(),
+        provideHttpClient(),
+        provideHttpClientTesting(),
         { provide: CompradorService, useValue: compradorService },
         { provide: EnumsService, useValue: enumsStub },
       ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(CompradorForm);
+    http = TestBed.inject(HttpTestingController);
   });
+
+  afterEach(() => http.verify());
 
   function enviarFormulario(): void {
     const formulario: HTMLFormElement = fixture.nativeElement.querySelector('form');
@@ -96,6 +113,8 @@ describe('CompradorForm', () => {
     // el formulario quedaba en blanco al editar (bug real, encontrado usando la app).
     fixture.componentRef.setInput('comprador', COMPRADOR);
     fixture.autoDetectChanges();
+    TestBed.flushEffects();
+    http.expectOne(URL_SALDO).flush(SALDO);
     await fixture.whenStable();
 
     const nombre: HTMLInputElement = fixture.nativeElement.querySelector(
@@ -106,6 +125,25 @@ describe('CompradorForm', () => {
     );
     expect(nombre.value).toBe('Distribuidora San Jorge');
     expect(cuit.value).toBe('30-52341180-4');
+  });
+
+  it('en edición muestra el saldo del comprador', async () => {
+    fixture.componentRef.setInput('comprador', COMPRADOR);
+    fixture.autoDetectChanges();
+    TestBed.flushEffects();
+    http.expectOne(URL_SALDO).flush(SALDO);
+    await fixture.whenStable();
+
+    expect(fixture.nativeElement.querySelector('app-comprador-saldo')).toBeTruthy();
+    expect(fixture.nativeElement.textContent).toContain('A cobrar (ARS)');
+    expect(fixture.nativeElement.textContent).toContain('Unidades sin liquidar');
+  });
+
+  it('al crear un comprador nuevo no pide ni muestra saldo', async () => {
+    fixture.autoDetectChanges();
+    await fixture.whenStable();
+
+    expect(fixture.nativeElement.querySelector('app-comprador-saldo')).toBeNull();
   });
 
 });
