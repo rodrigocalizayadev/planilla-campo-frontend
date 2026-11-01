@@ -9,6 +9,7 @@ import { AvisoService } from '../../shared/ui/aviso/aviso.service';
 import { EnumsService } from '../../core/enums/enums.service';
 import { TipoCambioMemoriaService } from '../../shared/data/tipo-cambio-memoria.service';
 import { LoteCampaniaService } from './lote-campania.service';
+import { hoyIso } from '../../shared/utils/fecha-local';
 import type { ErrorResponse, TareaRequest } from '../../models';
 
 type ModoCosto = 'JORNAL' | 'DESTAJO' | 'POR_HA' | 'TOTAL';
@@ -77,7 +78,7 @@ export class TareaForm {
     tipo: '',
     ejecutor: '',
     modoCosto: 'JORNAL',
-    fecha: new Date().toISOString().slice(0, 10),
+    fecha: hoyIso(),
     cantidad: '',
     valorImporte: '',
     valorMoneda: 'ARS',

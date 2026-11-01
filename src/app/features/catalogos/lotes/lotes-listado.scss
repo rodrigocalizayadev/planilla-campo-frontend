@@ -1,2 +1,6 @@
 @use '../../../shared/styles/catalogo';
 @use '../../../shared/styles/botones';
+
+.fila-catalogo--header {
+  max-width: calc(100% - 122px);
+}

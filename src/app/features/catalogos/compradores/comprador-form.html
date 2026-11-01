@@ -32,7 +32,7 @@
 
       <label class="campo">
         <span class="campo__etiqueta">Teléfono</span>
-        <input class="campo__input" type="text" [formField]="compradorForm.telefono" />
+        <input class="campo__input" type="text" inputmode="tel" [formField]="compradorForm.telefono" />
       </label>
     </div>
 
@@ -52,6 +52,10 @@
         </select>
       </label>
     </div>
+
+    @if (comprador(); as compradorActual) {
+      <app-comprador-saldo [compradorId]="compradorActual.id" />
+    }
 
     <div class="form-catalogo__pie">
       <button type="button" class="boton-secundario" (click)="cancelado.emit()">Cancelar</button>

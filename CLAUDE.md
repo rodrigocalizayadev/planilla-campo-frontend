@@ -145,7 +145,7 @@ en `docs/api-endpoints-v1.md` y en el comentario de `margen.model.ts`.
 ### 3. Enums desde la API
 
 Los desplegables se pueblan desde `GET /api/metadata/enums`, que devuelve valor y
-etiqueta en español para los trece enums del sistema. Se cachea al iniciar la app.
+etiqueta en español para los catorce enums del sistema. Se cachea al iniciar la app.
 
 **No hardcodees listas de enums**: se desincronizan cuando el back agrega un valor.
 

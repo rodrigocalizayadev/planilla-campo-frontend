@@ -27,6 +27,10 @@
     }
 
     <div class="catalogo__lista">
+      <div class="fila-catalogo fila-catalogo--indirecto fila-catalogo--header">
+        <div class="fila-catalogo__principal fila-catalogo__principal--header">Concepto</div>
+        <div class="fila-catalogo__numero fila-catalogo__numero--header">Importe</div>
+      </div>
       @for (costo of costosPagina(); track costo.id) {
         <div class="fila-catalogo fila-catalogo--indirecto">
           <div class="fila-catalogo__principal">
@@ -72,6 +76,10 @@
       <div class="panel">
         <div class="panel__header">
           <h2 class="panel__titulo">Reparto entre lotes</h2>
+        </div>
+        <div class="fila-reparto fila-reparto--header">
+          <span class="fila-reparto__lote fila-reparto__lote--header">Lote</span>
+          <span class="fila-reparto__importe fila-reparto__importe--header">Indirectos prorrateados</span>
         </div>
         @for (fila of reparto(); track fila.lote.id) {
           <div class="fila-reparto">

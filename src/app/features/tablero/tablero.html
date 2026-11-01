@@ -135,6 +135,11 @@
       </div>
 
       <div class="catalogo__lista">
+        <div class="fila-catalogo fila-catalogo--header">
+          <div class="fila-catalogo__principal fila-catalogo__principal--header">Lote</div>
+          <div class="fila-catalogo__numero fila-catalogo__numero--header">Costo total</div>
+          <div class="fila-catalogo__numero fila-catalogo__numero--header">Costo/ha</div>
+        </div>
         @for (fila of filas(); track fila.loteCampaniaId) {
           <a class="fila-catalogo fila-catalogo--tablero" [routerLink]="rutaLoteCampania(fila.loteCampaniaId)">
             <div class="fila-catalogo__principal">

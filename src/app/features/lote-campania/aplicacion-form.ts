@@ -10,6 +10,7 @@ import { AvisoService } from '../../shared/ui/aviso/aviso.service';
 import { EnumsService } from '../../core/enums/enums.service';
 import { TipoCambioMemoriaService } from '../../shared/data/tipo-cambio-memoria.service';
 import { LoteCampaniaService } from './lote-campania.service';
+import { hoyIso } from '../../shared/utils/fecha-local';
 import type { AplicacionInsumoRequest, ErrorResponse, Insumo, PaginaResponse } from '../../models';
 
 interface ModeloAplicacionForm {
@@ -58,7 +59,7 @@ export class AplicacionForm {
 
   protected readonly modelo = signal<ModeloAplicacionForm>({
     insumoId: '',
-    fecha: new Date().toISOString().slice(0, 10),
+    fecha: hoyIso(),
     cantidad: '',
     unidadMedida: '',
     precioImporte: '',

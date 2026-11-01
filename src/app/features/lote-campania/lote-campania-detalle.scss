@@ -3,6 +3,7 @@
 @use '../../shared/styles/formularios';
 @use '../../shared/styles/indicadores';
 @use '../../shared/styles/catalogo';
+@use '../../shared/styles/chips';
 
 .detalle-vacio {
   display: flex;
@@ -298,6 +299,31 @@
   min-width: 0;
 }
 
+.fila-cosecha--header {
+  padding-block: var(--espacio-4);
+  cursor: default;
+  pointer-events: none;
+
+  &:hover {
+    background: transparent;
+  }
+
+  .fila-cosecha__titulo--header,
+  .fila-cosecha__cantidad--header {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-texto-terciario);
+    font-family: inherit;
+    font-variant-numeric: normal;
+  }
+
+  .fila-cosecha__cantidad--header {
+    align-items: flex-end;
+  }
+}
+
 .fila-venta {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 120px 100px;
@@ -355,6 +381,37 @@
   }
 }
 
+.fila-venta--header {
+  padding-block: var(--espacio-4);
+  cursor: default;
+  pointer-events: none;
+  border-bottom: 1px solid var(--color-borde-fila);
+
+  &:hover {
+    background: transparent;
+  }
+
+  .fila-venta__principal--header,
+  .fila-venta__importe--header,
+  .fila-venta__estado--header {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-texto-terciario);
+    font-family: inherit;
+    font-variant-numeric: normal;
+  }
+
+  .fila-venta__importe--header {
+    text-align: right;
+  }
+
+  .fila-venta__estado--header {
+    justify-self: end;
+  }
+}
+
 .panel__header-boton {
   padding: 0 var(--espacio-6);
   white-space: nowrap;
@@ -393,25 +450,6 @@
 .panel__toolbar-separador {
   color: var(--color-texto-terciario);
   font-size: 12px;
-}
-
-.chip-estado {
-  justify-self: end;
-  padding: 2px 8px;
-  border-radius: var(--radio-pill);
-  background: var(--color-advertencia-fondo);
-  border: 1px solid var(--color-advertencia-borde);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--color-advertencia-texto);
-
-  &--liquidada {
-    background: var(--color-verde-100);
-    border-color: var(--color-verde-300);
-    color: var(--color-verde-900);
-  }
 }
 
 .fila-movimiento {
@@ -469,6 +507,33 @@
       grid-row: 1;
       grid-column: 1 / -1;
     }
+  }
+}
+
+.fila-movimiento--header {
+  padding-block: var(--espacio-4);
+  cursor: default;
+  pointer-events: none;
+  border-bottom: 1px solid var(--color-borde-fila);
+
+  &:hover {
+    background: transparent;
+  }
+
+  .fila-movimiento__fecha--header,
+  .fila-movimiento__detalle--header,
+  .fila-movimiento__importe--header {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-texto-terciario);
+    font-family: inherit;
+    font-variant-numeric: normal;
+  }
+
+  .fila-movimiento__importe--header {
+    text-align: right;
   }
 }
 

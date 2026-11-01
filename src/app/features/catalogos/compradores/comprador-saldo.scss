@@ -1,0 +1,65 @@
+@use '../../../shared/styles/tokens';
+
+.saldo-comprador {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-5);
+  padding-top: var(--espacio-6);
+  border-top: 1px solid var(--color-borde);
+
+  &__titulo {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-texto);
+  }
+
+  &__bloques {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--espacio-6);
+
+    @include tokens.movil {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  &__bloque {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-3);
+    padding: var(--espacio-6) var(--espacio-7);
+    background: var(--color-superficie-secundaria);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-lg);
+  }
+
+  &__etiqueta {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--color-texto-terciario);
+  }
+
+  &__valor {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--color-texto);
+  }
+
+  &__pendiente {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--espacio-5);
+    font-size: 14px;
+    color: var(--color-texto-sobre-superficie);
+  }
+
+  &__sub,
+  &__estado {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.3;
+    color: var(--color-texto-terciario);
+  }
+}

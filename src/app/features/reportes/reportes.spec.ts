@@ -182,7 +182,7 @@ describe('Reportes', () => {
     expect(texto).toContain('Cebolla');
     expect(texto).toContain('Zapallo');
     // Zapallo solo existe en 2025/26: la celda de 2024/25 queda vacía.
-    const celdasVacias = fixture.nativeElement.querySelectorAll('.tabla-comparativa__celda--vacia');
+    const celdasVacias = fixture.nativeElement.querySelectorAll('.cultivo-card__fila--vacia');
     expect(celdasVacias.length).toBe(1);
   });
 });

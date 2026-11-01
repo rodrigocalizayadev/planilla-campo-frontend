@@ -252,6 +252,37 @@
   }
 }
 
+// Encabezado de columnas para listas de catálogo.
+.fila-catalogo--header {
+  padding-block: var(--espacio-4);
+  cursor: default;
+  pointer-events: none;
+  border-bottom: 1px solid var(--color-borde-fila);
+
+  &:hover {
+    background: transparent;
+  }
+
+  .fila-catalogo__principal--header,
+  .fila-catalogo__numero--header,
+  .fila-catalogo__extra--header {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-texto-terciario);
+    font-family: inherit;
+    font-variant-numeric: normal;
+  }
+
+  // __extra mide 220px pero el chip en las filas arranca ~44px adentro desde la
+  // izquierda; con text-align: right el label cae sobre el botón de acción externo.
+  // text-align: center lo ubica visualmente sobre el chip sin tocar el botón.
+  .fila-catalogo__extra--header {
+    text-align: center;
+  }
+}
+
 // Botón de acción (Eliminar / Dar de baja / Reactivar) a la derecha de una fila de
 // listado, chico porque va al lado de la fila, no dentro de ella.
 .fila-catalogo__accion {
@@ -259,6 +290,13 @@
   padding: 0 var(--espacio-5);
   font-size: 12px;
   justify-self: end;
+
+  // Spacer invisible en la fila de encabezado: ocupa el mismo espacio que el botón
+  // de acción para que las columnas del header alineen con las de las filas de datos.
+  &--spacer {
+    visibility: hidden;
+    pointer-events: none;
+  }
 }
 
 // Fila de catálogo (lote, cultivo, insumo, comprador) con acción de baja/reactivación

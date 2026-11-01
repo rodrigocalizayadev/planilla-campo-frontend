@@ -1,0 +1,49 @@
+<app-modal titulo="Registrar cobro" [subtitulo]="venta().compradorNombre" (cerrar)="cancelado.emit()">
+  <form class="form-catalogo" novalidate (submit)="guardar($event)">
+    <p class="campo__ayuda">
+      Saldo pendiente:
+      <strong class="numero">{{ venta().saldoArs | importe: 'ARS' }}</strong>
+    </p>
+
+    <div class="campo-fila">
+      <label class="campo" for="cobroImporte">
+        <span class="campo__etiqueta">Importe cobrado ($)</span>
+        <app-campo-importe id="cobroImporte" variante="numerico" [formField]="cobroForm.importe" />
+        @if (cobroForm.importe().touched() && cobroForm.importe().invalid()) {
+          <span class="campo__error">{{ cobroForm.importe().errors()[0]?.message }}</span>
+        }
+      </label>
+
+      <label class="campo" for="cobroTipoCambio">
+        <span class="campo__etiqueta">Tipo de cambio</span>
+        <app-campo-importe
+          id="cobroTipoCambio"
+          variante="numerico"
+          tipo="tipoCambio"
+          [formField]="cobroForm.tipoCambio"
+        />
+        @if (cobroForm.tipoCambio().touched() && cobroForm.tipoCambio().invalid()) {
+          <span class="campo__error">{{ cobroForm.tipoCambio().errors()[0]?.message }}</span>
+        }
+      </label>
+    </div>
+
+    <label class="campo">
+      <span class="campo__etiqueta">Fecha del cobro</span>
+      <input class="campo__input" type="date" [formField]="cobroForm.fecha" />
+      @if (cobroForm.fecha().touched() && cobroForm.fecha().invalid()) {
+        <span class="campo__error">{{ cobroForm.fecha().errors()[0]?.message }}</span>
+      }
+    </label>
+
+    <label class="campo">
+      <span class="campo__etiqueta">Comentarios (opcional)</span>
+      <input class="campo__input" type="text" [formField]="cobroForm.comentarios" />
+    </label>
+
+    <div class="form-catalogo__pie">
+      <button type="button" class="boton-secundario" (click)="cancelado.emit()">Cancelar</button>
+      <button type="submit" class="boton-primario" [disabled]="enviando()">Registrar cobro</button>
+    </div>
+  </form>
+</app-modal>

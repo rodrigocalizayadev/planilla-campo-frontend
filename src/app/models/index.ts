@@ -19,4 +19,7 @@ export * from './aplicacion-insumo.model';
 export * from './movimiento.model';
 export * from './cosecha.model';
 export * from './venta.model';
+export * from './cobro.model';
+export * from './liquidacion-tramo.model';
+export * from './comprador-saldo.model';
 export * from './costo-indirecto.model';

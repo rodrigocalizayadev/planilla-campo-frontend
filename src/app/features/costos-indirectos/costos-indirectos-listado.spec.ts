@@ -162,7 +162,7 @@ describe('CostosIndirectosListado', () => {
     expect(texto).toContain('Directo a Lote Norte');
 
     // Reparto: lote 4 recibe 75.000 (parte de Canon) + 10.000 (directo) = 85.000; lote 5 recibe 25.000.
-    const filasReparto = fixture.nativeElement.querySelectorAll('.fila-reparto');
+    const filasReparto = fixture.nativeElement.querySelectorAll('.fila-reparto:not(.fila-reparto--header)');
     expect(filasReparto[0].textContent).toContain('85.000');
     expect(filasReparto[1].textContent).toContain('25.000');
   });

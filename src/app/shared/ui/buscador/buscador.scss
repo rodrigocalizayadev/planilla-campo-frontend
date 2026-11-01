@@ -1,3 +1,5 @@
+@use '../../styles/tokens';
+
 :host {
   display: contents;
 }
@@ -14,6 +16,10 @@
   background: var(--color-sidebar-fondo);
   font-size: 13px;
   color: var(--color-texto);
+
+  @include tokens.movil {
+    min-height: var(--objetivo-tactil-min);
+  }
 
   &::placeholder {
     color: var(--color-texto-terciario);

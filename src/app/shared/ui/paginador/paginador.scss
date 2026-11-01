@@ -1,3 +1,5 @@
+@use '../../styles/tokens';
+
 :host {
   display: contents;
 }
@@ -34,6 +36,11 @@
   font-weight: 600;
   color: var(--color-texto-terciario);
   cursor: pointer;
+
+  @include tokens.movil {
+    min-height: var(--objetivo-tactil-min);
+    min-width: var(--objetivo-tactil-min);
+  }
 
   &:hover:not(:disabled) {
     border-color: var(--color-borde-input);

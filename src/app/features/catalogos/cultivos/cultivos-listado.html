@@ -15,6 +15,11 @@
   </div>
 
   <div class="catalogo__lista">
+    <div class="fila-catalogo fila-catalogo--header">
+      <div class="fila-catalogo__principal fila-catalogo__principal--header">Cultivo</div>
+      <div class="fila-catalogo__numero fila-catalogo__numero--header">1ª de referencia</div>
+      <div class="fila-catalogo__extra fila-catalogo__extra--header">2ª de referencia</div>
+    </div>
     @for (cultivo of cultivosVisibles(); track cultivo.id) {
       <div class="fila-catalogo-fila">
         <button type="button" class="fila-catalogo" (click)="editar(cultivo)">

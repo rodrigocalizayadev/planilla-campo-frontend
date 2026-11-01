@@ -152,97 +152,111 @@
   }
 }
 
-.tabla-comparativa {
-  overflow-x: auto;
+.comparativa-cultivos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-6);
+}
+
+.cultivo-card {
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-lg);
+  overflow: hidden;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--espacio-6) var(--espacio-8);
+    background: var(--color-superficie-secundaria);
+    border-bottom: 1px solid var(--color-borde-fila);
+  }
+
+  &__nombre {
+    font-family: var(--font-ui);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-texto);
+    text-transform: capitalize;
+  }
+
+  &__cantidad {
+    font-size: 12px;
+    color: var(--color-texto-terciario);
+  }
 
   &__fila {
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: minmax(180px, 1fr);
-    grid-template-columns: minmax(0, 1.4fr);
-    gap: var(--espacio-6);
-    padding: var(--espacio-6) var(--espacio-8);
+    padding: var(--espacio-5) var(--espacio-8);
     border-bottom: 1px solid var(--color-borde-fila);
-    align-items: start;
+    display: grid;
+    grid-template-columns: minmax(100px, 200px) 1fr;
+    grid-template-rows: auto auto;
+    gap: var(--espacio-3) var(--espacio-6);
+    align-items: center;
 
-    // El grid de N columnas (una por campaña) no tiene ancho fijo que respetar en
-    // mobile: cada fila es su propio grid, así que columnas con contenido más angosto
-    // en una fila que en otra no se alinean entre filas, y un importe de varios
-    // dígitos sin punto de corte se pinta encima de la columna vecina en vez de
-    // desbordar de forma prolija. Por debajo de 900px cada campaña pasa a ser un
-    // bloque apilado dentro de la tarjeta del cultivo, con su nombre como etiqueta
-    // (agregado en el HTML con `.tabla-comparativa__campania`, oculto en escritorio
-    // porque ahí ya lo muestra el header de columna).
-    @include tokens.movil {
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &--vacia {
       display: flex;
-      flex-direction: column;
-      gap: var(--espacio-5);
+      align-items: center;
+      gap: var(--espacio-6);
     }
   }
 
-  &__fila--header {
-    font-size: 11px;
+  &__campania-nombre {
+    font-size: 13px;
     font-weight: 600;
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
-    color: var(--color-texto-terciario);
+    color: var(--color-texto-secundario);
+  }
+
+  &__barra-wrap {
+    height: 8px;
     background: var(--color-superficie-secundaria);
-
-    // Reemplazado por `.tabla-comparativa__campania` dentro de cada celda en mobile.
-    @include tokens.movil {
-      display: none;
-    }
+    border-radius: 4px;
+    overflow: hidden;
   }
 
-  &__cultivo {
-    @include tokens.movil {
-      font-family: var(--font-ui);
-      font-weight: 600;
-      font-size: 15px;
-      color: var(--color-texto);
-    }
+  &__barra {
+    height: 100%;
+    background: var(--color-verde-600);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+    min-width: 4px;
   }
 
-  &__celda {
+  &__metricas {
     display: flex;
-    flex-direction: column;
-    gap: 2px;
-    font-size: 15px;
-    font-weight: 600;
+    align-items: center;
+    gap: var(--espacio-6);
+    flex-wrap: wrap;
+    grid-column: 1 / -1;
+    font-size: 13px;
+  }
+
+  &__costo-ha {
+    font-weight: 700;
     color: var(--color-texto);
+    font-size: 15px;
+  }
 
-    @include tokens.movil {
-      // `& + &` para no ponerle borde de separación al primer bloque de campaña
-      // (su hermano anterior es `.tabla-comparativa__cultivo`, no otra celda).
-      & + & {
-        padding-top: var(--espacio-4);
-        border-top: 1px solid var(--color-borde-fila);
-      }
+  &__costo-total {
+    color: var(--color-texto-secundario);
+  }
+
+  &__margen {
+    color: var(--color-texto-secundario);
+
+    &.valor-negativo {
+      color: var(--color-negativo);
     }
   }
 
-  &__celda--vacia {
+  &__sin-datos {
+    font-size: 13px;
     color: var(--color-texto-terciario);
-    font-weight: 400;
-  }
-
-  &__campania {
-    display: none;
-
-    @include tokens.movil {
-      display: block;
-      font-family: var(--font-ui);
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      color: var(--color-texto-terciario);
-    }
-  }
-
-  &__sub {
-    font-size: 12px;
-    font-weight: 400;
-    color: var(--color-texto-terciario);
+    font-style: italic;
   }
 }

@@ -24,12 +24,34 @@
 
     <label class="campo">
       <span class="campo__etiqueta">Contraseña</span>
-      <input
-        class="campo__input"
-        type="password"
-        autocomplete="current-password"
-        [formField]="loginForm.password"
-      />
+      <div class="campo-password">
+        <input
+          class="campo__input campo-password__input"
+          [type]="mostrarPassword() ? 'text' : 'password'"
+          autocomplete="current-password"
+          [formField]="loginForm.password"
+        />
+        <button
+          type="button"
+          class="campo-password__boton"
+          [attr.aria-label]="mostrarPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+          [attr.aria-pressed]="mostrarPassword()"
+          (click)="alternarMostrarPassword()"
+        >
+          @if (mostrarPassword()) {
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+          } @else {
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M3 3l18 18" />
+              <path d="M10.6 5.2A10.9 10.9 0 0 1 12 5c6.5 0 10 7 10 7a13.4 13.4 0 0 1-3.1 3.9M6.5 6.6C3.9 8.3 2 12 2 12s3.5 7 10 7a10 10 0 0 0 4.2-.9" />
+              <path d="M9.9 9.9a3 3 0 0 0 4.2 4.2" />
+            </svg>
+          }
+        </button>
+      </div>
       @if (loginForm.password().touched() && loginForm.password().invalid()) {
         <span class="campo__error">{{ loginForm.password().errors()[0]?.message }}</span>
       }

@@ -3,6 +3,7 @@ import { FormField, form, required } from '@angular/forms/signals';
 import { Modal } from '../../../shared/ui/modal/modal';
 import { AvisoService } from '../../../shared/ui/aviso/aviso.service';
 import { EnumsService } from '../../../core/enums/enums.service';
+import { CompradorSaldoPanel } from './comprador-saldo';
 import { CompradorService } from './comprador.service';
 import type { Comprador, CompradorRequest, ErrorResponse } from '../../../models';
 
@@ -15,10 +16,14 @@ interface ModeloCompradorForm {
   modalidadHabitual: string;
 }
 
-/** Alta/edición de comprador (docs/plan-frontend.md slice 2). Solo el nombre es obligatorio. */
+/**
+ * Alta/edición de comprador (docs/plan-frontend.md slice 2). Solo el nombre es obligatorio.
+ * Al editar se muestra además su saldo (`CompradorSaldoPanel`): lo que debe y las unidades
+ * sin liquidar.
+ */
 @Component({
   selector: 'app-comprador-form',
-  imports: [Modal, FormField],
+  imports: [Modal, FormField, CompradorSaldoPanel],
   templateUrl: './comprador-form.html',
   styleUrl: './comprador-form.scss',
 })

@@ -5,10 +5,12 @@ import { environment } from '../../../environments/environment';
 import type {
   AplicacionInsumo,
   AplicacionInsumoRequest,
+  CobroRequest,
   Cosecha,
   CosechaRequest,
   DesgloseCostos,
   LiquidacionRequest,
+  LiquidacionTramoRequest,
   LoteCampania,
   LoteCampaniaRequest,
   Margen,
@@ -117,5 +119,25 @@ export class LoteCampaniaService {
   // por su propio id (`PATCH /api/ventas/{id}/liquidacion`), no por el lote-campaña.
   liquidarVenta(ventaId: number, payload: LiquidacionRequest): Observable<Venta> {
     return this.http.patch<Venta>(`${environment.apiBaseUrl}/ventas/${ventaId}/liquidacion`, payload);
+  }
+
+  // Cobros (`PRECIO_CERRADO`) y tramos de liquidación (`CONSIGNACION`): las cuatro
+  // escrituras devuelven la `Venta` actualizada, así que el llamador la usa para
+  // refrescar la pantalla sin volver a pedirla. Los DELETE son 200 con `Venta`, no 204.
+  // El listado de cobros/tramos lo pide el modal con `httpResource`.
+  registrarCobro(ventaId: number, payload: CobroRequest): Observable<Venta> {
+    return this.http.post<Venta>(`${environment.apiBaseUrl}/ventas/${ventaId}/cobros`, payload);
+  }
+
+  eliminarCobro(cobroId: number): Observable<Venta> {
+    return this.http.delete<Venta>(`${environment.apiBaseUrl}/cobros/${cobroId}`);
+  }
+
+  registrarTramo(ventaId: number, payload: LiquidacionTramoRequest): Observable<Venta> {
+    return this.http.post<Venta>(`${environment.apiBaseUrl}/ventas/${ventaId}/liquidaciones`, payload);
+  }
+
+  eliminarTramo(tramoId: number): Observable<Venta> {
+    return this.http.delete<Venta>(`${environment.apiBaseUrl}/liquidaciones/${tramoId}`);
   }
 }

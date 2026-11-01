@@ -115,6 +115,29 @@ export class Reportes {
     return Array.from(vistas, ([campaniaId, nombreCampania]) => ({ campaniaId, nombreCampania }));
   });
 
+  protected readonly gruposComparativa = computed(() => {
+    const cultivos = this.cultivosComparativa();
+    const campanias = this.campaniasComparativa();
+    const filas = this.comparativaFilas();
+    return cultivos.map((cultivo) => {
+      const entries = campanias.map((c) => filas.find((f) => f.cultivo === cultivo && f.campaniaId === c.campaniaId));
+      const validas = entries.filter((e) => e !== undefined) as FilaComparativaCultivo[];
+      const maxArs = Math.max(...validas.map((e) => e.costoPorHaArs), 0);
+      const maxUsd = Math.max(...validas.map((e) => e.costoPorHaUsd), 0);
+      return { cultivo, campanias: entries, maxCostoPorHaArs: maxArs, maxCostoPorHaUsd: maxUsd };
+    });
+  });
+
+  barraAncho(
+    fila: FilaComparativaCultivo,
+    grupo: { maxCostoPorHaArs: number; maxCostoPorHaUsd: number },
+    moneda: 'ARS' | 'USD',
+  ): number {
+    const max = moneda === 'ARS' ? grupo.maxCostoPorHaArs : grupo.maxCostoPorHaUsd;
+    const val = moneda === 'ARS' ? fila.costoPorHaArs : fila.costoPorHaUsd;
+    return max > 0 ? (val / max) * 100 : 0;
+  }
+
   celda(cultivo: string, campaniaId: number): FilaComparativaCultivo | undefined {
     return this.comparativaFilas().find((f) => f.cultivo === cultivo && f.campaniaId === campaniaId);
   }

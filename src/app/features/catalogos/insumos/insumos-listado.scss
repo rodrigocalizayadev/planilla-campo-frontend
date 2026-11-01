@@ -1,2 +1,9 @@
 @use '../../../shared/styles/catalogo';
 @use '../../../shared/styles/botones';
+
+// El header de columnas es un <div> con width: 100% que se expande al wrapper
+// completo, a diferencia de los <button> de filas que respetan al sibling de
+// acción con flex: 1. max-width limita el header al mismo ancho que los buttons.
+.fila-catalogo--header {
+  max-width: calc(100% - 122px);
+}

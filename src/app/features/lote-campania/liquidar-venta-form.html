@@ -1,8 +1,27 @@
-<app-modal titulo="Completar liquidación" [subtitulo]="loteCampaniaTitulo()" (cerrar)="cancelado.emit()">
+<app-modal
+  [titulo]="esTramo() ? 'Registrar liquidación' : 'Completar liquidación'"
+  [subtitulo]="loteCampaniaTitulo()"
+  (cerrar)="cancelado.emit()"
+>
   <form class="form-catalogo" novalidate (submit)="guardar($event)">
     <p class="campo__ayuda">
-      {{ venta().compradorNombre }} · {{ venta().cantidad | number: '1.0-2' }} {{ venta().unidad }} entregadas
+      @if (liquidadaEnParte()) {
+        {{ venta().compradorNombre }} · quedan {{ pendiente() | number: '1.0-2' }} {{ venta().unidad }} por liquidar de
+        {{ venta().cantidad | number: '1.0-2' }} entregadas
+      } @else {
+        {{ venta().compradorNombre }} · {{ venta().cantidad | number: '1.0-2' }} {{ venta().unidad }} entregadas
+      }
     </p>
+
+    @if (esTramo()) {
+      <label class="campo" for="liquidacionCantidad">
+        <span class="campo__etiqueta">Cantidad a liquidar</span>
+        <app-campo-cantidad id="liquidacionCantidad" [formField]="liquidacionForm.cantidad" />
+        @if (liquidacionForm.cantidad().touched() && liquidacionForm.cantidad().invalid()) {
+          <span class="campo__error">{{ liquidacionForm.cantidad().errors()[0]?.message }}</span>
+        }
+      </label>
+    }
 
     <div class="campo-fila">
       <div class="campo">
@@ -70,13 +89,15 @@
     </div>
 
     <div class="total-en-vivo">
-      <span class="total-en-vivo__etiqueta">Neto a liquidar</span>
+      <span class="total-en-vivo__etiqueta">{{ esTramo() ? 'Neto de este tramo' : 'Neto a liquidar' }}</span>
       <span class="total-en-vivo__valor numero">{{ importeNetoEnVivo() | importe: modelo().precioMoneda }}</span>
     </div>
 
     <div class="form-catalogo__pie">
       <button type="button" class="boton-secundario" (click)="cancelado.emit()">Cancelar</button>
-      <button type="submit" class="boton-primario" [disabled]="enviando()">Guardar liquidación</button>
+      <button type="submit" class="boton-primario" [disabled]="enviando()">
+        {{ esTramo() ? 'Registrar liquidación' : 'Guardar liquidación' }}
+      </button>
     </div>
   </form>
 </app-modal>

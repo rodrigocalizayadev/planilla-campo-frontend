@@ -1,3 +1,5 @@
+@use '../../styles/tokens';
+
 :host {
   display: contents;
 }
@@ -21,6 +23,10 @@
   font-size: 13px;
   font-weight: 600;
   color: var(--color-texto-secundario);
+
+  @include tokens.movil {
+    min-height: var(--objetivo-tactil-min);
+  }
 
   // El outline de foco (styles.scss) se dibuja por fuera de la caja, así que el botón
   // de al lado, pintado después en el DOM, lo tapa donde se solapan — subirlo por
@@ -46,6 +52,11 @@
   color: var(--color-texto-secundario);
   cursor: pointer;
   white-space: nowrap;
+
+  @include tokens.movil {
+    min-height: var(--objetivo-tactil-min);
+    min-width: var(--objetivo-tactil-min);
+  }
 
   &:hover {
     background: var(--color-superficie-secundaria);

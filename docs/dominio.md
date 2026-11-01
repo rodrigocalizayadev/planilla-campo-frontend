@@ -196,11 +196,24 @@ con la misma entidad `Venta`:
 Se acuerda precio antes o al momento de entregar. La venta nace con
 `estado = LIQUIDADA` y el precio cargado. El margen se conoce de inmediato.
 
+El mecanismo de pago lo define `venta.modalidad` (nunca el cultivo): una venta a
+precio cerrado se **cobra** en cuotas, en pesos. Cada **cobro** reduce el `saldoArs`
+y la venta lleva un `estadoCobro` propio (`PENDIENTE`, `PARCIAL`, `COBRADA`). Los
+cobros no mueven el margen, que se mide sobre lo devengado. Las ventas históricas
+figuran `COBRADA` con un cobro por el total en su fecha de entrega.
+
 ### 10.2 Consignación
 Se entrega la mercadería **sin precio**. El consignatario la vende y liquida
 semanas después, descontando comisión, flete y gastos. La venta nace con
 `estado = ENTREGADA` y `precioUnitario` en `null`, y se completa cuando llega la
 liquidación.
+
+El consignatario puede liquidar **de a poco**, al precio del día: cada liquidación
+es un **tramo** (cantidad, precio y gastos propios) que reduce `cantidadPendiente`.
+Mientras queden unidades por liquidar la venta está `PARCIAL`, y su `importeNeto` es
+un acumulado parcial, no un valor final; el precio vive en cada tramo, no en la
+venta. Pasa a `LIQUIDADA` cuando la suma de los tramos cubre la cantidad entregada.
+Las consignaciones históricas ya liquidadas tienen un único tramo.
 
 **Esta es la regla de negocio más fácil de romper.** Si el sistema calcula el
 margen ignorando las entregas sin liquidar, va a mostrar campañas falsamente
@@ -364,7 +377,19 @@ Esta tabla es la fuente única de verdad; cada pantalla debe usarla.
 | Enum | Etiqueta |
 |---|---|
 | `ENTREGADA` | Entregada |
+| `PARCIAL` | Parcial (consignación liquidada en parte) |
 | `LIQUIDADA` | Liquidada |
+
+### `EstadoCobro`
+
+Solo aplica a ventas `PRECIO_CERRADO`. Las etiquetas de la tabla son de referencia: la
+interfaz las lee de `GET /api/metadata/enums` (clave `estadoCobro`).
+
+| Enum | Etiqueta |
+|---|---|
+| `PENDIENTE` | Pendiente |
+| `PARCIAL` | Parcial |
+| `COBRADA` | Cobrada |
 
 ### `EstadoCampania`
 

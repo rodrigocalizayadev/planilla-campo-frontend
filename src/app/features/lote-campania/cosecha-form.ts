@@ -5,6 +5,7 @@ import { Modal } from '../../shared/ui/modal/modal';
 import { CampoCantidad } from '../../shared/ui/campo-cantidad/campo-cantidad';
 import { AvisoService } from '../../shared/ui/aviso/aviso.service';
 import { LoteCampaniaService } from './lote-campania.service';
+import { hoyIso } from '../../shared/utils/fecha-local';
 import type { Cosecha, CosechaRequest, ErrorResponse } from '../../models';
 
 interface ModeloCosechaForm {
@@ -78,7 +79,7 @@ export class CosechaForm {
     const existentes = this.cosechasExistentes();
     if (existentes.length === 0) {
       return {
-        fecha: new Date().toISOString().slice(0, 10),
+        fecha: hoyIso(),
         numeroCorte: String(this.proximoCorte()),
         primera: '',
         segunda: '',

@@ -3,6 +3,7 @@
 .shell {
   display: flex;
   min-height: 100vh;
+  min-height: 100dvh;
   background: var(--color-fondo);
 
   @include tokens.movil {
@@ -54,12 +55,13 @@
   // `overflow-y: auto` es defensivo: si el nav creciera más que el alto disponible en
   // una pantalla baja, se scrollea el sidebar solo, no desaparece el pie.
   height: 100vh;
+  height: 100dvh;
   position: sticky;
   top: 0;
   overflow-y: auto;
   box-sizing: border-box;
 
-  @include tokens.desde(900px) {
+  @include tokens.desde(tokens.$bp-movil) {
     display: flex;
   }
 
@@ -180,8 +182,10 @@
   position: sticky;
   top: 0;
   z-index: 3;
+  padding-left: max(var(--espacio-8), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--espacio-8), env(safe-area-inset-right, 0px));
 
-  @include tokens.desde(900px) {
+  @include tokens.desde(tokens.$bp-movil) {
     display: none;
   }
 
@@ -198,7 +202,9 @@
   box-sizing: border-box;
 
   @include tokens.movil {
-    padding: var(--espacio-8) var(--espacio-8) 84px;
+    padding: var(--espacio-8) var(--espacio-8) calc(84px + env(safe-area-inset-bottom, 0px));
+    padding-left: max(var(--espacio-8), env(safe-area-inset-left, 0px));
+    padding-right: max(var(--espacio-8), env(safe-area-inset-right, 0px));
   }
 }
 
@@ -212,6 +218,9 @@
   bottom: 0;
   background: var(--color-superficie);
   border-top: 1px solid var(--color-borde);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
   z-index: 4;
 
   @include tokens.movil {

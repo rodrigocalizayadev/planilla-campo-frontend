@@ -4,6 +4,7 @@
 
 .login {
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -31,6 +32,46 @@
     border: 1px solid var(--color-baja-borde);
     color: var(--color-baja-texto);
     font-size: 13px;
+  }
+}
+
+.campo-password {
+  position: relative;
+  display: flex;
+
+  &__input {
+    width: 100%;
+    padding-right: var(--espacio-14);
+  }
+
+  &__boton {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: var(--objetivo-tactil-min);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    color: var(--color-texto-terciario);
+    cursor: pointer;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    &:hover {
+      color: var(--color-texto-sobre-superficie);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-verde-300);
+      outline-offset: -2px;
+      border-radius: var(--radio-sm);
+    }
   }
 }
 

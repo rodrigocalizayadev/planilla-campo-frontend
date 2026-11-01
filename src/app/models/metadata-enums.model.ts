@@ -4,7 +4,7 @@ export interface ValorEnum {
 }
 
 /**
- * GET /api/metadata/enums. Fuente única de los trece enums del sistema: nunca
+ * GET /api/metadata/enums. Fuente única de los catorce enums del sistema: nunca
  * hardcodear listas de valores ni sus etiquetas en el frontend (CLAUDE.md,
  * regla 3) — se desincronizan cuando el backend agrega un valor.
  */
@@ -18,6 +18,7 @@ export interface MetadataEnums {
   unidadProduccion: ValorEnum[];
   modalidadVenta: ValorEnum[];
   estadoVenta: ValorEnum[];
+  estadoCobro: ValorEnum[];
   estadoCampania: ValorEnum[];
   criterioProrrateo: ValorEnum[];
   moneda: ValorEnum[];

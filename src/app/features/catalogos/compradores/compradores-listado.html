@@ -15,6 +15,10 @@
   </div>
 
   <div class="catalogo__lista">
+    <div class="fila-catalogo fila-catalogo--2col fila-catalogo--header">
+      <div class="fila-catalogo__principal fila-catalogo__principal--header">Comprador</div>
+      <div class="fila-catalogo__numero fila-catalogo__numero--header">Modalidad</div>
+    </div>
     @for (comprador of compradoresVisibles(); track comprador.id) {
       <div class="fila-catalogo-fila">
         <button type="button" class="fila-catalogo fila-catalogo--2col" (click)="editar(comprador)">
