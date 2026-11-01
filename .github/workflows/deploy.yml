@@ -100,8 +100,9 @@ jobs:
           ssh "$TARGET" "mkdir -p $DEPLOY_DIR"
           scp deploy/docker-compose.prod.yml deploy/deploy.sh "$TARGET:$DEPLOY_DIR/"
 
-      # El GITHUB_TOKEN viaja por stdin y solo vive durante este job: el servidor
-      # hace login, baja la imagen y hace logout sin guardar credenciales.
+      # El GITHUB_TOKEN viaja por stdin y GitHub lo revoca al terminar este job. El servidor
+      # hace login, baja la imagen y hace logout; mientras dura el deploy el token queda en el
+      # credential store de Docker del usuario deploy (con packages: write, ver cleanup abajo).
       - name: Desplegar
         env:
           TARGET: ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
