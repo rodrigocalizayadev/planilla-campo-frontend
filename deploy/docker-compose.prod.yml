@@ -1,0 +1,11 @@
+# Stack de producción del front: solo nginx con el build estático. Se usa solo a través de deploy.sh.
+# El ruteo de /api hacia la API es del reverse proxy del servidor, no de este stack.
+name: planilla-campo-front
+
+services:
+  web:
+    image: ghcr.io/rodrigo906/planilla-campo-frontend:${IMAGE_TAG:?falta IMAGE_TAG (lo escribe deploy.sh)}
+    restart: unless-stopped
+    ports:
+      # Por defecto solo escucha en localhost: el acceso público va por un reverse proxy con HTTPS.
+      - "${WEB_BIND:-127.0.0.1}:${WEB_PORT:-8081}:8080"
