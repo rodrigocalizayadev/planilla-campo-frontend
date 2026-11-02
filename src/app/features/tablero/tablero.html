@@ -35,9 +35,14 @@
           </div>
 
           @if (!editandoCotizacion()) {
-            <button type="button" class="tablero__tc" (click)="abrirEdicionCotizacion()">
+            <button
+              type="button"
+              class="tablero__tc"
+              title="Se usa solo para los valores estimados. Los costos se convierten con el tipo de cambio de cada movimiento."
+              (click)="abrirEdicionCotizacion()"
+            >
               @if (campaniaDetalle()?.cotizacionVigente; as tc) {
-                TC {{ tc | number: '1.2-2' }}
+                Cotización para estimados: {{ tc | importe }}
               } @else {
                 Sin cotización cargada
               }
