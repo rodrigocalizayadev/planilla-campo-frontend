@@ -4,7 +4,7 @@ name: planilla-campo-front
 
 services:
   web:
-    image: ghcr.io/rodrigo906/planilla-campo-frontend:${IMAGE_TAG:?falta IMAGE_TAG (lo escribe deploy.sh)}
+    image: ghcr.io/rodrigocalizayadev/planilla-campo-frontend:${IMAGE_TAG:?falta IMAGE_TAG (lo escribe deploy.sh)}
     restart: unless-stopped
     ports:
       # Por defecto solo escucha en localhost: el acceso público va por un reverse proxy con HTTPS.

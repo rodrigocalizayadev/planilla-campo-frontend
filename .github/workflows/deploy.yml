@@ -15,7 +15,7 @@ permissions:
 
 env:
   # GHCR exige el nombre en minúsculas; debe coincidir con deploy/docker-compose.prod.yml.
-  IMAGE: ghcr.io/rodrigo906/planilla-campo-frontend
+  IMAGE: ghcr.io/rodrigocalizayadev/planilla-campo-frontend
   DEPLOY_DIR: planilla-campo-front
 
 jobs:
