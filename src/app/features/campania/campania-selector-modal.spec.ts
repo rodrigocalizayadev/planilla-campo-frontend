@@ -92,6 +92,15 @@ describe('CampaniaSelectorModal', () => {
     expect(fixture.nativeElement.textContent).toContain('En curso');
   });
 
+  it('muestra el período de cada campaña en formato dd/MM/yyyy', async () => {
+    fixture.autoDetectChanges();
+    flushListado();
+    await fixture.whenStable();
+
+    const periodo = fixture.nativeElement.querySelector('.fila-campania__periodo');
+    expect(periodo.textContent.trim()).toBe('01/08/2025 – 31/07/2026');
+  });
+
   it('elegir una campaña la marca como activa y emite cerrado', async () => {
     let cerrado = false;
     fixture.componentInstance.cerrado.subscribe(() => (cerrado = true));
