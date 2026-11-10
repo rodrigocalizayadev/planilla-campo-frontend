@@ -140,7 +140,7 @@ describe('Reportes', () => {
     const texto = fixture.nativeElement.textContent;
     expect(texto).toContain('Insumos');
     // En USD (default): 30 de 74 = 40.5%.
-    expect(fixture.nativeElement.querySelector('.fila-rubro__pct')?.textContent).toContain('40.5');
+    expect(fixture.nativeElement.querySelector('.fila-rubro__pct')?.textContent).toContain('40,5');
     expect(texto).toContain('Lote Norte');
   });
 

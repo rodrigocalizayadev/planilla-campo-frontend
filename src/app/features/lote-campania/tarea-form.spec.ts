@@ -127,7 +127,7 @@ describe('TareaForm', () => {
     elegirModo('Por hectárea');
     await fixture.whenStable();
 
-    expect(fixture.nativeElement.textContent).toContain('1.5 ha sembradas');
+    expect(fixture.nativeElement.textContent).toContain('1,5 ha sembradas');
   });
 
   it('calcula el total en vivo multiplicando cantidad por valor en modo Jornal', async () => {
