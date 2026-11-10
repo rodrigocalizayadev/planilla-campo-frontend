@@ -287,6 +287,42 @@ describe('LoteCampaniaDetalle', () => {
     expect(cantidades[1].textContent).toContain('20');
   });
 
+  it('cada fila de cosecha nombra la columna de cada cantidad para lectores de pantalla', async () => {
+    const cosechas: Cosecha[] = [
+      {
+        id: 1,
+        loteCampaniaId: 4,
+        fecha: '2026-06-01',
+        numeroCorte: 1,
+        calidad: 'PRIMERA',
+        cantidad: '100',
+        unidad: 'BOLSA',
+        kgEquivalente: '2000',
+      },
+      {
+        id: 2,
+        loteCampaniaId: 4,
+        fecha: '2026-06-01',
+        numeroCorte: 1,
+        calidad: 'SEGUNDA',
+        cantidad: '20',
+        unidad: 'BOLSA',
+        kgEquivalente: '400',
+      },
+    ];
+    fixture.autoDetectChanges();
+    flushBase({ costos: COSTOS_CON_COSECHA, cosechas });
+    await fixture.whenStable();
+
+    const fila: HTMLButtonElement = fixture.nativeElement.querySelector('button.fila-cosecha');
+    const etiquetas = [...fila.querySelectorAll('.visualmente-oculto')].map((e) => e.textContent?.trim());
+    expect(etiquetas).toEqual(['Primera', 'Segunda', 'Descarte']);
+    const nombre = fila.textContent?.replace(/\s+/g, ' ') ?? '';
+    expect(nombre).toContain('Primera 100');
+    expect(nombre).toContain('Segunda 20');
+    expect(nombre).toMatch(/Descarte \d/);
+  });
+
   it('sin ventas, muestra el texto que explica el margen realizado negativo', async () => {
     fixture.autoDetectChanges();
     flushBase();

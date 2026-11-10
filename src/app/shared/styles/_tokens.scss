@@ -118,6 +118,21 @@ $bp-angosto: 1120px;
   }
 }
 
+// Texto solo para lectores de pantalla: no se ve ni ocupa lugar, pero forma parte del
+// nombre accesible del elemento (por ejemplo, la columna de cada valor en una fila que
+// ya muestra el encabezado arriba).
+.visualmente-oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
 // Utilidades de estado semántico. Aplicar a cualquier importe/indicador, nunca a
 // contenido que no sea uno de los tres estados reservados.
 .numero {

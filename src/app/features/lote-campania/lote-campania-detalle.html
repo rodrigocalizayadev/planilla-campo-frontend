@@ -261,12 +261,15 @@
                 <div class="fila-cosecha__fecha numero">{{ corte.fecha | fecha }}</div>
               </div>
               <div class="fila-cosecha__cantidad">
+                <span class="visualmente-oculto">Primera </span>
                 <span class="numero">{{ corte.primera | number: '1.0-0' }}</span>
               </div>
               <div class="fila-cosecha__cantidad">
+                <span class="visualmente-oculto">Segunda </span>
                 <span class="numero">{{ corte.segunda | number: '1.0-0' }}</span>
               </div>
               <div class="fila-cosecha__cantidad">
+                <span class="visualmente-oculto">Descarte </span>
                 <span class="numero">{{ corte.descarteKg | number: '1.0-0' }} kg</span>
               </div>
             </button>
