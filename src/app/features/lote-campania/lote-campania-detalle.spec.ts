@@ -154,7 +154,7 @@ describe('LoteCampaniaDetalle', () => {
     const texto = fixture.nativeElement.textContent;
     expect(texto).toContain('Lote Norte · Cebolla');
     expect(texto).toContain('Valenciana');
-    expect(texto).toContain('1.5 ha sembradas');
+    expect(texto).toContain('1,5 ha sembradas');
   });
 
   it('sin cosecha, muestra el estado vacío del costo por unidad y no muestra el input de oferta', async () => {
@@ -285,6 +285,73 @@ describe('LoteCampaniaDetalle', () => {
     const cantidades = fila.querySelectorAll('.fila-cosecha__cantidad');
     expect(cantidades[0].textContent).toContain('100');
     expect(cantidades[1].textContent).toContain('20');
+  });
+
+  it('cada fila de cosecha nombra la columna de cada cantidad para lectores de pantalla', async () => {
+    const cosechas: Cosecha[] = [
+      {
+        id: 1,
+        loteCampaniaId: 4,
+        fecha: '2026-06-01',
+        numeroCorte: 1,
+        calidad: 'PRIMERA',
+        cantidad: '100',
+        unidad: 'BOLSA',
+        kgEquivalente: '2000',
+      },
+      {
+        id: 2,
+        loteCampaniaId: 4,
+        fecha: '2026-06-01',
+        numeroCorte: 1,
+        calidad: 'SEGUNDA',
+        cantidad: '20',
+        unidad: 'BOLSA',
+        kgEquivalente: '400',
+      },
+      {
+        id: 3,
+        loteCampaniaId: 4,
+        fecha: '2026-06-01',
+        numeroCorte: 1,
+        calidad: 'DESCARTE',
+        cantidad: '1500',
+        unidad: 'KG',
+        kgEquivalente: '1500',
+      },
+    ];
+    fixture.autoDetectChanges();
+    flushBase({ costos: COSTOS_CON_COSECHA, cosechas });
+    await fixture.whenStable();
+
+    const fila: HTMLButtonElement = fixture.nativeElement.querySelector('button.fila-cosecha');
+    const etiquetas = [...fila.querySelectorAll('.visualmente-oculto')].map((e) => e.textContent?.trim());
+    expect(etiquetas).toEqual(['Primera', 'Segunda', 'Descarte']);
+    const nombre = fila.textContent?.replace(/\s+/g, ' ') ?? '';
+    expect(nombre).toContain('Primera 100');
+    expect(nombre).toContain('Segunda 20');
+    expect(nombre).toContain('Descarte 1.500 kg');
+  });
+
+  it('formatea las cantidades de cosecha con el locale es-AR (punto de miles)', async () => {
+    const cosechas: Cosecha[] = [
+      {
+        id: 1,
+        loteCampaniaId: 4,
+        fecha: '2026-06-01',
+        numeroCorte: 1,
+        calidad: 'PRIMERA',
+        cantidad: '12345',
+        unidad: 'BOLSA',
+        kgEquivalente: '246900',
+      },
+    ];
+    fixture.autoDetectChanges();
+    flushBase({ costos: COSTOS_CON_COSECHA, cosechas });
+    await fixture.whenStable();
+
+    const fila: HTMLButtonElement = fixture.nativeElement.querySelector('button.fila-cosecha');
+    expect(fila.querySelectorAll('.fila-cosecha__cantidad')[0].textContent).toContain('12.345');
   });
 
   it('sin ventas, muestra el texto que explica el margen realizado negativo', async () => {

@@ -9,6 +9,7 @@ import { AvisoService } from '../../shared/ui/aviso/aviso.service';
 import { EnumsService } from '../../core/enums/enums.service';
 import { CampaniaActivaService } from '../../core/campania/campania-activa.service';
 import { TipoCambioMemoriaService } from '../../shared/data/tipo-cambio-memoria.service';
+import { FechaPipe } from '../../shared/pipes/fecha.pipe';
 import { CampaniaService } from './campania.service';
 import type { Campania, CampaniaRequest, ErrorResponse, PaginaResponse } from '../../models';
 
@@ -37,7 +38,7 @@ const GASTOS_COMERCIALIZACION_DEFAULT_PCT = '12';
  */
 @Component({
   selector: 'app-campania-selector-modal',
-  imports: [Modal, FormField, CampoCantidad, CampoImporte],
+  imports: [Modal, FormField, CampoCantidad, CampoImporte, FechaPipe],
   templateUrl: './campania-selector-modal.html',
   styleUrl: './campania-selector-modal.scss',
 })

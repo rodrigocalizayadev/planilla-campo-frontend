@@ -2,7 +2,7 @@
 
 Guía para armar el pipeline del repo del frontend siguiendo los mismos lineamientos que el
 backend (`planilla-campo-backend`). Ambos repos están en la misma cuenta de GitHub
-(`rodrigo906`) y se despliegan en el **mismo servidor** con el **mismo usuario `deploy`**.
+(`rodrigocalizayadev`) y se despliegan en el **mismo servidor** con el **mismo usuario `deploy`**.
 
 Referencia del backend: `.github/workflows/ci.yml`, `.github/workflows/deploy.yml`,
 `deploy/deploy.sh`, `deploy/docker-compose.prod.yml`, `docs/despliegue.md`.
@@ -37,7 +37,7 @@ Elegir y fijar estos valores antes de escribir nada. **No pueden chocar con los 
 
 | Concepto | Backend | Frontend (propuesto) |
 |---|---|---|
-| Imagen | `ghcr.io/rodrigo906/planilla-campo-backend` | `ghcr.io/rodrigo906/<nombre-repo-front>` (en minúsculas, GHCR lo exige) |
+| Imagen | `ghcr.io/rodrigocalizayadev/planilla-campo-backend` | `ghcr.io/rodrigocalizayadev/<nombre-repo-front>` (en minúsculas, GHCR lo exige) |
 | `package-name` en la limpieza de GHCR | `planilla-campo-backend` | `<nombre-repo-front>` |
 | Directorio en el servidor | `/home/deploy/planilla-campo` | `/home/deploy/planilla-campo-front` |
 | `name:` del compose (proyecto Docker) | `planilla-campo` | `planilla-campo-front` |
@@ -150,7 +150,7 @@ permissions:
   contents: read
 
 env:
-  IMAGE: ghcr.io/rodrigo906/<nombre-repo-front>   # FRONT: minúsculas, igual que en el compose
+  IMAGE: ghcr.io/rodrigocalizayadev/<nombre-repo-front>   # FRONT: minúsculas, igual que en el compose
   DEPLOY_DIR: planilla-campo-front                # FRONT
 
 jobs:
@@ -285,7 +285,7 @@ name: planilla-campo-front
 
 services:
   web:
-    image: ghcr.io/rodrigo906/<nombre-repo-front>:${IMAGE_TAG:?falta IMAGE_TAG (lo escribe deploy.sh)}
+    image: ghcr.io/rodrigocalizayadev/<nombre-repo-front>:${IMAGE_TAG:?falta IMAGE_TAG (lo escribe deploy.sh)}
     restart: unless-stopped
     ports:
       # Solo localhost: el acceso público va por el reverse proxy con HTTPS.

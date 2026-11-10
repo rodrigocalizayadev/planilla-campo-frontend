@@ -11,7 +11,7 @@
           >
             <div class="fila-campania__principal">
               <span class="fila-campania__nombre numero">{{ campania.nombre }}</span>
-              <span class="fila-campania__periodo">{{ campania.fechaInicio }} – {{ campania.fechaFin }}</span>
+              <span class="fila-campania__periodo">{{ campania.fechaInicio | fecha }} – {{ campania.fechaFin | fecha }}</span>
             </div>
             <span
               class="fila-campania__estado"

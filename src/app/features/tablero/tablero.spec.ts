@@ -295,5 +295,9 @@ describe('Tablero', () => {
       cotizacionVigente: '1200.5',
     });
     expect(aviso.mostrar).toHaveBeenCalledWith('Cotización actualizada');
+
+    const botonActualizado: HTMLButtonElement = fixture.nativeElement.querySelector('.tablero__tc');
+    expect(botonActualizado.textContent).toContain('Cotización para estimados: $ 1.200,50');
+    expect(botonActualizado.title).toContain('tipo de cambio de cada movimiento');
   });
 });

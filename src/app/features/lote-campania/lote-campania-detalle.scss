@@ -282,15 +282,21 @@
     flex-direction: column;
     align-items: flex-end;
     gap: 2px;
+    white-space: nowrap;
   }
 
-  &__etiqueta {
-    font-size: 11px;
-    color: var(--color-texto-terciario);
-  }
-
+  // En móvil el botón "Eliminar" deja poco ancho para cuatro columnas: corte/fecha va
+  // en su propia línea y las tres cantidades se reparten el ancho completo. Header y
+  // filas comparten el mismo template, así que las columnas siguen alineadas. Descarte
+  // es más ancha porque lleva el sufijo "kg".
   @include tokens.movil {
-    grid-template-columns: minmax(0, 1fr) repeat(3, 1fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.5fr);
+    column-gap: var(--espacio-3);
+    row-gap: var(--espacio-2);
+
+    > :first-child {
+      grid-column: 1 / -1;
+    }
   }
 }
 
@@ -321,6 +327,12 @@
 
   .fila-cosecha__cantidad--header {
     align-items: flex-end;
+  }
+
+  @include tokens.movil {
+    .fila-cosecha__titulo--header {
+      display: none;
+    }
   }
 }
 

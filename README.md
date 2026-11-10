@@ -4,6 +4,41 @@ Aplicación web para el costeo de campañas hortícolas (cebolla, zapallo, maíz
 
 El backend (Spring Boot + MySQL) calcula todos los importes; este frontend los muestra.
 
+> Backend (Spring Boot): [planilla-campo-backend](https://github.com/rodrigocalizayadev/planilla-campo-backend)
+
+![Detalle de un lote-campaña: costos por rubro, margen realizado y margen estimado](docs/screenshots/lote-campania.png)
+
+## Por qué existe
+
+Lo construí para el negocio hortícola de mi familia, que costeaba las campañas en planillas. La interfaz está pensada para un productor, no para un contador: cargar un movimiento tiene que ser rápido y los números tienen que leerse de un vistazo, distinguiendo siempre lo **realizado** de lo **estimado**.
+
+## Destacados
+
+- **Angular moderno:** standalone, zoneless, Signals y Signal Forms, con TypeScript estricto.
+- **Diseño propio, validado con el usuario real.** Primero hice un prototipo con el productor ([`docs/design-reference/`](docs/design-reference/)) y recién después lo implementé.
+- **Cero lógica de negocio duplicada.** Los cálculos de dinero viven solo en el backend. Los importes viajan como string para no perder precisión con `Number`.
+- **CI/CD:** cada PR corre lint, tests con Vitest y build de producción. Cada merge a `master` despliega automáticamente.
+
+## Cómo se construyó
+
+Lo desarrollé con Claude Code como asistente de programación. Las decisiones de producto, de dominio y de diseño son mías. Las reglas que el agente debe respetar (ver "Reglas que no se negocian") están en [`CLAUDE.md`](CLAUDE.md), y las decisiones de arquitectura compartidas están en los [ADRs del backend](https://github.com/rodrigocalizayadev/planilla-campo-backend/tree/master/docs/adr).
+
+## Estado
+
+**MVP funcional de punta a punta.** La hoja de ruta está en el [README del backend](https://github.com/rodrigocalizayadev/planilla-campo-backend#estado).
+
+## Capturas
+
+Tablero de la campaña activa:
+
+![Tablero: indicadores de la campaña y lotes sembrados](docs/screenshots/tablero.png)
+
+Reporte de costos por rubro de la campaña:
+
+![Reporte: costos por rubro y por lote-campaña](docs/screenshots/reporte-campania.png)
+
+> Todas las capturas usan datos de prueba de la base local de desarrollo.
+
 ## Inicio rápido
 
 Requisitos: Node.js con npm 11 y el backend corriendo en `http://localhost:8080`.
@@ -21,6 +56,8 @@ Usuarios de desarrollo (base local):
 |---|---|---|
 | ADMIN | `admin@planillacampo.com` | `Admin1234` |
 | OPERADOR | `operador@planillacampo.com` | `Operador1234` |
+
+> Usuarios de la base local de desarrollo, creados por el seed. No existen en ningún entorno desplegado.
 
 > Para probar catálogos con precio (insumos, cultivos) usá ADMIN: el rol OPERADOR recibe `401`.
 
