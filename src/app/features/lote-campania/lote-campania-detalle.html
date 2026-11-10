@@ -235,11 +235,18 @@
         @if (errorEliminar(); as mensaje) {
           <p class="form-catalogo__error" role="alert">{{ mensaje }}</p>
         }
-        <div class="fila-cosecha fila-cosecha--header">
-          <div class="fila-cosecha__titulo--header">Corte</div>
-          <div class="fila-cosecha__cantidad fila-cosecha__cantidad--header">Primera</div>
-          <div class="fila-cosecha__cantidad fila-cosecha__cantidad--header">Segunda</div>
-          <div class="fila-cosecha__cantidad fila-cosecha__cantidad--header">Descarte</div>
+        <div class="fila-catalogo-fila">
+          <div class="fila-cosecha fila-cosecha--header">
+            <div class="fila-cosecha__titulo--header">Corte</div>
+            <div class="fila-cosecha__cantidad fila-cosecha__cantidad--header">Primera</div>
+            <div class="fila-cosecha__cantidad fila-cosecha__cantidad--header">Segunda</div>
+            <div class="fila-cosecha__cantidad fila-cosecha__cantidad--header">Descarte</div>
+          </div>
+          @if (!esCerrada()) {
+            <span class="boton-baja fila-catalogo__accion fila-catalogo__accion--spacer" aria-hidden="true">
+              Eliminar
+            </span>
+          }
         </div>
         @for (corte of cortesVisibles(); track corte.corte) {
           <div class="fila-catalogo-fila">
@@ -254,15 +261,12 @@
                 <div class="fila-cosecha__fecha numero">{{ corte.fecha | fecha }}</div>
               </div>
               <div class="fila-cosecha__cantidad">
-                <span class="fila-cosecha__etiqueta">Primera</span>
                 <span class="numero">{{ corte.primera | number: '1.0-0' }}</span>
               </div>
               <div class="fila-cosecha__cantidad">
-                <span class="fila-cosecha__etiqueta">Segunda</span>
                 <span class="numero">{{ corte.segunda | number: '1.0-0' }}</span>
               </div>
               <div class="fila-cosecha__cantidad">
-                <span class="fila-cosecha__etiqueta">Descarte</span>
                 <span class="numero">{{ corte.descarteKg | number: '1.0-0' }} kg</span>
               </div>
             </button>
