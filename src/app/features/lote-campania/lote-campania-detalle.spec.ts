@@ -309,6 +309,16 @@ describe('LoteCampaniaDetalle', () => {
         unidad: 'BOLSA',
         kgEquivalente: '400',
       },
+      {
+        id: 3,
+        loteCampaniaId: 4,
+        fecha: '2026-06-01',
+        numeroCorte: 1,
+        calidad: 'DESCARTE',
+        cantidad: '1500',
+        unidad: 'KG',
+        kgEquivalente: '1500',
+      },
     ];
     fixture.autoDetectChanges();
     flushBase({ costos: COSTOS_CON_COSECHA, cosechas });
@@ -320,7 +330,7 @@ describe('LoteCampaniaDetalle', () => {
     const nombre = fila.textContent?.replace(/\s+/g, ' ') ?? '';
     expect(nombre).toContain('Primera 100');
     expect(nombre).toContain('Segunda 20');
-    expect(nombre).toMatch(/Descarte \d/);
+    expect(nombre).toContain('Descarte 1.500 kg');
   });
 
   it('formatea las cantidades de cosecha con el locale es-AR (punto de miles)', async () => {
