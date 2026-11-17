@@ -10,6 +10,7 @@ import { CampaniaService } from './campania.service';
 import { CampaniaActivaService } from '../../core/campania/campania-activa.service';
 import { EnumsService } from '../../core/enums/enums.service';
 import type { Campania, PaginaResponse, ValorEnum } from '../../models';
+import { provideCotizacionStub, responderCotizacion } from '../../core/cotizacion/cotizacion.testing';
 
 const ESTADOS: ValorEnum[] = [
   { valor: 'PLANIFICADA', etiqueta: 'Planificada' },
@@ -65,6 +66,7 @@ describe('CampaniaSelectorModal', () => {
       imports: [CampaniaSelectorModal],
       providers: [
         provideZonelessChangeDetection(),
+        provideCotizacionStub(),
         provideHttpClient(),
         provideHttpClientTesting(),
         { provide: CampaniaService, useValue: campaniaService },
@@ -220,5 +222,21 @@ describe('CampaniaSelectorModal', () => {
 
     expect(campaniaService.crear).not.toHaveBeenCalled();
     expect(fixture.nativeElement.querySelectorAll('.campo__error').length).toBeGreaterThan(0);
+  });
+
+  it('en el alta, autocompleta la cotización vigente con la del BCRA de hoy (sin fecha); en la lista no la pide', async () => {
+    const obtenerDolar = responderCotizacion('1551.0000');
+    fixture.autoDetectChanges();
+    flushListado();
+    await fixture.whenStable();
+
+    expect(obtenerDolar).not.toHaveBeenCalled();
+
+    (fixture.nativeElement.querySelector('.selector-modal__nueva') as HTMLButtonElement).click();
+    await fixture.whenStable();
+
+    expect(obtenerDolar).toHaveBeenLastCalledWith(null);
+    const cotizacion: HTMLInputElement = fixture.nativeElement.querySelector('#cotizacionVigente');
+    expect(cotizacion.value).toBe('1.551,0000');
   });
 });

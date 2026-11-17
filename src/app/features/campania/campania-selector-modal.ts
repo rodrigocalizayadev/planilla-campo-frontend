@@ -9,6 +9,8 @@ import { AvisoService } from '../../shared/ui/aviso/aviso.service';
 import { EnumsService } from '../../core/enums/enums.service';
 import { CampaniaActivaService } from '../../core/campania/campania-activa.service';
 import { TipoCambioMemoriaService } from '../../shared/data/tipo-cambio-memoria.service';
+import { sugerirTipoCambio } from '../../shared/data/sugerencia-tipo-cambio';
+import { SugerenciaCotizacion } from '../../shared/ui/sugerencia-cotizacion/sugerencia-cotizacion';
 import { FechaPipe } from '../../shared/pipes/fecha.pipe';
 import { CampaniaService } from './campania.service';
 import type { Campania, CampaniaRequest, ErrorResponse, PaginaResponse } from '../../models';
@@ -38,7 +40,7 @@ const GASTOS_COMERCIALIZACION_DEFAULT_PCT = '12';
  */
 @Component({
   selector: 'app-campania-selector-modal',
-  imports: [Modal, FormField, CampoCantidad, CampoImporte, FechaPipe],
+  imports: [Modal, FormField, CampoCantidad, CampoImporte, FechaPipe, SugerenciaCotizacion],
   templateUrl: './campania-selector-modal.html',
   styleUrl: './campania-selector-modal.scss',
 })
@@ -70,6 +72,15 @@ export class CampaniaSelectorModal {
     fechaFin: '',
     gastosComercializacionPct: GASTOS_COMERCIALIZACION_DEFAULT_PCT,
     cotizacionVigente: untracked(this.tipoCambioMemoria.ultimo),
+  });
+
+  // Cotización BCRA de hoy (sin fecha: es la vigente, no la de un movimiento), solo en el
+  // alta (docs/api-endpoints-v2.md §16).
+  protected readonly sugerenciaCotizacion = sugerirTipoCambio({
+    fecha: () => null,
+    valorActual: () => this.modelo().cotizacionVigente,
+    asignar: (valor) => this.modelo.update((actual) => ({ ...actual, cotizacionVigente: valor })),
+    habilitada: () => this.modo() === 'nueva',
   });
 
   protected readonly campaniaForm = form(this.modelo, (path) => {
