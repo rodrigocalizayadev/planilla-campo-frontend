@@ -316,6 +316,32 @@ describe('VentaForm', () => {
       expect(loteCampaniaService.crearVenta).not.toHaveBeenCalled();
       expect(aviso.mostrar).toHaveBeenCalledWith('Venta actualizada');
     });
+
+    it('no pide ni muestra la cotización BCRA, aunque cambie la fecha: la consignación no lleva precio', async () => {
+      const obtenerDolar = responderCotizacion('1551.0000');
+      loteCampaniaService.actualizarVenta.mockReturnValue(of(VENTA_ENTREGADA));
+      cargarCompradores();
+      await fixture.whenStable();
+
+      const fecha: HTMLInputElement = fixture.nativeElement.querySelector('input[type="date"]');
+      fecha.value = '2026-07-20';
+      fecha.dispatchEvent(new Event('input'));
+      await fixture.whenStable();
+
+      expect(obtenerDolar).not.toHaveBeenCalled();
+      expect(fixture.nativeElement.querySelector('app-sugerencia-cotizacion')).toBeNull();
+
+      enviarFormulario();
+      await fixture.whenStable();
+
+      expect(loteCampaniaService.actualizarVenta).toHaveBeenCalledWith(3, {
+        compradorId: 6,
+        fechaEntrega: '2026-07-20',
+        calidad: 'SEGUNDA',
+        cantidad: '15',
+        modalidad: 'CONSIGNACION',
+      });
+    });
   });
 
   describe('cotización BCRA', () => {
