@@ -6,6 +6,7 @@ import { CostoIndirectoForm } from './costo-indirecto-form';
 import { CostosIndirectosService } from './costos-indirectos.service';
 import { AvisoService } from '../../shared/ui/aviso/aviso.service';
 import type { CostoIndirecto, ErrorResponse, LoteCampania } from '../../models';
+import { provideCotizacionStub, responderCotizacion } from '../../core/cotizacion/cotizacion.testing';
 
 function lote(parcial: Partial<LoteCampania>): LoteCampania {
   return {
@@ -57,6 +58,7 @@ describe('CostoIndirectoForm', () => {
       imports: [CostoIndirectoForm],
       providers: [
         provideZonelessChangeDetection(),
+        provideCotizacionStub(),
         { provide: CostosIndirectosService, useValue: service },
       ],
     }).compileComponents();
@@ -238,5 +240,38 @@ describe('CostoIndirectoForm', () => {
     await fixture.whenStable();
 
     expect(aviso.mostrar).toHaveBeenCalledWith('La campaña está cerrada', 'error');
+  });
+
+  describe('cotización BCRA', () => {
+    function cambiarFecha(valor: string): void {
+      const fecha: HTMLInputElement = fixture.nativeElement.querySelector('input[type="date"]');
+      fecha.value = valor;
+      fecha.dispatchEvent(new Event('input'));
+    }
+
+    it('autocompleta el tipo de cambio con la cotización de la fecha del costo y la manda en el payload', async () => {
+      const obtenerDolar = responderCotizacion('1551.0000');
+      service.crear.mockReturnValue(of(COSTO_CREADO));
+      fixture.autoDetectChanges();
+      await fixture.whenStable();
+
+      cambiarFecha('2026-11-13');
+      completarInput('input[type="text"][placeholder="Canon de riego"]', 'Limpieza de canales');
+      completarInput('.campo-precio__monto', '50000');
+      await fixture.whenStable();
+
+      expect(obtenerDolar).toHaveBeenLastCalledWith('2026-11-13');
+
+      enviarFormulario();
+      await fixture.whenStable();
+
+      expect(service.crear).toHaveBeenCalledWith(
+        1,
+        expect.objectContaining({
+          fecha: '2026-11-13',
+          importe: { importe: '50000', moneda: 'ARS', tipoCambio: '1551.0000' },
+        }),
+      );
+    });
   });
 });

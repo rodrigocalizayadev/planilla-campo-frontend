@@ -6,6 +6,8 @@ import { CampoImporte } from '../../shared/ui/campo-importe/campo-importe';
 import { ImportePipe } from '../../shared/pipes/importe.pipe';
 import { AvisoService } from '../../shared/ui/aviso/aviso.service';
 import { TipoCambioMemoriaService } from '../../shared/data/tipo-cambio-memoria.service';
+import { sugerirTipoCambio } from '../../shared/data/sugerencia-tipo-cambio';
+import { SugerenciaCotizacion } from '../../shared/ui/sugerencia-cotizacion/sugerencia-cotizacion';
 import { calcularRepartoPorHa } from '../../shared/utils/prorrateo';
 import { CostosIndirectosService } from './costos-indirectos.service';
 import { hoyIso } from '../../shared/utils/fecha-local';
@@ -46,7 +48,7 @@ interface ModeloCostoIndirectoForm {
  */
 @Component({
   selector: 'app-costo-indirecto-form',
-  imports: [Modal, FormField, CampoImporte, ImportePipe, DecimalPipe],
+  imports: [Modal, FormField, CampoImporte, ImportePipe, DecimalPipe, SugerenciaCotizacion],
   templateUrl: './costo-indirecto-form.html',
   styleUrl: './costo-indirecto-form.scss',
 })
@@ -96,6 +98,13 @@ export class CostoIndirectoForm {
   protected readonly sumaPreviewPorHa = computed(() =>
     this.previewPorHa().reduce((suma, parte) => suma + parte.importe, 0),
   );
+
+  // Cotización BCRA a la fecha del movimiento (docs/api-endpoints-v2.md §16).
+  protected readonly sugerenciaTipoCambio = sugerirTipoCambio({
+    fecha: () => this.modelo().fecha,
+    valorActual: () => this.modelo().tipoCambio,
+    asignar: (valor) => this.modelo.update((actual) => ({ ...actual, tipoCambio: valor })),
+  });
 
   protected readonly costoIndirectoForm = form(this.modelo, (path) => {
     required(path.concepto, { message: 'Ingresá el concepto' });
