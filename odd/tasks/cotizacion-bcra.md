@@ -22,8 +22,8 @@ Ruta de todas: inline. Evidencia (sin Writer trigger): T2–T4 dependen de la pi
 - [x] **T1** Modelo `CotizacionResponse`, helper `sugerirTipoCambio` y componente `SugerenciaCotizacion` con tests — S2, S3, S4, S5, S7 — inline — RED: módulo inexistente; GREEN: 10/10 en `sugerencia-cotizacion.spec.ts` — commit: ff88c80
 - [x] **T2** Formularios de lote-campaña: aplicación, tarea, venta, liquidación, cobro — S5, S6 — inline — 125/125 en `features/lote-campania` (6 tests nuevos; escritos después del cableado, sin RED propio) — commit: 499a106
 - [x] **T3** Costo indirecto — S5, S6 — inline — RED: no pedía cotización; GREEN 13/13 en `features/costos-indirectos` — commit: 62a2ded
-- [x] **T4** Campaña: modal de alta y edición inline del tablero — S2, S5, S6 — inline — RED: 2 tests sin pedido de cotización; GREEN 15/15 — commit: ver git log
-- [ ] **T5** Docs (§16 en api-endpoints-v2, resumen-slices) + verificación visual — S8 — inline — commit: —
+- [x] **T4** Campaña: modal de alta y edición inline del tablero — S2, S5, S6 — inline — RED: 2 tests sin pedido de cotización; GREEN 15/15 — commit: df38e12
+- [x] **T5** Docs (§16 en api-endpoints-v2, resumen-slices) + verificación visual — S8 — inline — commit: último de la rama
 
 ## Log
 
@@ -37,4 +37,5 @@ Ruta de todas: inline. Evidencia (sin Writer trigger): T2–T4 dependen de la pi
 - T2 bug encontrado: loop infinito cuando `fecha` y el TC viven en el mismo signal de modelo (`params` devolvía un `{ fecha }` nuevo en cada cambio del modelo → recarga → autocompletado → ...). RED reproducido en `sugerencia-cotizacion.spec.ts` ("con fecha y tipo de cambio en el mismo modelo..."), GREEN con un `computed` de la fecha a consultar.
 - T2: no correr `prettier --write` sobre carpetas: el código existente no está formateado con el `.prettierrc` y mete ruido en el diff.
 - T4 cierre de código: suite completa 337/337 (51 archivos), `npm run lint` limpio, `npm run build` OK (warning de budget preexistente en `lote-campania-detalle.scss`, archivo no tocado).
-- Próximo paso: T5.
+- T5 verificación visual (Playwright, ADMIN, campaña 2025/26, lote-campaña 5, backend real): aplicación hoy → "BCRA del 17/11/2026: 1.552,0000" y TC autocompletado; fecha 15/11 (domingo) → "BCRA del 13/11/2026: 1.543,5000" autocompletado; TC manual 1600 + fecha 16/11 → no se pisa, aparece "Usar"; tras "Usar" → 1.551,0000; fecha 30/12 → "No hay cotización del BCRA para una fecha futura."; móvil 390px OK; tablero en edición → sugerencia + "Usar" sin autocompletar. Consola sin errores. Scripts y capturas borrados.
+- Estado: feature completa. Push y PR quedan a decisión del usuario.
