@@ -9,6 +9,8 @@ import { ImportePipe } from '../../shared/pipes/importe.pipe';
 import { AvisoService } from '../../shared/ui/aviso/aviso.service';
 import { EnumsService } from '../../core/enums/enums.service';
 import { TipoCambioMemoriaService } from '../../shared/data/tipo-cambio-memoria.service';
+import { sugerirTipoCambio } from '../../shared/data/sugerencia-tipo-cambio';
+import { SugerenciaCotizacion } from '../../shared/ui/sugerencia-cotizacion/sugerencia-cotizacion';
 import { LoteCampaniaService } from './lote-campania.service';
 import { hoyIso } from '../../shared/utils/fecha-local';
 import type { AplicacionInsumoRequest, ErrorResponse, Insumo, PaginaResponse } from '../../models';
@@ -37,7 +39,7 @@ interface ModeloAplicacionForm {
  */
 @Component({
   selector: 'app-aplicacion-form',
-  imports: [Modal, FormField, CampoCantidad, CampoImporte, ImportePipe],
+  imports: [Modal, FormField, CampoCantidad, CampoImporte, ImportePipe, SugerenciaCotizacion],
   templateUrl: './aplicacion-form.html',
   styleUrl: './aplicacion-form.scss',
 })
@@ -74,6 +76,13 @@ export class AplicacionForm {
     return Number.isFinite(cantidad) && Number.isFinite(precio) && cantidad > 0 && precio > 0
       ? cantidad * precio
       : 0;
+  });
+
+  // Cotización BCRA a la fecha del movimiento (docs/api-endpoints-v2.md §16).
+  protected readonly sugerenciaTipoCambio = sugerirTipoCambio({
+    fecha: () => this.modelo().fecha,
+    valorActual: () => this.modelo().precioTipoCambio,
+    asignar: (valor) => this.modelo.update((actual) => ({ ...actual, precioTipoCambio: valor })),
   });
 
   protected readonly aplicacionForm = form(this.modelo, (path) => {

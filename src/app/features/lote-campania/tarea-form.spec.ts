@@ -7,6 +7,7 @@ import { LoteCampaniaService } from './lote-campania.service';
 import { EnumsService } from '../../core/enums/enums.service';
 import { AvisoService } from '../../shared/ui/aviso/aviso.service';
 import type { ErrorResponse, Tarea, ValorEnum } from '../../models';
+import { provideCotizacionStub, responderCotizacion } from '../../core/cotizacion/cotizacion.testing';
 
 const TIPOS_TAREA: ValorEnum[] = [
   { valor: 'CARPIDA', etiqueta: 'Carpida' },
@@ -50,6 +51,7 @@ describe('TareaForm', () => {
       imports: [TareaForm],
       providers: [
         provideZonelessChangeDetection(),
+        provideCotizacionStub(),
         { provide: LoteCampaniaService, useValue: loteCampaniaService },
         { provide: EnumsService, useValue: enumsStub },
       ],
@@ -241,5 +243,40 @@ describe('TareaForm', () => {
     await fixture.whenStable();
 
     expect(aviso.mostrar).toHaveBeenCalledWith('La campaña está cerrada', 'error');
+  });
+
+  describe('cotización BCRA', () => {
+    function cambiarFecha(valor: string): void {
+      const fecha: HTMLInputElement = fixture.nativeElement.querySelector('input[type="date"]');
+      fecha.value = valor;
+      fecha.dispatchEvent(new Event('input'));
+    }
+
+    it('autocompleta el tipo de cambio con la cotización de la fecha de la tarea y la manda en el payload', async () => {
+      const obtenerDolar = responderCotizacion('1551.0000');
+      loteCampaniaService.crearTarea.mockReturnValue(of(TAREA));
+      fixture.autoDetectChanges();
+      await fixture.whenStable();
+
+      cambiarFecha('2026-11-13');
+      elegirModo('Monto total');
+      completarInput('.campo-precio__monto', '2800000');
+      elegir(selects().tipo, 'CARPIDA');
+      elegir(selects().ejecutor, 'CUADRILLA');
+      await fixture.whenStable();
+
+      expect(obtenerDolar).toHaveBeenLastCalledWith('2026-11-13');
+
+      enviarFormulario();
+      await fixture.whenStable();
+
+      expect(loteCampaniaService.crearTarea).toHaveBeenCalledWith(
+        4,
+        expect.objectContaining({
+          fecha: '2026-11-13',
+          valorUnitario: { importe: '2800000', moneda: 'ARS', tipoCambio: '1551.0000' },
+        }),
+      );
+    });
   });
 });

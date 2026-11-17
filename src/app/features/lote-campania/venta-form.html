@@ -111,6 +111,7 @@
           @if (ventaForm.precioTipoCambio().touched() && ventaForm.precioTipoCambio().invalid()) {
             <span class="campo__error">{{ ventaForm.precioTipoCambio().errors()[0]?.message }}</span>
           }
+          <app-sugerencia-cotizacion [sugerencia]="sugerenciaTipoCambio" />
         </label>
       </div>
 

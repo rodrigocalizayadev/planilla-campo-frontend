@@ -8,6 +8,8 @@ import { ImportePipe } from '../../shared/pipes/importe.pipe';
 import { AvisoService } from '../../shared/ui/aviso/aviso.service';
 import { EnumsService } from '../../core/enums/enums.service';
 import { TipoCambioMemoriaService } from '../../shared/data/tipo-cambio-memoria.service';
+import { sugerirTipoCambio } from '../../shared/data/sugerencia-tipo-cambio';
+import { SugerenciaCotizacion } from '../../shared/ui/sugerencia-cotizacion/sugerencia-cotizacion';
 import { LoteCampaniaService } from './lote-campania.service';
 import { hoyIso } from '../../shared/utils/fecha-local';
 import type { ErrorResponse, TareaRequest } from '../../models';
@@ -58,7 +60,7 @@ const ETIQUETAS_VALOR: Record<ModoCosto, string> = {
  */
 @Component({
   selector: 'app-tarea-form',
-  imports: [Modal, FormField, CampoCantidad, CampoImporte, ImportePipe, DecimalPipe],
+  imports: [Modal, FormField, CampoCantidad, CampoImporte, ImportePipe, DecimalPipe, SugerenciaCotizacion],
   templateUrl: './tarea-form.html',
   styleUrl: './tarea-form.scss',
 })
@@ -103,6 +105,13 @@ export class TareaForm {
     }
     const cantidad = Number(m.cantidad);
     return Number.isFinite(cantidad) && cantidad > 0 ? valor * cantidad : 0;
+  });
+
+  // Cotización BCRA a la fecha del movimiento (docs/api-endpoints-v2.md §16).
+  protected readonly sugerenciaTipoCambio = sugerirTipoCambio({
+    fecha: () => this.modelo().fecha,
+    valorActual: () => this.modelo().valorTipoCambio,
+    asignar: (valor) => this.modelo.update((actual) => ({ ...actual, valorTipoCambio: valor })),
   });
 
   protected readonly tareaForm = form(this.modelo, (path) => {

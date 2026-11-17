@@ -10,6 +10,7 @@ import { EnumsService } from '../../core/enums/enums.service';
 import { AvisoService } from '../../shared/ui/aviso/aviso.service';
 import { environment } from '../../../environments/environment';
 import type { Cobro, ErrorResponse, LiquidacionTramo, PaginaResponse, Venta } from '../../models';
+import { provideCotizacionStub } from '../../core/cotizacion/cotizacion.testing';
 
 const ETIQUETAS: Record<string, Record<string, string>> = {
   estadoVenta: { ENTREGADA: 'Entregada', PARCIAL: 'Parcial', LIQUIDADA: 'Liquidada' },
@@ -102,6 +103,7 @@ describe('VentaDetalle', () => {
       imports: [VentaDetalle],
       providers: [
         provideZonelessChangeDetection(),
+        provideCotizacionStub(),
         provideHttpClient(),
         provideHttpClientTesting(),
         { provide: EnumsService, useValue: enumsStub },

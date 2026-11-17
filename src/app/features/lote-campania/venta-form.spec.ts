@@ -10,6 +10,7 @@ import { LoteCampaniaService } from './lote-campania.service';
 import { EnumsService } from '../../core/enums/enums.service';
 import { AvisoService } from '../../shared/ui/aviso/aviso.service';
 import type { Comprador, ErrorResponse, PaginaResponse, ValorEnum, Venta } from '../../models';
+import { provideCotizacionStub, responderCotizacion } from '../../core/cotizacion/cotizacion.testing';
 
 const CALIDADES: ValorEnum[] = [
   { valor: 'PRIMERA', etiqueta: 'Primera' },
@@ -75,6 +76,7 @@ describe('VentaForm', () => {
       imports: [VentaForm],
       providers: [
         provideZonelessChangeDetection(),
+        provideCotizacionStub(),
         provideHttpClient(),
         provideHttpClientTesting(),
         { provide: LoteCampaniaService, useValue: loteCampaniaService },
@@ -313,6 +315,42 @@ describe('VentaForm', () => {
       });
       expect(loteCampaniaService.crearVenta).not.toHaveBeenCalled();
       expect(aviso.mostrar).toHaveBeenCalledWith('Venta actualizada');
+    });
+  });
+
+  describe('cotización BCRA', () => {
+    function cambiarFecha(valor: string): void {
+      const fecha: HTMLInputElement = fixture.nativeElement.querySelector('input[type="date"]');
+      fecha.value = valor;
+      fecha.dispatchEvent(new Event('input'));
+    }
+
+    it('a precio cerrado, autocompleta el tipo de cambio con la cotización de la fecha de entrega', async () => {
+      const obtenerDolar = responderCotizacion('1551.0000');
+      loteCampaniaService.crearVenta.mockReturnValue(of(VENTA));
+      cargarCompradores();
+      await fixture.whenStable();
+
+      cambiarFecha('2026-11-13');
+      elegir(selects().comprador, '6');
+      elegir(selects().calidad, 'PRIMERA');
+      camposNumericos()[0].value = '50';
+      camposNumericos()[0].dispatchEvent(new Event('input'));
+      completarInput('.campo-precio__monto', '9000');
+      await fixture.whenStable();
+
+      expect(obtenerDolar).toHaveBeenLastCalledWith('2026-11-13');
+
+      enviarFormulario();
+      await fixture.whenStable();
+
+      expect(loteCampaniaService.crearVenta).toHaveBeenCalledWith(
+        4,
+        expect.objectContaining({
+          fechaEntrega: '2026-11-13',
+          precioUnitario: { importe: '9000', moneda: 'ARS', tipoCambio: '1551.0000' },
+        }),
+      );
     });
   });
 });

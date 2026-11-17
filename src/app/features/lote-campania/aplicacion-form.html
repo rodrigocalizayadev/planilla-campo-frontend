@@ -69,6 +69,7 @@
         @if (aplicacionForm.precioTipoCambio().touched() && aplicacionForm.precioTipoCambio().invalid()) {
           <span class="campo__error">{{ aplicacionForm.precioTipoCambio().errors()[0]?.message }}</span>
         }
+        <app-sugerencia-cotizacion [sugerencia]="sugerenciaTipoCambio" />
       </label>
     </div>
     <span class="campo__ayuda">

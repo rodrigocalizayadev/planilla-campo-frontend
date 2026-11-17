@@ -1,6 +1,6 @@
-import { computed, effect, signal, untracked, type Signal } from '@angular/core';
-import { httpResource } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+import { computed, effect, inject, signal, untracked, type Signal } from '@angular/core';
+import { rxResource } from '@angular/core/rxjs-interop';
+import { CotizacionService } from '../../core/cotizacion/cotizacion.service';
 import { hoyIso } from '../utils/fecha-local';
 import type { CotizacionResponse } from '../../models';
 
@@ -32,7 +32,7 @@ export interface SugerenciaTipoCambio {
 }
 
 /**
- * Sugerencia de tipo de cambio desde la cotización BCRA (`GET /api/cotizaciones/dolar`)
+ * Sugerencia de tipo de cambio desde la cotización BCRA (`CotizacionService`)
  * para un formulario. Debe llamarse en contexto de inyección (inicializador de campo de
  * un componente).
  *
@@ -54,13 +54,23 @@ export function sugerirTipoCambio(opciones: OpcionesSugerenciaTipoCambio): Suger
     return habilitada() && !!fecha && fecha > hoyIso();
   });
 
-  const recurso = httpResource<CotizacionResponse>(() => {
+  // Fecha a consultar (`undefined` = no consultar). Es un `computed` aparte para que
+  // `params` solo se recalcule cuando cambia la fecha: en los formularios, `fecha` y el
+  // tipo de cambio viven en el mismo signal de modelo, y si `params` leyera el modelo
+  // directamente, autocompletar el tipo de cambio crearía un `{ fecha }` nuevo, el
+  // recurso recargaría y se volvería a autocompletar, en loop.
+  const fechaConsulta = computed<string | null | undefined>(() => {
     const fecha = opciones.fecha();
-    if (!habilitada() || fecha === '' || fechaFutura()) {
-      return undefined;
-    }
-    const url = `${environment.apiBaseUrl}/cotizaciones/dolar`;
-    return fecha === null ? { url } : { url, params: { fecha } };
+    return !habilitada() || fecha === '' || fechaFutura() ? undefined : fecha;
+  });
+
+  const cotizacionService = inject(CotizacionService);
+  const recurso = rxResource({
+    params: () => {
+      const fecha = fechaConsulta();
+      return fecha === undefined ? undefined : { fecha };
+    },
+    stream: ({ params }) => cotizacionService.obtenerDolar(params.fecha),
   });
 
   const cotizacion = computed(() => (recurso.hasValue() ? recurso.value() : undefined));
@@ -75,8 +85,10 @@ export function sugerirTipoCambio(opciones: OpcionesSugerenciaTipoCambio): Suger
   });
 
   // Último valor escrito por la sugerencia (o el inicial del formulario): si el campo
-  // tiene otra cosa, lo editó el usuario (o lo trajo un insumo).
-  const ultimoAutomatico = signal(untracked(opciones.valorActual));
+  // tiene otra cosa, lo editó el usuario (o lo trajo un insumo). El inicial se captura en
+  // la primera corrida del effect y no acá: el modelo de algunos formularios es un
+  // `linkedSignal` que lee inputs requeridos, todavía no seteados al construir.
+  const ultimoAutomatico = signal<string | null>(null);
 
   function aplicar(valor: string): void {
     ultimoAutomatico.set(valor);
@@ -85,6 +97,9 @@ export function sugerirTipoCambio(opciones: OpcionesSugerenciaTipoCambio): Suger
 
   effect(() => {
     const sugerida = cotizacion();
+    if (untracked(ultimoAutomatico) === null) {
+      ultimoAutomatico.set(untracked(opciones.valorActual));
+    }
     if (!sugerida) {
       return;
     }

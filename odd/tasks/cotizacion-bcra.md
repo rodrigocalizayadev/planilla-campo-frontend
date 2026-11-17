@@ -19,8 +19,8 @@ Fuente: documentación del endpoint (L1, citada textual), verificación contra e
 
 Ruta de todas: inline. Evidencia (sin Writer trigger): T2–T4 dependen de la pieza compartida de T1, no son independientes. Forecast: ~700–900 líneas autoradas (incluye tests); la estrategia de una sola rama aplica.
 
-- [x] **T1** Modelo `CotizacionResponse`, helper `sugerirTipoCambio` y componente `SugerenciaCotizacion` con tests — S2, S3, S4, S5, S7 — inline — RED: módulo inexistente; GREEN: 10/10 en `sugerencia-cotizacion.spec.ts` — commit: primer commit de la rama
-- [ ] **T2** Formularios de lote-campaña: aplicación, tarea, venta, liquidación, cobro — S5, S6 — inline — commit: —
+- [x] **T1** Modelo `CotizacionResponse`, helper `sugerirTipoCambio` y componente `SugerenciaCotizacion` con tests — S2, S3, S4, S5, S7 — inline — RED: módulo inexistente; GREEN: 10/10 en `sugerencia-cotizacion.spec.ts` — commit: ff88c80
+- [x] **T2** Formularios de lote-campaña: aplicación, tarea, venta, liquidación, cobro — S5, S6 — inline — 125/125 en `features/lote-campania` (6 tests nuevos; escritos después del cableado, sin RED propio) — commit: ver Log
 - [ ] **T3** Costo indirecto — S5, S6 — inline — commit: —
 - [ ] **T4** Campaña: modal de alta y edición inline del tablero — S2, S5, S6 — inline — commit: —
 - [ ] **T5** Docs (§16 en api-endpoints-v2, resumen-slices) + verificación visual — S8 — inline — commit: —
@@ -33,4 +33,7 @@ Ruta de todas: inline. Evidencia (sin Writer trigger): T2–T4 dependen de la pi
 - **L4 (2026-11-17, usuario):** "Creaste un plan o tarea como sugiere ODD para una tarea de este tamaño? Ademas deberias trabajar sobre una nueva rama a partir de dev" → rama `feat/cotizacion-bcra` creada desde `dev` (87bbd41) y este documento antes de la primera escritura de código.
 - Hallazgos del análisis: todos los formularios precargan hoy desde `TipoCambioMemoriaService`; en aplicación, elegir insumo pisa el TC con `insumo.precioReferencia.tipoCambio` (cuenta como "tocado" para S5); el interceptor de errores solo normaliza (sin toast global); los specs de tarea, cobro, liquidación y costo indirecto no proveen `HttpClient` y hay que sumarlo.
 - T1: `httpResource` mantiene pendiente `whenStable()` hasta el flush; en specs, usar `TestBed.tick()` antes de `expectOne`.
-- Próximo paso: T2.
+- T2: el fetch pasó a `CotizacionService` (`core/cotizacion`) + `rxResource`, con `provideCotizacionStub()`/`responderCotizacion()` en `cotizacion.testing.ts`: un `httpResource` en cada formulario colgaba `whenStable()` y rompía `http.verify()` en todos los specs que montan formularios (49 fallos).
+- T2 bug encontrado: loop infinito cuando `fecha` y el TC viven en el mismo signal de modelo (`params` devolvía un `{ fecha }` nuevo en cada cambio del modelo → recarga → autocompletado → ...). RED reproducido en `sugerencia-cotizacion.spec.ts` ("con fecha y tipo de cambio en el mismo modelo..."), GREEN con un `computed` de la fecha a consultar.
+- T2: no correr `prettier --write` sobre carpetas: el código existente no está formateado con el `.prettierrc` y mete ruido en el diff.
+- Próximo paso: T3.

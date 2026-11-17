@@ -37,6 +37,21 @@ class HostSugerencia {
   });
 }
 
+/** Host como los formularios reales: fecha y tipo de cambio en el mismo signal. */
+@Component({
+  imports: [SugerenciaCotizacion],
+  template: `<app-sugerencia-cotizacion [sugerencia]="sugerencia" />`,
+})
+class HostModeloUnico {
+  readonly modelo = signal({ fecha: '2026-11-15', tipoCambio: '1400.0000' });
+
+  readonly sugerencia = sugerirTipoCambio({
+    fecha: () => this.modelo().fecha,
+    valorActual: () => this.modelo().tipoCambio,
+    asignar: (valor) => this.modelo.update((actual) => ({ ...actual, tipoCambio: valor })),
+  });
+}
+
 describe('sugerirTipoCambio + SugerenciaCotizacion', () => {
   let fixture: ComponentFixture<HostSugerencia>;
   let host: HostSugerencia;
@@ -195,5 +210,18 @@ describe('sugerirTipoCambio + SugerenciaCotizacion', () => {
 
     http.expectNone((req) => req.url.startsWith(URL_COTIZACION));
     expect(texto()).toBe('');
+  });
+
+  it('con fecha y tipo de cambio en el mismo modelo, autocompletar no vuelve a pedir la cotización', async () => {
+    host.habilitada.set(false);
+    const fixtureUnico = TestBed.createComponent(HostModeloUnico);
+    fixtureUnico.autoDetectChanges();
+    TestBed.tick();
+    http.expectOne(`${URL_COTIZACION}?fecha=2026-11-15`).flush(COTIZACION_FIN_DE_SEMANA);
+    await fixtureUnico.whenStable();
+    TestBed.tick();
+
+    http.expectNone((req) => req.url.startsWith(URL_COTIZACION));
+    expect(fixtureUnico.componentInstance.modelo().tipoCambio).toBe('1543.5000');
   });
 });

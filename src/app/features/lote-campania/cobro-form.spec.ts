@@ -7,6 +7,7 @@ import { LoteCampaniaService } from './lote-campania.service';
 import { AvisoService } from '../../shared/ui/aviso/aviso.service';
 import { hoyIso } from '../../shared/utils/fecha-local';
 import type { ErrorResponse, Venta } from '../../models';
+import { provideCotizacionStub, responderCotizacion } from '../../core/cotizacion/cotizacion.testing';
 
 const VENTA_CON_SALDO: Venta = {
   id: 3,
@@ -44,6 +45,7 @@ describe('CobroForm', () => {
       imports: [CobroForm],
       providers: [
         provideZonelessChangeDetection(),
+        provideCotizacionStub(),
         { provide: LoteCampaniaService, useValue: loteCampaniaService },
       ],
     }).compileComponents();
@@ -227,5 +229,33 @@ describe('CobroForm', () => {
 
     expect(aviso.mostrar).toHaveBeenCalledWith('Solo se pueden cobrar ventas a precio cerrado', 'error');
     expect(pidioRefrescar).toBe(false);
+  });
+
+  describe('cotización BCRA', () => {
+    function cambiarFecha(valor: string): void {
+      const fecha: HTMLInputElement = fixture.nativeElement.querySelector('input[type="date"]');
+      fecha.value = valor;
+      fecha.dispatchEvent(new Event('input'));
+    }
+
+    it('autocompleta el tipo de cambio con la cotización de la fecha del cobro y la manda en el payload', async () => {
+      const obtenerDolar = responderCotizacion('1551.0000');
+      loteCampaniaService.registrarCobro.mockReturnValue(of(VENTA_CON_SALDO));
+      await renderizar();
+      cambiarFecha('2026-11-13');
+      completar(0, '1000');
+      await fixture.whenStable();
+
+      expect(obtenerDolar).toHaveBeenLastCalledWith('2026-11-13');
+      expect(camposNumericos()[1].value).toBe('1.551,0000');
+
+      enviarFormulario();
+      await fixture.whenStable();
+
+      expect(loteCampaniaService.registrarCobro).toHaveBeenCalledWith(3, {
+        fecha: '2026-11-13',
+        monto: { importe: '1000', moneda: 'ARS', tipoCambio: '1551.0000' },
+      });
+    });
   });
 });
