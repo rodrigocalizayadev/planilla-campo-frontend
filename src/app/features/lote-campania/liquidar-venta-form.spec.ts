@@ -7,7 +7,7 @@ import { LoteCampaniaService } from './lote-campania.service';
 import { AvisoService } from '../../shared/ui/aviso/aviso.service';
 import { hoyIso } from '../../shared/utils/fecha-local';
 import type { ErrorResponse, Venta } from '../../models';
-import { provideCotizacionStub, responderCotizacion } from '../../core/cotizacion/cotizacion.testing';
+import { provideCotizacionStub, responderCotizacion, cambiarFecha } from '../../core/cotizacion/cotizacion.testing';
 
 const VENTA_PENDIENTE: Venta = {
   id: 2,
@@ -303,19 +303,13 @@ describe('LiquidarVentaForm', () => {
   });
 
   describe('cotización BCRA', () => {
-    function cambiarFecha(valor: string): void {
-      const fecha: HTMLInputElement = fixture.nativeElement.querySelector('input[type="date"]');
-      fecha.value = valor;
-      fecha.dispatchEvent(new Event('input'));
-    }
-
     it('autocompleta el tipo de cambio con la cotización de la fecha de liquidación y lo usa en precio y gastos', async () => {
       const obtenerDolar = responderCotizacion('1551.0000');
       loteCampaniaService.liquidarVenta.mockReturnValue(of(VENTA_LIQUIDADA));
       fixture.autoDetectChanges();
       await fixture.whenStable();
 
-      cambiarFecha('2026-11-13');
+      cambiarFecha(fixture, '2026-11-13');
       completar(0, '4500');
       completar(2, '100');
       await fixture.whenStable();

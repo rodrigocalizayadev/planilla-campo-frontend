@@ -10,7 +10,7 @@ import { LoteCampaniaService } from './lote-campania.service';
 import { EnumsService } from '../../core/enums/enums.service';
 import { AvisoService } from '../../shared/ui/aviso/aviso.service';
 import type { AplicacionInsumo, ErrorResponse, Insumo, PaginaResponse, ValorEnum } from '../../models';
-import { provideCotizacionStub, responderCotizacion } from '../../core/cotizacion/cotizacion.testing';
+import { provideCotizacionStub, responderCotizacion, cambiarFecha } from '../../core/cotizacion/cotizacion.testing';
 
 const UNIDADES: ValorEnum[] = [
   { valor: 'KG', etiqueta: 'kg' },
@@ -222,12 +222,6 @@ describe('AplicacionForm', () => {
   });
 
   describe('cotización BCRA', () => {
-    function cambiarFecha(valor: string): void {
-      const fecha: HTMLInputElement = fixture.nativeElement.querySelector('input[type="date"]');
-      fecha.value = valor;
-      fecha.dispatchEvent(new Event('input'));
-    }
-
     function botonUsar(): HTMLButtonElement | null {
       return fixture.nativeElement.querySelector('.sugerencia-cotizacion__usar');
     }
@@ -237,7 +231,7 @@ describe('AplicacionForm', () => {
       cargarInsumos();
       await fixture.whenStable();
 
-      cambiarFecha('2026-11-13');
+      cambiarFecha(fixture, '2026-11-13');
       await fixture.whenStable();
 
       expect(obtenerDolar).toHaveBeenLastCalledWith('2026-11-13');
@@ -253,7 +247,7 @@ describe('AplicacionForm', () => {
 
       elegir(selects().insumo, '5', true);
       completarInput('input[inputmode="decimal"].campo__input--numerico', '20');
-      cambiarFecha('2026-11-13');
+      cambiarFecha(fixture, '2026-11-13');
       await fixture.whenStable();
 
       expect(fixture.nativeElement.querySelector('#precioTipoCambio').value).toBe('1,0000');

@@ -6,7 +6,7 @@ import { CostoIndirectoForm } from './costo-indirecto-form';
 import { CostosIndirectosService } from './costos-indirectos.service';
 import { AvisoService } from '../../shared/ui/aviso/aviso.service';
 import type { CostoIndirecto, ErrorResponse, LoteCampania } from '../../models';
-import { provideCotizacionStub, responderCotizacion } from '../../core/cotizacion/cotizacion.testing';
+import { provideCotizacionStub, responderCotizacion, cambiarFecha } from '../../core/cotizacion/cotizacion.testing';
 
 function lote(parcial: Partial<LoteCampania>): LoteCampania {
   return {
@@ -243,19 +243,13 @@ describe('CostoIndirectoForm', () => {
   });
 
   describe('cotización BCRA', () => {
-    function cambiarFecha(valor: string): void {
-      const fecha: HTMLInputElement = fixture.nativeElement.querySelector('input[type="date"]');
-      fecha.value = valor;
-      fecha.dispatchEvent(new Event('input'));
-    }
-
     it('autocompleta el tipo de cambio con la cotización de la fecha del costo y la manda en el payload', async () => {
       const obtenerDolar = responderCotizacion('1551.0000');
       service.crear.mockReturnValue(of(COSTO_CREADO));
       fixture.autoDetectChanges();
       await fixture.whenStable();
 
-      cambiarFecha('2026-11-13');
+      cambiarFecha(fixture, '2026-11-13');
       completarInput('input[type="text"][placeholder="Canon de riego"]', 'Limpieza de canales');
       completarInput('.campo-precio__monto', '50000');
       await fixture.whenStable();

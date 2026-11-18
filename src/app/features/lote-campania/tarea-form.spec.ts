@@ -7,7 +7,7 @@ import { LoteCampaniaService } from './lote-campania.service';
 import { EnumsService } from '../../core/enums/enums.service';
 import { AvisoService } from '../../shared/ui/aviso/aviso.service';
 import type { ErrorResponse, Tarea, ValorEnum } from '../../models';
-import { provideCotizacionStub, responderCotizacion } from '../../core/cotizacion/cotizacion.testing';
+import { provideCotizacionStub, responderCotizacion, cambiarFecha } from '../../core/cotizacion/cotizacion.testing';
 
 const TIPOS_TAREA: ValorEnum[] = [
   { valor: 'CARPIDA', etiqueta: 'Carpida' },
@@ -246,19 +246,13 @@ describe('TareaForm', () => {
   });
 
   describe('cotización BCRA', () => {
-    function cambiarFecha(valor: string): void {
-      const fecha: HTMLInputElement = fixture.nativeElement.querySelector('input[type="date"]');
-      fecha.value = valor;
-      fecha.dispatchEvent(new Event('input'));
-    }
-
     it('autocompleta el tipo de cambio con la cotización de la fecha de la tarea y la manda en el payload', async () => {
       const obtenerDolar = responderCotizacion('1551.0000');
       loteCampaniaService.crearTarea.mockReturnValue(of(TAREA));
       fixture.autoDetectChanges();
       await fixture.whenStable();
 
-      cambiarFecha('2026-11-13');
+      cambiarFecha(fixture, '2026-11-13');
       elegirModo('Monto total');
       completarInput('.campo-precio__monto', '2800000');
       elegir(selects().tipo, 'CARPIDA');

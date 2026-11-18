@@ -10,7 +10,7 @@ import { LoteCampaniaService } from './lote-campania.service';
 import { EnumsService } from '../../core/enums/enums.service';
 import { AvisoService } from '../../shared/ui/aviso/aviso.service';
 import type { Comprador, ErrorResponse, PaginaResponse, ValorEnum, Venta } from '../../models';
-import { provideCotizacionStub, responderCotizacion } from '../../core/cotizacion/cotizacion.testing';
+import { provideCotizacionStub, responderCotizacion, cambiarFecha } from '../../core/cotizacion/cotizacion.testing';
 
 const CALIDADES: ValorEnum[] = [
   { valor: 'PRIMERA', etiqueta: 'Primera' },
@@ -323,9 +323,7 @@ describe('VentaForm', () => {
       cargarCompradores();
       await fixture.whenStable();
 
-      const fecha: HTMLInputElement = fixture.nativeElement.querySelector('input[type="date"]');
-      fecha.value = '2026-07-20';
-      fecha.dispatchEvent(new Event('input'));
+      cambiarFecha(fixture, '2026-07-20');
       await fixture.whenStable();
 
       expect(obtenerDolar).not.toHaveBeenCalled();
@@ -345,19 +343,13 @@ describe('VentaForm', () => {
   });
 
   describe('cotización BCRA', () => {
-    function cambiarFecha(valor: string): void {
-      const fecha: HTMLInputElement = fixture.nativeElement.querySelector('input[type="date"]');
-      fecha.value = valor;
-      fecha.dispatchEvent(new Event('input'));
-    }
-
     it('a precio cerrado, autocompleta el tipo de cambio con la cotización de la fecha de entrega', async () => {
       const obtenerDolar = responderCotizacion('1551.0000');
       loteCampaniaService.crearVenta.mockReturnValue(of(VENTA));
       cargarCompradores();
       await fixture.whenStable();
 
-      cambiarFecha('2026-11-13');
+      cambiarFecha(fixture, '2026-11-13');
       elegir(selects().comprador, '6');
       elegir(selects().calidad, 'PRIMERA');
       camposNumericos()[0].value = '50';

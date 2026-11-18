@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed, type ComponentFixture } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
 import { vi, type Mock } from 'vitest';
 import { CotizacionService } from './cotizacion.service';
@@ -47,4 +47,14 @@ export function responderCotizacion(valor: string): ObtenerDolar {
   ).obtenerDolar;
   obtenerDolar.mockImplementation((fecha) => of(cotizacionPara(fecha, valor)));
   return obtenerDolar;
+}
+
+/**
+ * Cambia la fecha del movimiento en un formulario con un único `input[type="date"]`
+ * (el que dispara una nueva consulta de cotización).
+ */
+export function cambiarFecha(fixture: ComponentFixture<unknown>, valor: string): void {
+  const fecha: HTMLInputElement = fixture.nativeElement.querySelector('input[type="date"]');
+  fecha.value = valor;
+  fecha.dispatchEvent(new Event('input'));
 }

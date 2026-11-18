@@ -213,6 +213,8 @@ describe('sugerirTipoCambio + SugerenciaCotizacion', () => {
   });
 
   it('con fecha y tipo de cambio en el mismo modelo, autocompletar no vuelve a pedir la cotización', async () => {
+    // El host del beforeEach también pide su cotización: se lo deshabilita para que el
+    // único request esperado sea el de HostModeloUnico.
     host.habilitada.set(false);
     const fixtureUnico = TestBed.createComponent(HostModeloUnico);
     fixtureUnico.autoDetectChanges();
@@ -223,5 +225,31 @@ describe('sugerirTipoCambio + SugerenciaCotizacion', () => {
 
     http.expectNone((req) => req.url.startsWith(URL_COTIZACION));
     expect(fixtureUnico.componentInstance.modelo().tipoCambio).toBe('1543.5000');
+  });
+
+  it('con la fecha vacía no consulta; al completarla, pide la cotización de esa fecha', async () => {
+    host.fecha.set('');
+    fixture.autoDetectChanges();
+    TestBed.tick();
+
+    http.expectNone((req) => req.url.startsWith(URL_COTIZACION));
+    expect(texto()).toBe('');
+
+    host.fecha.set('2026-11-15');
+    await responder(COTIZACION_FIN_DE_SEMANA);
+
+    expect(host.tipoCambio()).toBe('1543.5000');
+  });
+
+  it('al habilitarse después (campo que aparece), consulta y autocompleta', async () => {
+    host.habilitada.set(false);
+    fixture.autoDetectChanges();
+    TestBed.tick();
+    http.expectNone((req) => req.url.startsWith(URL_COTIZACION));
+
+    host.habilitada.set(true);
+    await responder(COTIZACION_FIN_DE_SEMANA);
+
+    expect(host.tipoCambio()).toBe('1543.5000');
   });
 });
