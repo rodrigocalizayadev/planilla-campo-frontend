@@ -10,6 +10,7 @@ import { LoteCampaniaService } from './lote-campania.service';
 import { EnumsService } from '../../core/enums/enums.service';
 import { AvisoService } from '../../shared/ui/aviso/aviso.service';
 import type { AplicacionInsumo, ErrorResponse, Insumo, PaginaResponse, ValorEnum } from '../../models';
+import { provideCotizacionStub, responderCotizacion, cambiarFecha } from '../../core/cotizacion/cotizacion.testing';
 
 const UNIDADES: ValorEnum[] = [
   { valor: 'KG', etiqueta: 'kg' },
@@ -74,6 +75,7 @@ describe('AplicacionForm', () => {
       imports: [AplicacionForm],
       providers: [
         provideZonelessChangeDetection(),
+        provideCotizacionStub(),
         provideHttpClient(),
         provideHttpClientTesting(),
         { provide: LoteCampaniaService, useValue: loteCampaniaService },
@@ -217,5 +219,52 @@ describe('AplicacionForm', () => {
     await fixture.whenStable();
 
     expect(aviso.mostrar).toHaveBeenCalledWith('La campaña está cerrada', 'error');
+  });
+
+  describe('cotización BCRA', () => {
+    function botonUsar(): HTMLButtonElement | null {
+      return fixture.nativeElement.querySelector('.sugerencia-cotizacion__usar');
+    }
+
+    it('sin insumo elegido, autocompleta el tipo de cambio con la cotización de la fecha de la aplicación', async () => {
+      const obtenerDolar = responderCotizacion('1551.0000');
+      cargarInsumos();
+      await fixture.whenStable();
+
+      cambiarFecha(fixture, '2026-11-13');
+      await fixture.whenStable();
+
+      expect(obtenerDolar).toHaveBeenLastCalledWith('2026-11-13');
+      expect(fixture.nativeElement.querySelector('#precioTipoCambio').value).toBe('1.551,0000');
+      expect(botonUsar()).toBeNull();
+    });
+
+    it('el tipo de cambio que trae el insumo no se pisa: se ofrece "Usar" y, al tocarlo, viaja el del BCRA', async () => {
+      responderCotizacion('1551.0000');
+      loteCampaniaService.crearAplicacion.mockReturnValue(of(APLICACION));
+      cargarInsumos();
+      await fixture.whenStable();
+
+      elegir(selects().insumo, '5', true);
+      completarInput('input[inputmode="decimal"].campo__input--numerico', '20');
+      cambiarFecha(fixture, '2026-11-13');
+      await fixture.whenStable();
+
+      expect(fixture.nativeElement.querySelector('#precioTipoCambio').value).toBe('1,0000');
+      expect(botonUsar()).not.toBeNull();
+
+      botonUsar()!.click();
+      await fixture.whenStable();
+      enviarFormulario();
+      await fixture.whenStable();
+
+      expect(loteCampaniaService.crearAplicacion).toHaveBeenCalledWith(
+        4,
+        expect.objectContaining({
+          fecha: '2026-11-13',
+          precioUnitario: { importe: '900.5', moneda: 'ARS', tipoCambio: '1551.0000' },
+        }),
+      );
+    });
   });
 });

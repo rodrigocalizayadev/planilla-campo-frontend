@@ -9,6 +9,8 @@ import { ImportePipe } from '../../shared/pipes/importe.pipe';
 import { AvisoService } from '../../shared/ui/aviso/aviso.service';
 import { EnumsService } from '../../core/enums/enums.service';
 import { TipoCambioMemoriaService } from '../../shared/data/tipo-cambio-memoria.service';
+import { sugerirTipoCambio } from '../../shared/data/sugerencia-tipo-cambio';
+import { SugerenciaCotizacion } from '../../shared/ui/sugerencia-cotizacion/sugerencia-cotizacion';
 import { LoteCampaniaService } from './lote-campania.service';
 import { hoyIso } from '../../shared/utils/fecha-local';
 import type { Comprador, ErrorResponse, PaginaResponse, Venta, VentaRequest } from '../../models';
@@ -58,7 +60,7 @@ interface ModeloVentaForm {
  */
 @Component({
   selector: 'app-venta-form',
-  imports: [Modal, FormField, CampoCantidad, CampoImporte, ImportePipe],
+  imports: [Modal, FormField, CampoCantidad, CampoImporte, ImportePipe, SugerenciaCotizacion],
   templateUrl: './venta-form.html',
   styleUrl: './venta-form.scss',
 })
@@ -145,6 +147,14 @@ export class VentaForm {
       : 0;
   });
 
+  // Cotización BCRA a la fecha del movimiento (docs/api-endpoints-v2.md §16).
+  protected readonly sugerenciaTipoCambio = sugerirTipoCambio({
+    fecha: () => this.modelo().fechaEntrega,
+    valorActual: () => this.modelo().precioTipoCambio,
+    asignar: (valor) => this.modelo.update((actual) => ({ ...actual, precioTipoCambio: valor })),
+    habilitada: () => this.esPrecioCerrado(),
+  });
+
   protected readonly ventaForm = form(this.modelo, (path) => {
     required(path.compradorId, { message: 'Elegí un comprador' });
     required(path.calidad, { message: 'Elegí la calidad' });
@@ -191,6 +201,11 @@ export class VentaForm {
 
   guardar(evento: Event): void {
     evento.preventDefault();
+    // Con la cotización de la fecha nueva en camino, el tipo de cambio todavía es el
+    // autocompletado de otra fecha: no se guarda hasta que llegue.
+    if (this.sugerenciaTipoCambio.pendiente()) {
+      return;
+    }
 
     const raiz = this.ventaForm();
     if (!raiz.valid()) {

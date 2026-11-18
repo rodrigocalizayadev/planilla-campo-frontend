@@ -1399,3 +1399,48 @@ editarla (comprador/calidad/fecha/cantidad, con el disponible ajustado mostrado
 correctamente) y eliminarla — todo sin errores de consola, en 1280px y 390px (sheet a
 pantalla completa en el formulario, confirmación centrada). `npm test` (208/208),
 `npm run lint` y `npm run build` en verde.
+
+---
+
+## Cotización BCRA — sugerencia de tipo de cambio (`feat/cotizacion-bcra`)
+
+Integra `GET /api/cotizaciones/dolar` (docs/api-endpoints-v2.md §16). Especificación y
+bitácora: `odd/tasks/cotizacion-bcra.md`.
+
+### Qué se construyó
+
+- `core/cotizacion/CotizacionService` (`obtenerDolar(fecha | null)`) y el modelo
+  `CotizacionResponse`.
+- `shared/data/sugerirTipoCambio()`: `rxResource` que pide la cotización a la fecha del
+  movimiento y **autocompleta el tipo de cambio mientras el usuario no lo haya editado a
+  mano** (decisión de producto, opción B). Un valor distinto del último autocompletado
+  —tipeado o traído por un insumo— cuenta como editado y no se pisa.
+- `shared/ui/SugerenciaCotizacion`: línea bajo el campo con "BCRA del dd/MM/yyyy:
+  valor" y el botón "Usar" cuando el campo tiene otro valor. Mientras carga o si falla
+  (503, red), lo dice sin bloquear el campo; una fecha futura no se consulta.
+- Cableado en aplicación, tarea, venta (solo precio cerrado), liquidación (todo y
+  tramo), cobro, costo indirecto, alta de campaña (sin `fecha`, autocompleta) y edición
+  inline de `cotizacionVigente` en el tablero (sin `fecha`, solo "Usar").
+- `TipoCambioMemoriaService` sigue como valor inicial (fallback si el BCRA falla).
+- **Consistencia del tipo de cambio**: si el campo tiene un valor puesto por la
+  sugerencia y la fecha nueva queda sin cotización (error del BCRA o fecha futura), el
+  campo se vacía y la validación pide cargarlo a mano — nunca se guarda el tipo de
+  cambio de otra fecha. Lo manual, lo del insumo y el inicial de memoria no se tocan.
+  Mientras se consulta la cotización de la fecha nueva y el campo tiene un valor
+  autocompletado, el botón de guardar queda deshabilitado (`pendiente` del helper).
+  La consulta tiene un timeout de 10 s (`TIEMPO_MAXIMO_COTIZACION_MS`): si vence, cuenta
+  como error, así una consulta colgada nunca traba el guardado.
+
+### Decisiones no triviales
+
+- **Loop de recarga**: en los formularios, `fecha` y el tipo de cambio viven en el
+  mismo signal de modelo. Si `params` del recurso lee el modelo, autocompletar crea un
+  `{ fecha }` nuevo → recarga → autocompleta → ... La fecha a consultar pasa por un
+  `computed` propio, que solo emite cuando cambia el string.
+- **Valor inicial capturado en la primera corrida del `effect`**, no al construir:
+  venta y liquidación arman el modelo con `linkedSignal` sobre `input.required`.
+- **Servicio + `rxResource` en vez de `httpResource` en cada formulario**: con
+  `httpResource`, todo spec que monta un formulario quedaba con un request pendiente
+  (cuelga `whenStable()`, rompe `http.verify()`). `provideCotizacionStub()` /
+  `responderCotizacion()` (`core/cotizacion/cotizacion.testing.ts`) responden síncrono.
+

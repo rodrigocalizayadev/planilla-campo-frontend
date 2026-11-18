@@ -84,6 +84,7 @@
         @if (campaniaForm.cotizacionVigente().touched() && campaniaForm.cotizacionVigente().invalid()) {
           <span class="campo__error">{{ campaniaForm.cotizacionVigente().errors()[0]?.message }}</span>
         }
+        <app-sugerencia-cotizacion [sugerencia]="sugerenciaCotizacion" />
         <span class="campo__ayuda">
           Se usa para mostrar los costos e ingresos de la campaña también en pesos. Se puede dejar sin cargar y
           completar después; sin esto, los importes solo se ven en dólares.
@@ -92,7 +93,7 @@
 
       <div class="form-catalogo__pie">
         <button type="button" class="boton-secundario" (click)="volverALista()">Volver</button>
-        <button type="submit" class="boton-primario" [disabled]="enviando()">Crear campaña</button>
+        <button type="submit" class="boton-primario" [disabled]="enviando() || sugerenciaCotizacion.pendiente()">Crear campaña</button>
       </div>
     </form>
   </app-modal>

@@ -1,12 +1,13 @@
 import { provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { of, throwError } from 'rxjs';
+import { NEVER, of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 import { CobroForm } from './cobro-form';
 import { LoteCampaniaService } from './lote-campania.service';
 import { AvisoService } from '../../shared/ui/aviso/aviso.service';
 import { hoyIso } from '../../shared/utils/fecha-local';
 import type { ErrorResponse, Venta } from '../../models';
+import { provideCotizacionStub, responderCotizacion, cambiarFecha } from '../../core/cotizacion/cotizacion.testing';
 
 const VENTA_CON_SALDO: Venta = {
   id: 3,
@@ -44,6 +45,7 @@ describe('CobroForm', () => {
       imports: [CobroForm],
       providers: [
         provideZonelessChangeDetection(),
+        provideCotizacionStub(),
         { provide: LoteCampaniaService, useValue: loteCampaniaService },
       ],
     }).compileComponents();
@@ -227,5 +229,70 @@ describe('CobroForm', () => {
 
     expect(aviso.mostrar).toHaveBeenCalledWith('Solo se pueden cobrar ventas a precio cerrado', 'error');
     expect(pidioRefrescar).toBe(false);
+  });
+
+  describe('cotización BCRA', () => {
+    it('mientras carga la cotización de la fecha nueva, no deja guardar con el tipo de cambio anterior', async () => {
+      const obtenerDolar = responderCotizacion('1551.0000');
+      const autocompletar = obtenerDolar.getMockImplementation()!;
+      obtenerDolar.mockImplementation((fecha) => (fecha === '2026-11-14' ? NEVER : autocompletar(fecha)));
+      loteCampaniaService.registrarCobro.mockReturnValue(of(VENTA_CON_SALDO));
+      await renderizar();
+      cambiarFecha(fixture, '2026-11-13');
+      completar(0, '1000');
+      await fixture.whenStable();
+
+      cambiarFecha(fixture, '2026-11-14');
+      fixture.detectChanges();
+
+      const guardar: HTMLButtonElement = fixture.nativeElement.querySelector('button[type="submit"]');
+      expect(guardar.disabled).toBe(true);
+      enviarFormulario();
+      expect(loteCampaniaService.registrarCobro).not.toHaveBeenCalled();
+    });
+
+    it('si la fecha nueva queda sin cotización, no guarda con el tipo de cambio de la fecha anterior', async () => {
+      const obtenerDolar = responderCotizacion('1551.0000');
+      const autocompletar = obtenerDolar.getMockImplementation()!;
+      obtenerDolar.mockImplementation((fecha) =>
+        fecha === '2026-11-14'
+          ? throwError(() => ({ status: 503, code: 'COTIZACION_NO_DISPONIBLE', message: 'No disponible' }))
+          : autocompletar(fecha),
+      );
+      await renderizar();
+      cambiarFecha(fixture, '2026-11-13');
+      completar(0, '1000');
+      await fixture.whenStable();
+      expect(camposNumericos()[1].value).toBe('1.551,0000');
+
+      cambiarFecha(fixture, '2026-11-14');
+      await fixture.whenStable();
+      enviarFormulario();
+      await fixture.whenStable();
+
+      expect(camposNumericos()[1].value).toBe('');
+      expect(loteCampaniaService.registrarCobro).not.toHaveBeenCalled();
+      expect(fixture.nativeElement.textContent).toContain('Ingresá el tipo de cambio');
+    });
+
+    it('autocompleta el tipo de cambio con la cotización de la fecha del cobro y la manda en el payload', async () => {
+      const obtenerDolar = responderCotizacion('1551.0000');
+      loteCampaniaService.registrarCobro.mockReturnValue(of(VENTA_CON_SALDO));
+      await renderizar();
+      cambiarFecha(fixture, '2026-11-13');
+      completar(0, '1000');
+      await fixture.whenStable();
+
+      expect(obtenerDolar).toHaveBeenLastCalledWith('2026-11-13');
+      expect(camposNumericos()[1].value).toBe('1.551,0000');
+
+      enviarFormulario();
+      await fixture.whenStable();
+
+      expect(loteCampaniaService.registrarCobro).toHaveBeenCalledWith(3, {
+        fecha: '2026-11-13',
+        monto: { importe: '1000', moneda: 'ARS', tipoCambio: '1551.0000' },
+      });
+    });
   });
 });

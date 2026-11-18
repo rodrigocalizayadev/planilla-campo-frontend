@@ -23,3 +23,4 @@ export * from './cobro.model';
 export * from './liquidacion-tramo.model';
 export * from './comprador-saldo.model';
 export * from './costo-indirecto.model';
+export * from './cotizacion.model';

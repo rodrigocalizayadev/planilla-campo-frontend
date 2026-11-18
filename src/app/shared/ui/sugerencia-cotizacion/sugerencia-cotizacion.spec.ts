@@ -1,0 +1,410 @@
+import { Component, provideZonelessChangeDetection, signal } from '@angular/core';
+import { provideHttpClient } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { environment } from '../../../../environments/environment';
+import { SugerenciaCotizacion } from './sugerencia-cotizacion';
+import { sugerirTipoCambio } from '../../data/sugerencia-tipo-cambio';
+import { hoyIso } from '../../utils/fecha-local';
+import { TIEMPO_MAXIMO_COTIZACION_MS } from '../../../core/cotizacion/cotizacion.service';
+import type { CotizacionResponse } from '../../../models';
+
+const URL_COTIZACION = `${environment.apiBaseUrl}/cotizaciones/dolar`;
+const TIMEOUT_TEST_MS = 30;
+
+const COTIZACION_FIN_DE_SEMANA: CotizacionResponse = {
+  fechaSolicitada: '2026-11-15',
+  fechaCotizacion: '2026-11-13',
+  valor: '1543.5000',
+  fuente: 'BCRA',
+};
+
+/** Host mínimo: un "formulario" con fecha y tipo de cambio en signals. */
+@Component({
+  imports: [SugerenciaCotizacion],
+  template: `<app-sugerencia-cotizacion [sugerencia]="sugerencia" />`,
+})
+class HostSugerencia {
+  readonly fecha = signal<string | null>('2026-11-15');
+  readonly tipoCambio = signal('1400.0000');
+  readonly habilitada = signal(true);
+  autocompletar = true;
+
+  readonly sugerencia = sugerirTipoCambio({
+    fecha: () => this.fecha(),
+    valorActual: () => this.tipoCambio(),
+    asignar: (valor) => this.tipoCambio.set(valor),
+    autocompletar: () => this.autocompletar,
+    habilitada: () => this.habilitada(),
+  });
+}
+
+/** Host como los formularios reales: fecha y tipo de cambio en el mismo signal. */
+@Component({
+  imports: [SugerenciaCotizacion],
+  template: `<app-sugerencia-cotizacion [sugerencia]="sugerencia" />`,
+})
+class HostModeloUnico {
+  readonly modelo = signal({ fecha: '2026-11-15', tipoCambio: '1400.0000' });
+
+  readonly sugerencia = sugerirTipoCambio({
+    fecha: () => this.modelo().fecha,
+    valorActual: () => this.modelo().tipoCambio,
+    asignar: (valor) => this.modelo.update((actual) => ({ ...actual, tipoCambio: valor })),
+  });
+}
+
+describe('sugerirTipoCambio + SugerenciaCotizacion', () => {
+  let fixture: ComponentFixture<HostSugerencia>;
+  let host: HostSugerencia;
+  let http: HttpTestingController;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [HostSugerencia],
+      providers: [
+        provideZonelessChangeDetection(),
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        { provide: TIEMPO_MAXIMO_COTIZACION_MS, useValue: TIMEOUT_TEST_MS },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(HostSugerencia);
+    host = fixture.componentInstance;
+    http = TestBed.inject(HttpTestingController);
+  });
+
+  afterEach(() => http.verify());
+
+  function texto(): string {
+    return (fixture.nativeElement as HTMLElement).textContent?.replace(/\s+/g, ' ').trim() ?? '';
+  }
+
+  function botonUsar(): HTMLButtonElement | null {
+    return fixture.nativeElement.querySelector('button');
+  }
+
+  async function responder(
+    cotizacion: CotizacionResponse,
+    fecha = cotizacion.fechaSolicitada,
+  ): Promise<void> {
+    TestBed.tick();
+    http.expectOne(`${URL_COTIZACION}?fecha=${fecha}`).flush(cotizacion);
+    await fixture.whenStable();
+  }
+
+  it('pide la cotización con la fecha del movimiento y autocompleta el campo sin tocar', async () => {
+    fixture.autoDetectChanges();
+    await responder(COTIZACION_FIN_DE_SEMANA);
+
+    expect(host.tipoCambio()).toBe('1543.5000');
+    expect(botonUsar()).toBeNull();
+  });
+
+  it('muestra la fecha real de la cotización en dd/MM/yyyy con el día correcto (UTC−3)', async () => {
+    fixture.autoDetectChanges();
+    await responder(COTIZACION_FIN_DE_SEMANA);
+
+    expect(texto()).toContain('BCRA del 13/11/2026');
+    expect(texto()).toContain('1.543,5000');
+  });
+
+  it('al cambiar la fecha vuelve a consultar y pisa el valor si el campo no se editó a mano', async () => {
+    fixture.autoDetectChanges();
+    await responder(COTIZACION_FIN_DE_SEMANA);
+
+    host.fecha.set('2026-11-16');
+    await responder({
+      ...COTIZACION_FIN_DE_SEMANA,
+      fechaSolicitada: '2026-11-16',
+      fechaCotizacion: '2026-11-16',
+      valor: '1551.0000',
+    });
+
+    expect(host.tipoCambio()).toBe('1551.0000');
+  });
+
+  it('no pisa un tipo de cambio editado a mano: ofrece el botón "Usar" y lo aplica al tocarlo', async () => {
+    fixture.autoDetectChanges();
+    await responder(COTIZACION_FIN_DE_SEMANA);
+
+    host.tipoCambio.set('1600.0000');
+    host.fecha.set('2026-11-16');
+    await responder({
+      ...COTIZACION_FIN_DE_SEMANA,
+      fechaSolicitada: '2026-11-16',
+      fechaCotizacion: '2026-11-16',
+      valor: '1551.0000',
+    });
+
+    expect(host.tipoCambio()).toBe('1600.0000');
+    expect(botonUsar()?.textContent).toContain('Usar');
+
+    botonUsar()!.click();
+    await fixture.whenStable();
+
+    expect(host.tipoCambio()).toBe('1551.0000');
+    expect(botonUsar()).toBeNull();
+  });
+
+  it('no muestra el botón cuando el valor editado coincide numéricamente con la sugerencia', async () => {
+    fixture.autoDetectChanges();
+    await responder(COTIZACION_FIN_DE_SEMANA);
+
+    host.tipoCambio.set('1543.5');
+    await fixture.whenStable();
+
+    expect(botonUsar()).toBeNull();
+  });
+
+  it('con fecha null pide la cotización de hoy, sin query param', async () => {
+    host.fecha.set(null);
+    fixture.autoDetectChanges();
+    TestBed.tick();
+
+    http
+      .expectOne(URL_COTIZACION)
+      .flush({ ...COTIZACION_FIN_DE_SEMANA, fechaSolicitada: hoyIso() });
+    await fixture.whenStable();
+
+    expect(host.tipoCambio()).toBe('1543.5000');
+  });
+
+  it('con una fecha futura no consulta al backend y avisa', async () => {
+    host.fecha.set('2999-01-01');
+    fixture.autoDetectChanges();
+    await fixture.whenStable();
+
+    http.expectNone((req) => req.url.startsWith(URL_COTIZACION));
+    expect(texto()).toContain('No hay cotización del BCRA para una fecha futura');
+    expect(host.tipoCambio()).toBe('1400.0000');
+  });
+
+  it('si el BCRA no está disponible (503) avisa y deja el campo como estaba, editable a mano', async () => {
+    fixture.autoDetectChanges();
+    TestBed.tick();
+
+    http
+      .expectOne(`${URL_COTIZACION}?fecha=2026-11-15`)
+      .flush(
+        { status: 503, code: 'COTIZACION_NO_DISPONIBLE', message: 'No disponible', details: [] },
+        { status: 503, statusText: 'Service Unavailable' },
+      );
+    await fixture.whenStable();
+
+    expect(texto()).toContain('No se pudo obtener la cotización del BCRA');
+    expect(host.tipoCambio()).toBe('1400.0000');
+  });
+
+  it('sin autocompletar solo ofrece el botón, sin tocar el valor existente', async () => {
+    host.autocompletar = false;
+    fixture.autoDetectChanges();
+    await responder(COTIZACION_FIN_DE_SEMANA);
+
+    expect(host.tipoCambio()).toBe('1400.0000');
+    expect(botonUsar()).not.toBeNull();
+  });
+
+  it('deshabilitada no consulta ni muestra nada', async () => {
+    host.habilitada.set(false);
+    fixture.autoDetectChanges();
+    await fixture.whenStable();
+
+    http.expectNone((req) => req.url.startsWith(URL_COTIZACION));
+    expect(texto()).toBe('');
+  });
+
+  it('con fecha y tipo de cambio en el mismo modelo, autocompletar no vuelve a pedir la cotización', async () => {
+    // El host del beforeEach también pide su cotización: se lo deshabilita para que el
+    // único request esperado sea el de HostModeloUnico.
+    host.habilitada.set(false);
+    const fixtureUnico = TestBed.createComponent(HostModeloUnico);
+    fixtureUnico.autoDetectChanges();
+    TestBed.tick();
+    http.expectOne(`${URL_COTIZACION}?fecha=2026-11-15`).flush(COTIZACION_FIN_DE_SEMANA);
+    await fixtureUnico.whenStable();
+    TestBed.tick();
+
+    http.expectNone((req) => req.url.startsWith(URL_COTIZACION));
+    expect(fixtureUnico.componentInstance.modelo().tipoCambio).toBe('1543.5000');
+  });
+
+  it('con la fecha vacía no consulta; al completarla, pide la cotización de esa fecha', async () => {
+    host.fecha.set('');
+    fixture.autoDetectChanges();
+    TestBed.tick();
+
+    http.expectNone((req) => req.url.startsWith(URL_COTIZACION));
+    expect(texto()).toBe('');
+
+    host.fecha.set('2026-11-15');
+    await responder(COTIZACION_FIN_DE_SEMANA);
+
+    expect(host.tipoCambio()).toBe('1543.5000');
+  });
+
+  it('al habilitarse después (campo que aparece), consulta y autocompleta', async () => {
+    host.habilitada.set(false);
+    fixture.autoDetectChanges();
+    TestBed.tick();
+    http.expectNone((req) => req.url.startsWith(URL_COTIZACION));
+
+    host.habilitada.set(true);
+    await responder(COTIZACION_FIN_DE_SEMANA);
+
+    expect(host.tipoCambio()).toBe('1543.5000');
+  });
+
+  it('después de "Usar", un cambio de fecha vuelve a autocompletar', async () => {
+    const del16 = { ...COTIZACION_FIN_DE_SEMANA, fechaSolicitada: '2026-11-16', fechaCotizacion: '2026-11-16', valor: '1551.0000' };
+    const del17 = { ...COTIZACION_FIN_DE_SEMANA, fechaSolicitada: '2026-11-17', fechaCotizacion: '2026-11-17', valor: '1552.0000' };
+    fixture.autoDetectChanges();
+    await responder(COTIZACION_FIN_DE_SEMANA);
+
+    host.tipoCambio.set('1600.0000');
+    host.fecha.set('2026-11-16');
+    await responder(del16);
+    expect(host.tipoCambio()).toBe('1600.0000');
+
+    botonUsar()!.click();
+    await fixture.whenStable();
+    expect(host.tipoCambio()).toBe('1551.0000');
+
+    host.fecha.set('2026-11-17');
+    await responder(del17);
+
+    expect(host.tipoCambio()).toBe('1552.0000');
+  });
+
+  it('si se escribe a mano mientras la consulta está en vuelo, la respuesta no pisa el valor', async () => {
+    fixture.autoDetectChanges();
+    TestBed.tick();
+    const pedido = http.expectOne(`${URL_COTIZACION}?fecha=2026-11-15`);
+
+    host.tipoCambio.set('1600.0000');
+    pedido.flush(COTIZACION_FIN_DE_SEMANA);
+    await fixture.whenStable();
+
+    expect(host.tipoCambio()).toBe('1600.0000');
+    expect(botonUsar()).not.toBeNull();
+  });
+
+  describe('sin cotización para la fecha nueva (consistencia del tipo de cambio)', () => {
+    function fallar503(fecha: string): void {
+      http
+        .expectOne(`${URL_COTIZACION}?fecha=${fecha}`)
+        .flush(
+          { status: 503, code: 'COTIZACION_NO_DISPONIBLE', message: 'No disponible', details: [] },
+          { status: 503, statusText: 'Service Unavailable' },
+        );
+    }
+
+    it('si la consulta de la fecha nueva falla, vacía el tipo de cambio autocompletado de la fecha anterior', async () => {
+      fixture.autoDetectChanges();
+      await responder(COTIZACION_FIN_DE_SEMANA);
+      expect(host.tipoCambio()).toBe('1543.5000');
+
+      host.fecha.set('2026-11-16');
+      TestBed.tick();
+      fallar503('2026-11-16');
+      await fixture.whenStable();
+
+      expect(host.tipoCambio()).toBe('');
+      expect(texto()).toContain('No se pudo obtener la cotización del BCRA');
+    });
+
+    it('si la fecha nueva es futura, vacía el tipo de cambio autocompletado de la fecha anterior', async () => {
+      fixture.autoDetectChanges();
+      await responder(COTIZACION_FIN_DE_SEMANA);
+
+      host.fecha.set('2999-01-01');
+      await fixture.whenStable();
+
+      expect(host.tipoCambio()).toBe('');
+    });
+
+    it('un tipo de cambio escrito a mano no se vacía aunque la fecha nueva quede sin cotización', async () => {
+      fixture.autoDetectChanges();
+      await responder(COTIZACION_FIN_DE_SEMANA);
+
+      host.tipoCambio.set('1600.0000');
+      host.fecha.set('2026-11-16');
+      TestBed.tick();
+      fallar503('2026-11-16');
+      await fixture.whenStable();
+
+      expect(host.tipoCambio()).toBe('1600.0000');
+    });
+
+    it('tras vaciarse, al volver a una fecha con cotización vuelve a autocompletar', async () => {
+      fixture.autoDetectChanges();
+      await responder(COTIZACION_FIN_DE_SEMANA);
+      host.fecha.set('2026-11-16');
+      TestBed.tick();
+      fallar503('2026-11-16');
+      await fixture.whenStable();
+
+      host.fecha.set('2026-11-17');
+      await responder({ ...COTIZACION_FIN_DE_SEMANA, fechaSolicitada: '2026-11-17', fechaCotizacion: '2026-11-17', valor: '1552.0000' });
+
+      expect(host.tipoCambio()).toBe('1552.0000');
+    });
+  });
+
+  describe('pendiente (no guardar el tipo de cambio de otra fecha mientras carga)', () => {
+    it('es verdadero mientras se consulta la fecha nueva si el valor lo puso la sugerencia', async () => {
+      fixture.autoDetectChanges();
+      await responder(COTIZACION_FIN_DE_SEMANA);
+      expect(host.sugerencia.pendiente()).toBe(false);
+
+      host.fecha.set('2026-11-16');
+      TestBed.tick();
+      const pedido = http.expectOne(`${URL_COTIZACION}?fecha=2026-11-16`);
+
+      expect(host.sugerencia.pendiente()).toBe(true);
+
+      pedido.flush({ ...COTIZACION_FIN_DE_SEMANA, fechaSolicitada: '2026-11-16', valor: '1551.0000' });
+      await fixture.whenStable();
+
+      expect(host.sugerencia.pendiente()).toBe(false);
+    });
+
+    it('es falso mientras carga si el valor es manual o el inicial del formulario', async () => {
+      fixture.autoDetectChanges();
+      TestBed.tick();
+      const primero = http.expectOne(`${URL_COTIZACION}?fecha=2026-11-15`);
+      expect(host.sugerencia.pendiente()).toBe(false);
+      primero.flush(COTIZACION_FIN_DE_SEMANA);
+      await fixture.whenStable();
+
+      host.tipoCambio.set('1600.0000');
+      host.fecha.set('2026-11-16');
+      TestBed.tick();
+      const segundo = http.expectOne(`${URL_COTIZACION}?fecha=2026-11-16`);
+
+      expect(host.sugerencia.pendiente()).toBe(false);
+      segundo.flush({ ...COTIZACION_FIN_DE_SEMANA, fechaSolicitada: '2026-11-16', valor: '1551.0000' });
+      await fixture.whenStable();
+    });
+  });
+
+  describe('timeout de la consulta', () => {
+    it('si la cotización no responde a tiempo, cuenta como error: vacía el autocompletado y destraba el guardado', async () => {
+      fixture.autoDetectChanges();
+      await responder(COTIZACION_FIN_DE_SEMANA);
+
+      host.fecha.set('2026-11-16');
+      TestBed.tick();
+      http.expectOne(`${URL_COTIZACION}?fecha=2026-11-16`);
+      expect(host.sugerencia.pendiente()).toBe(true);
+
+      await new Promise((resolver) => setTimeout(resolver, TIMEOUT_TEST_MS * 3));
+      await fixture.whenStable();
+
+      expect(host.sugerencia.pendiente()).toBe(false);
+      expect(host.tipoCambio()).toBe('');
+      expect(texto()).toContain('No se pudo obtener la cotización del BCRA');
+    });
+  });
+});
