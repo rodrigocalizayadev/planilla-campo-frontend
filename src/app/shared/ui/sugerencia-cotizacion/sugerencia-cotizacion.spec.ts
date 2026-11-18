@@ -286,4 +286,66 @@ describe('sugerirTipoCambio + SugerenciaCotizacion', () => {
     expect(host.tipoCambio()).toBe('1600.0000');
     expect(botonUsar()).not.toBeNull();
   });
+
+  describe('sin cotización para la fecha nueva (consistencia del tipo de cambio)', () => {
+    function fallar503(fecha: string): void {
+      http
+        .expectOne(`${URL_COTIZACION}?fecha=${fecha}`)
+        .flush(
+          { status: 503, code: 'COTIZACION_NO_DISPONIBLE', message: 'No disponible', details: [] },
+          { status: 503, statusText: 'Service Unavailable' },
+        );
+    }
+
+    it('si la consulta de la fecha nueva falla, vacía el tipo de cambio autocompletado de la fecha anterior', async () => {
+      fixture.autoDetectChanges();
+      await responder(COTIZACION_FIN_DE_SEMANA);
+      expect(host.tipoCambio()).toBe('1543.5000');
+
+      host.fecha.set('2026-11-16');
+      TestBed.tick();
+      fallar503('2026-11-16');
+      await fixture.whenStable();
+
+      expect(host.tipoCambio()).toBe('');
+      expect(texto()).toContain('No se pudo obtener la cotización del BCRA');
+    });
+
+    it('si la fecha nueva es futura, vacía el tipo de cambio autocompletado de la fecha anterior', async () => {
+      fixture.autoDetectChanges();
+      await responder(COTIZACION_FIN_DE_SEMANA);
+
+      host.fecha.set('2999-01-01');
+      await fixture.whenStable();
+
+      expect(host.tipoCambio()).toBe('');
+    });
+
+    it('un tipo de cambio escrito a mano no se vacía aunque la fecha nueva quede sin cotización', async () => {
+      fixture.autoDetectChanges();
+      await responder(COTIZACION_FIN_DE_SEMANA);
+
+      host.tipoCambio.set('1600.0000');
+      host.fecha.set('2026-11-16');
+      TestBed.tick();
+      fallar503('2026-11-16');
+      await fixture.whenStable();
+
+      expect(host.tipoCambio()).toBe('1600.0000');
+    });
+
+    it('tras vaciarse, al volver a una fecha con cotización vuelve a autocompletar', async () => {
+      fixture.autoDetectChanges();
+      await responder(COTIZACION_FIN_DE_SEMANA);
+      host.fecha.set('2026-11-16');
+      TestBed.tick();
+      fallar503('2026-11-16');
+      await fixture.whenStable();
+
+      host.fecha.set('2026-11-17');
+      await responder({ ...COTIZACION_FIN_DE_SEMANA, fechaSolicitada: '2026-11-17', fechaCotizacion: '2026-11-17', valor: '1552.0000' });
+
+      expect(host.tipoCambio()).toBe('1552.0000');
+    });
+  });
 });

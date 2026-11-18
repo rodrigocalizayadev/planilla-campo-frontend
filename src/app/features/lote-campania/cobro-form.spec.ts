@@ -232,6 +232,30 @@ describe('CobroForm', () => {
   });
 
   describe('cotización BCRA', () => {
+    it('si la fecha nueva queda sin cotización, no guarda con el tipo de cambio de la fecha anterior', async () => {
+      const obtenerDolar = responderCotizacion('1551.0000');
+      const autocompletar = obtenerDolar.getMockImplementation()!;
+      obtenerDolar.mockImplementation((fecha) =>
+        fecha === '2026-11-14'
+          ? throwError(() => ({ status: 503, code: 'COTIZACION_NO_DISPONIBLE', message: 'No disponible' }))
+          : autocompletar(fecha),
+      );
+      await renderizar();
+      cambiarFecha(fixture, '2026-11-13');
+      completar(0, '1000');
+      await fixture.whenStable();
+      expect(camposNumericos()[1].value).toBe('1.551,0000');
+
+      cambiarFecha(fixture, '2026-11-14');
+      await fixture.whenStable();
+      enviarFormulario();
+      await fixture.whenStable();
+
+      expect(camposNumericos()[1].value).toBe('');
+      expect(loteCampaniaService.registrarCobro).not.toHaveBeenCalled();
+      expect(fixture.nativeElement.textContent).toContain('Ingresá el tipo de cambio');
+    });
+
     it('autocompleta el tipo de cambio con la cotización de la fecha del cobro y la manda en el payload', async () => {
       const obtenerDolar = responderCotizacion('1551.0000');
       loteCampaniaService.registrarCobro.mockReturnValue(of(VENTA_CON_SALDO));

@@ -93,23 +93,38 @@ export function sugerirTipoCambio(opciones: OpcionesSugerenciaTipoCambio): Suger
   // se ofrece "Usar". Hoy no es alcanzable: venta solo autocompleta en el alta (sin
   // `venta`) y liquidación se recalcula únicamente si cambia el id de la venta.
   const ultimoAutomatico = signal<string | null>(null);
+  // Si el valor actual lo escribió una sugerencia BCRA (y no es el inicial de memoria).
+  let valorEsDeSugerencia = false;
 
   function aplicar(valor: string): void {
     ultimoAutomatico.set(valor);
+    valorEsDeSugerencia = true;
     opciones.asignar(valor);
   }
 
+  // La fecha actual quedó sin cotización: falló la consulta o es futura.
+  const sinCotizacion = computed(() => fechaFutura() || recurso.status() === 'error');
+
   effect(() => {
     const sugerida = cotizacion();
+    const faltaCotizacion = sinCotizacion();
     if (untracked(ultimoAutomatico) === null) {
       ultimoAutomatico.set(untracked(opciones.valorActual));
     }
-    if (!sugerida) {
-      return;
-    }
     untracked(() => {
-      if (autocompletar() && opciones.valorActual() === ultimoAutomatico()) {
+      if (!autocompletar() || opciones.valorActual() !== ultimoAutomatico()) {
+        return;
+      }
+      if (sugerida) {
         aplicar(sugerida.valor);
+      } else if (faltaCotizacion && valorEsDeSugerencia) {
+        // El campo tiene la cotización de OTRA fecha (la anterior) y la actual no tiene:
+        // se vacía para que se cargue a mano, en vez de guardar un tipo de cambio que no
+        // corresponde a la fecha del movimiento. Lo manual, lo del insumo y el inicial
+        // de memoria no se tocan.
+        ultimoAutomatico.set('');
+        valorEsDeSugerencia = false;
+        opciones.asignar('');
       }
     });
   });

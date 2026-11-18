@@ -1422,6 +1422,10 @@ bitácora: `odd/tasks/cotizacion-bcra.md`.
   tramo), cobro, costo indirecto, alta de campaña (sin `fecha`, autocompleta) y edición
   inline de `cotizacionVigente` en el tablero (sin `fecha`, solo "Usar").
 - `TipoCambioMemoriaService` sigue como valor inicial (fallback si el BCRA falla).
+- **Consistencia del tipo de cambio**: si el campo tiene un valor puesto por la
+  sugerencia y la fecha nueva queda sin cotización (error del BCRA o fecha futura), el
+  campo se vacía y la validación pide cargarlo a mano — nunca se guarda el tipo de
+  cambio de otra fecha. Lo manual, lo del insumo y el inicial de memoria no se tocan.
 
 ### Decisiones no triviales
 
