@@ -1,8 +1,18 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { Injectable, InjectionToken, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import type { CotizacionResponse } from '../../models';
+
+/**
+ * Tiempo máximo de espera de la cotización. Pasado ese tiempo la consulta cuenta como
+ * error: mientras carga, los formularios no dejan guardar un tipo de cambio autocompletado
+ * de otra fecha, así que una consulta colgada no puede trabar el guardado.
+ */
+export const TIEMPO_MAXIMO_COTIZACION_MS = new InjectionToken<number>('TIEMPO_MAXIMO_COTIZACION_MS', {
+  providedIn: 'root',
+  factory: () => 10_000,
+});
 
 /**
  * Cotización del dólar BCRA (BNA vendedor divisa), `GET /api/cotizaciones/dolar`

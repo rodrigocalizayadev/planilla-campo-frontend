@@ -1428,6 +1428,8 @@ bitácora: `odd/tasks/cotizacion-bcra.md`.
   cambio de otra fecha. Lo manual, lo del insumo y el inicial de memoria no se tocan.
   Mientras se consulta la cotización de la fecha nueva y el campo tiene un valor
   autocompletado, el botón de guardar queda deshabilitado (`pendiente` del helper).
+  La consulta tiene un timeout de 10 s (`TIEMPO_MAXIMO_COTIZACION_MS`): si vence, cuenta
+  como error, así una consulta colgada nunca traba el guardado.
 
 ### Decisiones no triviales
 

@@ -6,9 +6,11 @@ import { environment } from '../../../../environments/environment';
 import { SugerenciaCotizacion } from './sugerencia-cotizacion';
 import { sugerirTipoCambio } from '../../data/sugerencia-tipo-cambio';
 import { hoyIso } from '../../utils/fecha-local';
+import { TIEMPO_MAXIMO_COTIZACION_MS } from '../../../core/cotizacion/cotizacion.service';
 import type { CotizacionResponse } from '../../../models';
 
 const URL_COTIZACION = `${environment.apiBaseUrl}/cotizaciones/dolar`;
+const TIMEOUT_TEST_MS = 30;
 
 const COTIZACION_FIN_DE_SEMANA: CotizacionResponse = {
   fechaSolicitada: '2026-11-15',
@@ -64,6 +66,7 @@ describe('sugerirTipoCambio + SugerenciaCotizacion', () => {
         provideZonelessChangeDetection(),
         provideHttpClient(),
         provideHttpClientTesting(),
+        { provide: TIEMPO_MAXIMO_COTIZACION_MS, useValue: TIMEOUT_TEST_MS },
       ],
     }).compileComponents();
 
@@ -383,6 +386,25 @@ describe('sugerirTipoCambio + SugerenciaCotizacion', () => {
       expect(host.sugerencia.pendiente()).toBe(false);
       segundo.flush({ ...COTIZACION_FIN_DE_SEMANA, fechaSolicitada: '2026-11-16', valor: '1551.0000' });
       await fixture.whenStable();
+    });
+  });
+
+  describe('timeout de la consulta', () => {
+    it('si la cotización no responde a tiempo, cuenta como error: vacía el autocompletado y destraba el guardado', async () => {
+      fixture.autoDetectChanges();
+      await responder(COTIZACION_FIN_DE_SEMANA);
+
+      host.fecha.set('2026-11-16');
+      TestBed.tick();
+      http.expectOne(`${URL_COTIZACION}?fecha=2026-11-16`);
+      expect(host.sugerencia.pendiente()).toBe(true);
+
+      await new Promise((resolver) => setTimeout(resolver, TIMEOUT_TEST_MS * 3));
+      await fixture.whenStable();
+
+      expect(host.sugerencia.pendiente()).toBe(false);
+      expect(host.tipoCambio()).toBe('');
+      expect(texto()).toContain('No se pudo obtener la cotización del BCRA');
     });
   });
 });

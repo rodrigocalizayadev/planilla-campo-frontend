@@ -1,6 +1,7 @@
 import { computed, effect, inject, signal, untracked, type Signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { CotizacionService } from '../../core/cotizacion/cotizacion.service';
+import { timeout } from 'rxjs';
+import { CotizacionService, TIEMPO_MAXIMO_COTIZACION_MS } from '../../core/cotizacion/cotizacion.service';
 import { hoyIso } from '../utils/fecha-local';
 import type { CotizacionResponse } from '../../models';
 
@@ -70,12 +71,13 @@ export function sugerirTipoCambio(opciones: OpcionesSugerenciaTipoCambio): Suger
   });
 
   const cotizacionService = inject(CotizacionService);
+  const tiempoMaximo = inject(TIEMPO_MAXIMO_COTIZACION_MS);
   const recurso = rxResource({
     params: () => {
       const fecha = fechaConsulta();
       return fecha === undefined ? undefined : { fecha };
     },
-    stream: ({ params }) => cotizacionService.obtenerDolar(params.fecha),
+    stream: ({ params }) => cotizacionService.obtenerDolar(params.fecha).pipe(timeout(tiempoMaximo)),
   });
 
   const cotizacion = computed(() => (recurso.hasValue() ? recurso.value() : undefined));
