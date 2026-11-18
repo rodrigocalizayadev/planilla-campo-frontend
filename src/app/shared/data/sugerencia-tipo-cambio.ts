@@ -88,6 +88,10 @@ export function sugerirTipoCambio(opciones: OpcionesSugerenciaTipoCambio): Suger
   // tiene otra cosa, lo editó el usuario (o lo trajo un insumo). El inicial se captura en
   // la primera corrida del effect y no acá: el modelo de algunos formularios es un
   // `linkedSignal` que lee inputs requeridos, todavía no seteados al construir.
+  // Límite conocido: si ese `linkedSignal` se recalcula con el formulario abierto, el campo
+  // vuelve a su valor inicial pero esta referencia no, así que cuenta como "editado" y solo
+  // se ofrece "Usar". Hoy no es alcanzable: venta solo autocompleta en el alta (sin
+  // `venta`) y liquidación se recalcula únicamente si cambia el id de la venta.
   const ultimoAutomatico = signal<string | null>(null);
 
   function aplicar(valor: string): void {

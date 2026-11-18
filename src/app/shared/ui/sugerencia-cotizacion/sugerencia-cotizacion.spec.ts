@@ -252,4 +252,38 @@ describe('sugerirTipoCambio + SugerenciaCotizacion', () => {
 
     expect(host.tipoCambio()).toBe('1543.5000');
   });
+
+  it('después de "Usar", un cambio de fecha vuelve a autocompletar', async () => {
+    const del16 = { ...COTIZACION_FIN_DE_SEMANA, fechaSolicitada: '2026-11-16', fechaCotizacion: '2026-11-16', valor: '1551.0000' };
+    const del17 = { ...COTIZACION_FIN_DE_SEMANA, fechaSolicitada: '2026-11-17', fechaCotizacion: '2026-11-17', valor: '1552.0000' };
+    fixture.autoDetectChanges();
+    await responder(COTIZACION_FIN_DE_SEMANA);
+
+    host.tipoCambio.set('1600.0000');
+    host.fecha.set('2026-11-16');
+    await responder(del16);
+    expect(host.tipoCambio()).toBe('1600.0000');
+
+    botonUsar()!.click();
+    await fixture.whenStable();
+    expect(host.tipoCambio()).toBe('1551.0000');
+
+    host.fecha.set('2026-11-17');
+    await responder(del17);
+
+    expect(host.tipoCambio()).toBe('1552.0000');
+  });
+
+  it('si se escribe a mano mientras la consulta está en vuelo, la respuesta no pisa el valor', async () => {
+    fixture.autoDetectChanges();
+    TestBed.tick();
+    const pedido = http.expectOne(`${URL_COTIZACION}?fecha=2026-11-15`);
+
+    host.tipoCambio.set('1600.0000');
+    pedido.flush(COTIZACION_FIN_DE_SEMANA);
+    await fixture.whenStable();
+
+    expect(host.tipoCambio()).toBe('1600.0000');
+    expect(botonUsar()).not.toBeNull();
+  });
 });
