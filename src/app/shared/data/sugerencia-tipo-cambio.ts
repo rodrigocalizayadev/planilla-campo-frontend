@@ -27,6 +27,11 @@ export interface SugerenciaTipoCambio {
   readonly mensajeError: Signal<string | null>;
   /** La sugerencia existe y no coincide con lo que tiene el campo. */
   readonly difiere: Signal<boolean>;
+  /**
+   * Se está consultando la cotización de la fecha actual y el campo todavía tiene un
+   * valor puesto por la sugerencia (de otra fecha): el formulario no debe guardar.
+   */
+  readonly pendiente: Signal<boolean>;
   /** Copia la sugerencia al campo y vuelve a habilitar el autocompletado. */
   usar(): void;
 }
@@ -94,11 +99,11 @@ export function sugerirTipoCambio(opciones: OpcionesSugerenciaTipoCambio): Suger
   // `venta`) y liquidación se recalcula únicamente si cambia el id de la venta.
   const ultimoAutomatico = signal<string | null>(null);
   // Si el valor actual lo escribió una sugerencia BCRA (y no es el inicial de memoria).
-  let valorEsDeSugerencia = false;
+  const valorEsDeSugerencia = signal(false);
 
   function aplicar(valor: string): void {
     ultimoAutomatico.set(valor);
-    valorEsDeSugerencia = true;
+    valorEsDeSugerencia.set(true);
     opciones.asignar(valor);
   }
 
@@ -117,13 +122,13 @@ export function sugerirTipoCambio(opciones: OpcionesSugerenciaTipoCambio): Suger
       }
       if (sugerida) {
         aplicar(sugerida.valor);
-      } else if (faltaCotizacion && valorEsDeSugerencia) {
+      } else if (faltaCotizacion && valorEsDeSugerencia()) {
         // El campo tiene la cotización de OTRA fecha (la anterior) y la actual no tiene:
         // se vacía para que se cargue a mano, en vez de guardar un tipo de cambio que no
         // corresponde a la fecha del movimiento. Lo manual, lo del insumo y el inicial
         // de memoria no se tocan.
         ultimoAutomatico.set('');
-        valorEsDeSugerencia = false;
+        valorEsDeSugerencia.set(false);
         opciones.asignar('');
       }
     });
@@ -136,8 +141,17 @@ export function sugerirTipoCambio(opciones: OpcionesSugerenciaTipoCambio): Suger
     return !!sugerida && Number(sugerida.valor) !== Number(opciones.valorActual());
   });
 
+  const pendiente = computed(
+    () =>
+      recurso.isLoading() &&
+      autocompletar() &&
+      valorEsDeSugerencia() &&
+      opciones.valorActual() === ultimoAutomatico(),
+  );
+
   return {
     cotizacion,
+    pendiente,
     cargando: computed(() => recurso.isLoading()),
     mensajeError,
     difiere,

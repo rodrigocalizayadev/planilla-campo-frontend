@@ -92,6 +92,11 @@ export class CobroForm {
 
   guardar(evento: Event): void {
     evento.preventDefault();
+    // Con la cotización de la fecha nueva en camino, el tipo de cambio todavía es el
+    // autocompletado de otra fecha: no se guarda hasta que llegue.
+    if (this.sugerenciaTipoCambio.pendiente()) {
+      return;
+    }
 
     const raiz = this.cobroForm();
     if (!raiz.valid()) {

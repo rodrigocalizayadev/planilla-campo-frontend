@@ -1426,6 +1426,8 @@ bitácora: `odd/tasks/cotizacion-bcra.md`.
   sugerencia y la fecha nueva queda sin cotización (error del BCRA o fecha futura), el
   campo se vacía y la validación pide cargarlo a mano — nunca se guarda el tipo de
   cambio de otra fecha. Lo manual, lo del insumo y el inicial de memoria no se tocan.
+  Mientras se consulta la cotización de la fecha nueva y el campo tiene un valor
+  autocompletado, el botón de guardar queda deshabilitado (`pendiente` del helper).
 
 ### Decisiones no triviales
 

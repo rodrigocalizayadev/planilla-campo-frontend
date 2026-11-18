@@ -152,7 +152,7 @@
 
     <div class="form-catalogo__pie">
       <button type="button" class="boton-secundario" (click)="cancelado.emit()">Cancelar</button>
-      <button type="submit" class="boton-primario" [disabled]="enviando()">Guardar</button>
+      <button type="submit" class="boton-primario" [disabled]="enviando() || sugerenciaTipoCambio.pendiente()">Guardar</button>
     </div>
   </form>
 </app-modal>

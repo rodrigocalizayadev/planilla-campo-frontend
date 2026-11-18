@@ -93,7 +93,7 @@
 
       <div class="form-catalogo__pie">
         <button type="button" class="boton-secundario" (click)="volverALista()">Volver</button>
-        <button type="submit" class="boton-primario" [disabled]="enviando()">Crear campaña</button>
+        <button type="submit" class="boton-primario" [disabled]="enviando() || sugerenciaCotizacion.pendiente()">Crear campaña</button>
       </div>
     </form>
   </app-modal>

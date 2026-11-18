@@ -1,6 +1,6 @@
 import { provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { of, throwError } from 'rxjs';
+import { NEVER, of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 import { CobroForm } from './cobro-form';
 import { LoteCampaniaService } from './lote-campania.service';
@@ -232,6 +232,25 @@ describe('CobroForm', () => {
   });
 
   describe('cotización BCRA', () => {
+    it('mientras carga la cotización de la fecha nueva, no deja guardar con el tipo de cambio anterior', async () => {
+      const obtenerDolar = responderCotizacion('1551.0000');
+      const autocompletar = obtenerDolar.getMockImplementation()!;
+      obtenerDolar.mockImplementation((fecha) => (fecha === '2026-11-14' ? NEVER : autocompletar(fecha)));
+      loteCampaniaService.registrarCobro.mockReturnValue(of(VENTA_CON_SALDO));
+      await renderizar();
+      cambiarFecha(fixture, '2026-11-13');
+      completar(0, '1000');
+      await fixture.whenStable();
+
+      cambiarFecha(fixture, '2026-11-14');
+      fixture.detectChanges();
+
+      const guardar: HTMLButtonElement = fixture.nativeElement.querySelector('button[type="submit"]');
+      expect(guardar.disabled).toBe(true);
+      enviarFormulario();
+      expect(loteCampaniaService.registrarCobro).not.toHaveBeenCalled();
+    });
+
     it('si la fecha nueva queda sin cotización, no guarda con el tipo de cambio de la fecha anterior', async () => {
       const obtenerDolar = responderCotizacion('1551.0000');
       const autocompletar = obtenerDolar.getMockImplementation()!;

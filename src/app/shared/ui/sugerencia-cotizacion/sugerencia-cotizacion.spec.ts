@@ -348,4 +348,41 @@ describe('sugerirTipoCambio + SugerenciaCotizacion', () => {
       expect(host.tipoCambio()).toBe('1552.0000');
     });
   });
+
+  describe('pendiente (no guardar el tipo de cambio de otra fecha mientras carga)', () => {
+    it('es verdadero mientras se consulta la fecha nueva si el valor lo puso la sugerencia', async () => {
+      fixture.autoDetectChanges();
+      await responder(COTIZACION_FIN_DE_SEMANA);
+      expect(host.sugerencia.pendiente()).toBe(false);
+
+      host.fecha.set('2026-11-16');
+      TestBed.tick();
+      const pedido = http.expectOne(`${URL_COTIZACION}?fecha=2026-11-16`);
+
+      expect(host.sugerencia.pendiente()).toBe(true);
+
+      pedido.flush({ ...COTIZACION_FIN_DE_SEMANA, fechaSolicitada: '2026-11-16', valor: '1551.0000' });
+      await fixture.whenStable();
+
+      expect(host.sugerencia.pendiente()).toBe(false);
+    });
+
+    it('es falso mientras carga si el valor es manual o el inicial del formulario', async () => {
+      fixture.autoDetectChanges();
+      TestBed.tick();
+      const primero = http.expectOne(`${URL_COTIZACION}?fecha=2026-11-15`);
+      expect(host.sugerencia.pendiente()).toBe(false);
+      primero.flush(COTIZACION_FIN_DE_SEMANA);
+      await fixture.whenStable();
+
+      host.tipoCambio.set('1600.0000');
+      host.fecha.set('2026-11-16');
+      TestBed.tick();
+      const segundo = http.expectOne(`${URL_COTIZACION}?fecha=2026-11-16`);
+
+      expect(host.sugerencia.pendiente()).toBe(false);
+      segundo.flush({ ...COTIZACION_FIN_DE_SEMANA, fechaSolicitada: '2026-11-16', valor: '1551.0000' });
+      await fixture.whenStable();
+    });
+  });
 });

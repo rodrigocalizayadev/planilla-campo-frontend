@@ -142,7 +142,7 @@
 
     <div class="form-catalogo__pie">
       <button type="button" class="boton-secundario" (click)="cancelado.emit()">Cancelar</button>
-      <button type="submit" class="boton-primario" [disabled]="enviando()">Cargar tarea</button>
+      <button type="submit" class="boton-primario" [disabled]="enviando() || sugerenciaTipoCambio.pendiente()">Cargar tarea</button>
     </div>
   </form>
 </app-modal>
