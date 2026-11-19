@@ -6,6 +6,8 @@ import { environment } from '../../../environments/environment';
 import { CampoImporte } from '../../shared/ui/campo-importe/campo-importe';
 import { ImportePipe } from '../../shared/pipes/importe.pipe';
 import { AvisoService } from '../../shared/ui/aviso/aviso.service';
+import { sugerirTipoCambio } from '../../shared/data/sugerencia-tipo-cambio';
+import { SugerenciaCotizacion } from '../../shared/ui/sugerencia-cotizacion/sugerencia-cotizacion';
 import { EnumsService } from '../../core/enums/enums.service';
 import { CampaniaActivaService } from '../../core/campania/campania-activa.service';
 import { MonedaVistaService } from '../../core/moneda/moneda-vista.service';
@@ -46,7 +48,7 @@ import type { Campania, CampaniaRequest, ErrorResponse, LoteCampania, PaginaResp
  */
 @Component({
   selector: 'app-tablero',
-  imports: [CampoImporte, ImportePipe, DecimalPipe, RouterLink, SembrarLoteForm],
+  imports: [CampoImporte, ImportePipe, DecimalPipe, RouterLink, SembrarLoteForm, SugerenciaCotizacion],
   templateUrl: './tablero.html',
   styleUrl: './tablero.scss',
 })
@@ -118,6 +120,15 @@ export class Tablero {
 
   protected readonly editandoCotizacion = signal(false);
   protected readonly cotizacionEditada = signal('');
+  // Cotización BCRA de hoy mientras se edita la vigente. No autocompleta: se está
+  // editando un valor ya cargado, así que solo se ofrece "Usar".
+  protected readonly sugerenciaCotizacion = sugerirTipoCambio({
+    fecha: () => null,
+    valorActual: () => this.cotizacionEditada(),
+    asignar: (valor) => this.cotizacionEditada.set(valor),
+    autocompletar: () => false,
+    habilitada: () => this.editandoCotizacion(),
+  });
   protected readonly guardandoCotizacion = signal(false);
 
   etiquetaEstado(): string {

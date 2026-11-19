@@ -8,6 +8,7 @@ import { CampaniaActivaService } from '../../core/campania/campania-activa.servi
 import { EnumsService } from '../../core/enums/enums.service';
 import { environment } from '../../../environments/environment';
 import type { Cosecha, DesgloseCostos, LoteCampania, Margen, Movimiento, PaginaResponse, Venta, ValorEnum } from '../../models';
+import { provideCotizacionStub } from '../../core/cotizacion/cotizacion.testing';
 
 const TIPOS_TAREA: ValorEnum[] = [{ valor: 'CARPIDA', etiqueta: 'Carpida' }];
 const ESTADOS_VENTA: ValorEnum[] = [
@@ -114,6 +115,7 @@ describe('LoteCampaniaDetalle', () => {
       imports: [LoteCampaniaDetalle],
       providers: [
         provideZonelessChangeDetection(),
+        provideCotizacionStub(),
         provideRouter([]),
         provideHttpClient(),
         provideHttpClientTesting(),

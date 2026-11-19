@@ -25,6 +25,7 @@
         @if (cobroForm.tipoCambio().touched() && cobroForm.tipoCambio().invalid()) {
           <span class="campo__error">{{ cobroForm.tipoCambio().errors()[0]?.message }}</span>
         }
+        <app-sugerencia-cotizacion [sugerencia]="sugerenciaTipoCambio" />
       </label>
     </div>
 
@@ -43,7 +44,7 @@
 
     <div class="form-catalogo__pie">
       <button type="button" class="boton-secundario" (click)="cancelado.emit()">Cancelar</button>
-      <button type="submit" class="boton-primario" [disabled]="enviando()">Registrar cobro</button>
+      <button type="submit" class="boton-primario" [disabled]="enviando() || sugerenciaTipoCambio.pendiente()">Registrar cobro</button>
     </div>
   </form>
 </app-modal>

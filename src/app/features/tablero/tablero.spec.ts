@@ -12,6 +12,7 @@ import { CampaniaService } from '../campania/campania.service';
 import { EnumsService } from '../../core/enums/enums.service';
 import { AvisoService } from '../../shared/ui/aviso/aviso.service';
 import type { Campania, LoteCampania, PaginaResponse, ResumenCampania, ValorEnum } from '../../models';
+import { provideCotizacionStub, responderCotizacion } from '../../core/cotizacion/cotizacion.testing';
 
 const ESTADOS: ValorEnum[] = [
   { valor: 'PLANIFICADA', etiqueta: 'Planificada' },
@@ -156,6 +157,7 @@ describe('Tablero', () => {
       imports: [Tablero],
       providers: [
         provideZonelessChangeDetection(),
+        provideCotizacionStub(),
         provideRouter([]),
         provideHttpClient(),
         provideHttpClientTesting(),
@@ -299,5 +301,27 @@ describe('Tablero', () => {
     const botonActualizado: HTMLButtonElement = fixture.nativeElement.querySelector('.tablero__tc');
     expect(botonActualizado.textContent).toContain('Cotización para estimados: $ 1.200,50');
     expect(botonActualizado.title).toContain('tipo de cambio de cada movimiento');
+  });
+
+  it('al editar la cotización, ofrece la del BCRA de hoy sin pisar la que se está editando', async () => {
+    const obtenerDolar = responderCotizacion('1551.0000');
+    establecer('EN_CURSO');
+    fixture.autoDetectChanges();
+    flushDatos();
+    await fixture.whenStable();
+
+    expect(obtenerDolar).not.toHaveBeenCalled();
+
+    (fixture.nativeElement.querySelector('.tablero__tc') as HTMLButtonElement).click();
+    await fixture.whenStable();
+
+    expect(obtenerDolar).toHaveBeenLastCalledWith(null);
+    const input: HTMLInputElement = fixture.nativeElement.querySelector('.tablero__tc-form input');
+    expect(input.value).toBe('');
+
+    (fixture.nativeElement.querySelector('.sugerencia-cotizacion__usar') as HTMLButtonElement).click();
+    await fixture.whenStable();
+
+    expect(input.value).toBe('1.551,0000');
   });
 });

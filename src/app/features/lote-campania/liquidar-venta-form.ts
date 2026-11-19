@@ -7,6 +7,8 @@ import { CampoImporte } from '../../shared/ui/campo-importe/campo-importe';
 import { ImportePipe } from '../../shared/pipes/importe.pipe';
 import { AvisoService } from '../../shared/ui/aviso/aviso.service';
 import { TipoCambioMemoriaService } from '../../shared/data/tipo-cambio-memoria.service';
+import { sugerirTipoCambio } from '../../shared/data/sugerencia-tipo-cambio';
+import { SugerenciaCotizacion } from '../../shared/ui/sugerencia-cotizacion/sugerencia-cotizacion';
 import { hoyIso } from '../../shared/utils/fecha-local';
 import { LoteCampaniaService } from './lote-campania.service';
 import type {
@@ -51,7 +53,7 @@ interface ModeloLiquidacionForm {
  */
 @Component({
   selector: 'app-liquidar-venta-form',
-  imports: [Modal, FormField, CampoCantidad, CampoImporte, ImportePipe, DecimalPipe],
+  imports: [Modal, FormField, CampoCantidad, CampoImporte, ImportePipe, DecimalPipe, SugerenciaCotizacion],
   templateUrl: './liquidar-venta-form.html',
   styleUrl: './liquidar-venta-form.scss',
 })
@@ -121,6 +123,13 @@ export class LiquidarVentaForm {
     return Number.isFinite(numero) && numero >= 0;
   }
 
+  // Cotización BCRA a la fecha del movimiento (docs/api-endpoints-v2.md §16).
+  protected readonly sugerenciaTipoCambio = sugerirTipoCambio({
+    fecha: () => this.modelo().fechaLiquidacion,
+    valorActual: () => this.modelo().precioTipoCambio,
+    asignar: (valor) => this.modelo.update((actual) => ({ ...actual, precioTipoCambio: valor })),
+  });
+
   protected readonly liquidacionForm = form(this.modelo, (path) => {
     validate(path.cantidad, ({ value }) => {
       if (!this.esTramo()) {
@@ -171,6 +180,11 @@ export class LiquidarVentaForm {
 
   guardar(evento: Event): void {
     evento.preventDefault();
+    // Con la cotización de la fecha nueva en camino, el tipo de cambio todavía es el
+    // autocompletado de otra fecha: no se guarda hasta que llegue.
+    if (this.sugerenciaTipoCambio.pendiente()) {
+      return;
+    }
 
     const raiz = this.liquidacionForm();
     if (!raiz.valid()) {

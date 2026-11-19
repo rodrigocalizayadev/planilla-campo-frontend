@@ -12,6 +12,7 @@ import { MonedaVistaService } from '../../core/moneda/moneda-vista.service';
 import { EnumsService } from '../../core/enums/enums.service';
 import { AvisoService } from '../../shared/ui/aviso/aviso.service';
 import type { CostoIndirecto, LoteCampania, PaginaResponse, ValorEnum } from '../../models';
+import { provideCotizacionStub } from '../../core/cotizacion/cotizacion.testing';
 
 const CRITERIOS: ValorEnum[] = [
   { valor: 'POR_HA', etiqueta: 'Por hectárea' },
@@ -117,6 +118,7 @@ describe('CostosIndirectosListado', () => {
       imports: [CostosIndirectosListado],
       providers: [
         provideZonelessChangeDetection(),
+        provideCotizacionStub(),
         provideHttpClient(),
         provideHttpClientTesting(),
         { provide: CostosIndirectosService, useValue: service },

@@ -95,7 +95,8 @@
       @if (tareaForm.valorTipoCambio().touched() && tareaForm.valorTipoCambio().invalid()) {
         <span class="campo__error">{{ tareaForm.valorTipoCambio().errors()[0]?.message }}</span>
       }
-      <span class="campo__ayuda">Se precarga con el último que cargaste, incluso pagando en pesos.</span>
+      <app-sugerencia-cotizacion [sugerencia]="sugerenciaTipoCambio" />
+      <span class="campo__ayuda">El tipo de cambio se carga siempre, aunque pagues en pesos.</span>
     </label>
 
     <div class="campo-fila">
@@ -141,7 +142,7 @@
 
     <div class="form-catalogo__pie">
       <button type="button" class="boton-secundario" (click)="cancelado.emit()">Cancelar</button>
-      <button type="submit" class="boton-primario" [disabled]="enviando()">Cargar tarea</button>
+      <button type="submit" class="boton-primario" [disabled]="enviando() || sugerenciaTipoCambio.pendiente()">Cargar tarea</button>
     </div>
   </form>
 </app-modal>

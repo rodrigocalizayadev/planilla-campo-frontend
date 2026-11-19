@@ -1511,6 +1511,68 @@ construye leyendo reflection sobre el campo `etiqueta` de cada enum.
 
 ---
 
+## 16. Cotizaciones
+
+Cotización del dólar sugerida para autocompletar `tipoCambio` en vistas y formularios
+(aplicaciones, tareas, costos indirectos, ventas, cobros, tramos de liquidación y
+`cotizacionVigente` de la campaña). **El backend no rellena `tipoCambio`: sigue siendo
+obligatorio en cada request.** Ver `docs/adr/0004` (repo del backend).
+
+Fuente: API Estadísticas Cambiarias del BCRA, valor BNA vendedor divisa.
+
+### GET /api/cotizaciones/dolar
+
+**Auth:** requiere JWT.  
+**HTTP:** 200 OK.
+
+**Query params:**
+
+| Param | Tipo | Obligatorio | Notas |
+|---|---|---|---|
+| `fecha` | LocalDate ISO | no | Por defecto, hoy en Argentina (`America/Argentina/Buenos_Aires`) |
+
+El front debe enviar la **fecha del movimiento**, no la de hoy: el tipo de cambio se
+congela a la fecha del movimiento. Solo `cotizacionVigente` de la campaña se pide sin
+`fecha`.
+
+**Response — `CotizacionResponse`:**
+
+```json
+{
+  "fechaSolicitada": "2026-11-15",
+  "fechaCotizacion": "2026-11-13",
+  "valor": "1543.5000",
+  "fuente": "BCRA"
+}
+```
+
+| Campo | Tipo | Significado |
+|---|---|---|
+| `fechaSolicitada` | LocalDate | la fecha pedida |
+| `fechaCotizacion` | LocalDate | fecha real de la cotización usada; puede ser anterior (fin de semana, feriado o cierre del día aún no publicado) |
+| `valor` | BigDecimal → **string**, 4 decimales | ARS por USD |
+| `fuente` | String | origen del dato (`BCRA`) |
+
+(Verificado contra el backend real, 2026-11-17: `valor` llega como string con 4
+decimales, p. ej. `"1551.0000"`, la misma escala que `tipoCambio`.)
+
+**Reglas:**
+
+- Si la fecha no tiene publicación se usa la última dentro de los 7 días anteriores.
+- Las cotizaciones se persisten en la tabla `cotizacion`: una fecha ya consultada no
+  vuelve a llamar al BCRA.
+- Si el BCRA no responde se usa lo persistido dentro de la ventana.
+
+**Errores:**
+
+| Status | `code` | Cuándo |
+|---|---|---|
+| 422 | `FECHA_COTIZACION_FUTURA` | fecha posterior a hoy |
+| 503 | `COTIZACION_NO_DISPONIBLE` | el BCRA no responde (o no publicó nada) y no hay cotización persistida en la ventana |
+| 401 | — | sin token |
+
+---
+
 ## Shapes de respuesta (tipos exactos)
 
 ### LoteResponse

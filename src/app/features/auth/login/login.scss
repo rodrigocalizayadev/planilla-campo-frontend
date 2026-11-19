@@ -84,8 +84,7 @@
     width: 32px;
     height: 32px;
     flex: none;
-    border-radius: var(--radio-sm);
-    background: var(--color-verde-600);
+    display: block;
   }
 
   &__nombre {

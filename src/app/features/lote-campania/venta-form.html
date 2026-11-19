@@ -111,6 +111,7 @@
           @if (ventaForm.precioTipoCambio().touched() && ventaForm.precioTipoCambio().invalid()) {
             <span class="campo__error">{{ ventaForm.precioTipoCambio().errors()[0]?.message }}</span>
           }
+          <app-sugerencia-cotizacion [sugerencia]="sugerenciaTipoCambio" />
         </label>
       </div>
 
@@ -122,7 +123,7 @@
 
     <div class="form-catalogo__pie">
       <button type="button" class="boton-secundario" (click)="cancelado.emit()">Cancelar</button>
-      <button type="submit" class="boton-primario" [disabled]="enviando()">
+      <button type="submit" class="boton-primario" [disabled]="enviando() || sugerenciaTipoCambio.pendiente()">
         {{ editando() ? 'Guardar cambios' : esPrecioCerrado() ? 'Cargar venta' : 'Registrar entrega' }}
       </button>
     </div>

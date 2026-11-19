@@ -7,6 +7,7 @@ import { LoteCampaniaService } from './lote-campania.service';
 import { AvisoService } from '../../shared/ui/aviso/aviso.service';
 import { hoyIso } from '../../shared/utils/fecha-local';
 import type { ErrorResponse, Venta } from '../../models';
+import { provideCotizacionStub, responderCotizacion, cambiarFecha } from '../../core/cotizacion/cotizacion.testing';
 
 const VENTA_PENDIENTE: Venta = {
   id: 2,
@@ -61,6 +62,7 @@ describe('LiquidarVentaForm', () => {
       imports: [LiquidarVentaForm],
       providers: [
         provideZonelessChangeDetection(),
+        provideCotizacionStub(),
         { provide: LoteCampaniaService, useValue: loteCampaniaService },
       ],
     }).compileComponents();
@@ -297,6 +299,33 @@ describe('LiquidarVentaForm', () => {
 
       expect(aviso.mostrar).toHaveBeenCalledWith('La cantidad supera lo pendiente de liquidar', 'error');
       expect(pidioRefrescar).toBe(true);
+    });
+  });
+
+  describe('cotización BCRA', () => {
+    it('autocompleta el tipo de cambio con la cotización de la fecha de liquidación y lo usa en precio y gastos', async () => {
+      const obtenerDolar = responderCotizacion('1551.0000');
+      loteCampaniaService.liquidarVenta.mockReturnValue(of(VENTA_LIQUIDADA));
+      fixture.autoDetectChanges();
+      await fixture.whenStable();
+
+      cambiarFecha(fixture, '2026-11-13');
+      completar(0, '4500');
+      completar(2, '100');
+      await fixture.whenStable();
+
+      expect(obtenerDolar).toHaveBeenLastCalledWith('2026-11-13');
+
+      enviarFormulario();
+      await fixture.whenStable();
+
+      expect(loteCampaniaService.liquidarVenta).toHaveBeenCalledWith(2, {
+        precioUnitario: { importe: '4500', moneda: 'ARS', tipoCambio: '1551.0000' },
+        fechaLiquidacion: '2026-11-13',
+        comision: { importe: '100', moneda: 'ARS', tipoCambio: '1551.0000' },
+        flete: undefined,
+        otrosGastos: undefined,
+      });
     });
   });
 });
